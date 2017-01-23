@@ -15,7 +15,7 @@ import {
   TextInput,
   Navigator,
 } from 'react-native'
-import Login  from './screens/Login';
+import Login  from './screens/Login/Login';
 
 export default class IRIS extends Component {
     render() {
@@ -46,6 +46,3 @@ export default class IRIS extends Component {
 
 
 AppRegistry.registerComponent('IRIS', () => IRIS);
-
-
-

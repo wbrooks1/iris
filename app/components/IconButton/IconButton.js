@@ -7,7 +7,7 @@ export default class IconButton extends Component {
     render() {
         return (
             <TouchableOpacity style={styles.button} >
-                <View>
+                <View style={styles.container}>
                     <Image style={styles.buttonIcon}
                         source={this.props.image}
                     />

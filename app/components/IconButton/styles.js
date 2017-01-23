@@ -10,14 +10,17 @@ export default StyleSheet.create({
     },
     buttonText: {
         color: colors.buttonText,
-        fontSize: 20,
-        fontWeight: '500',
-        justifyContent: 'center',
+        fontSize: 14,
+        alignSelf: 'center',
     },
     buttonIcon: {
-        width: 50,
-        height: 50,
+        width: 60,
+        height: 60,
         marginTop: 5,
         justifyContent: 'center',
     },
+    container: {
+      justifyContent: 'center',
+      alignItems: 'center',
+    }
 });
