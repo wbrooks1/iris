@@ -3,7 +3,7 @@ export const colors = {
   errorText: '#FA3256',
   headerText: '#444444',
   buttonBackground: '#39BD98',
-  buttonText: '#FFFFFF',
+  buttonText: '#454545',
   inputBackground: '#FFFFFF',
   inputDivider: '#E4E2E5',
 };

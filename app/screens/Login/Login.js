@@ -1,20 +1,10 @@
 'use strict';
 /**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
+ * Login Screen: holds buttons for opening login modal
  */
 
 import React, { Component } from 'react';
-import {
-    AppRegistry,
-    StyleSheet,
-    Text,
-    Image,
-    View,
-    TextInput,
-    ScrollView,
-} from 'react-native'
+import {AppRegistry, StyleSheet, Text, Image, View, TextInput, ScrollView,} from 'react-native'
 import styles from './styles';
 import IconButton from '../../components/IconButton';
 
@@ -22,15 +12,15 @@ export default class Login extends Component {
 
 
     render() {
-        let pic = {
-            uri: 'https://upload.wikimedia.org/wikipedia/commons/d/de/Bananavarieties.jpg'
-        };
         return (
             <View style={styles.container}>
                 <Image style={styles.image}
-                       source={pic}/>
+                       source={require('../../images/login_image.jpg')}/>
                 <Text style={styles.title}>
-                    I.R.I.S
+                    Incident Response In Situ
+                </Text>
+                <Text style={styles.title}>
+                    Login
                 </Text>
                 <View style={styles.row_container}>
                 <IconButton

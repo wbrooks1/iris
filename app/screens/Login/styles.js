@@ -1,29 +1,31 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 import { colors } from '../../config/styles';
+
+var {height, width} = Dimensions.get('window')
 
 export default StyleSheet.create({
   container: {
       flex: 1,
-      justifyContent: 'space-around',
+      //justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: '#e1e5ed',
+      backgroundColor: colors.background,
   },
   row_container: {
-    flex: 1,
+    flex: -1,
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#e1e5ed',
+    backgroundColor: colors.background,
   },
   title: {
       fontSize: 20,
       textAlign: 'center',
       margin: 10,
+      color: colors.headerText,
   },
   image: {
-      width: 200,
-      height: 200,
-      marginTop: 5,
+      width: width,
+      height: height / 3,
       justifyContent: 'flex-start',
   },
 });
