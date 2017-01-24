@@ -6,7 +6,7 @@ const SingleLineInput = (props) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>
-        Title
+          {props.title}
       </Text>
       <TextInput
         style={styles.input}

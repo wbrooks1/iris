@@ -6,7 +6,8 @@ import styles from './styles';
 export default class IconButton extends Component {
     render() {
         return (
-            <TouchableOpacity style={styles.button} >
+            <TouchableOpacity style={styles.button}
+                onPress={this.props.onPress}>
                 <View style={styles.container}>
                     <Image style={styles.buttonIcon}
                         source={this.props.image}
@@ -19,4 +20,4 @@ export default class IconButton extends Component {
         );
     };
 }
-AppRegistry.registerComponent('IconButton', () => IconButton);
+//AppRegistry.registerComponent('IconButton', () => IconButton);
