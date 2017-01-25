@@ -6,11 +6,11 @@ const window = Dimensions.get('window');
 export default StyleSheet.create({
   input: {
     height: 40,
-    width: window.width - 25,
+    width: window.width - 60,
     fontSize: 16,
     borderRadius: 5,
     backgroundColor: colors.inputBackground,
-    marginHorizontal: 20,
+    marginHorizontal: 10,
     paddingVertical: 5,
     paddingHorizontal: 15,
     alignSelf:"center"
@@ -21,14 +21,12 @@ export default StyleSheet.create({
     margin: 5,
   },
   container: {
-    height: 40,
-    backgroundColor: "#d9dde2",
     flex: 1,
-    marginHorizontal: 10,
+    height: 40,
+    width: window.width - 50,
+    backgroundColor: "#d9dde2",
+    marginHorizontal: 5,
     alignSelf:"center",
-  },
-  inputWrapper: {
-    backgroundColor: colors.inputBackground,
-    width: window.width,
+    flexDirection: 'column',
   },
 });

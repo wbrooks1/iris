@@ -13,14 +13,18 @@ export default StyleSheet.create({
         // flex: 1,
         marginTop: window.height / 4,
         height: window.height / 2,
+        width: window.width - 20,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'silver',
         padding: 20,
+        borderRadius: 10,
+        alignSelf: 'center',
     },
     signIn: {
         fontSize: 20,
         textAlign: 'center',
         margin: 5,
+        color: colors.buttonTextBlue
     },
 });

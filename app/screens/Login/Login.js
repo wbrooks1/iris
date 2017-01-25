@@ -25,7 +25,7 @@ export default class Login extends Component {
         return (
             <View style={styles.container}>
                 <LoginModal modalVisible = {this.state.modalVisible} openModal = {this.openModal}
-                            closeModal = {this.closeModal} />
+                            closeModal = {this.closeModal} navigator = {this.props.navigator}/>
                 <Image style={styles.image}
                        source={require('../../images/login_image.jpg')}/>
                 <Text style={styles.title}>

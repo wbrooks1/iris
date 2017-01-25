@@ -20,4 +20,4 @@ export default class IconButton extends Component {
         );
     };
 }
-//AppRegistry.registerComponent('IconButton', () => IconButton);
+AppRegistry.registerComponent('IconButton', () => IconButton);
