@@ -16,7 +16,9 @@ import {
   Navigator,
 } from 'react-native'
 import Login  from './screens/Login';
-import Home from './screens/Home'
+import Home from './screens/Home';
+import NewIncident from './screens/NewIncident';
+
 
 export default class IRIS extends Component {
   render() {
@@ -45,6 +47,12 @@ export default class IRIS extends Component {
         <Home
         navigator={navigator} />
       );
+    }
+    if (routeId === 'NewIncident') {
+      return (
+          <NewIncident
+        navigator={navigator} />
+    );
     }
   }
 }

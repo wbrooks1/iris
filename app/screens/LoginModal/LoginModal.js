@@ -14,6 +14,7 @@ export default class LoginModal extends Component {
       this.props.navigator.push({
          id: 'Home',
       });
+      this.props.closeModal();
   }
   verifySignIn = () => {
     //TODO: write the verify function
@@ -23,7 +24,7 @@ export default class LoginModal extends Component {
       <Modal animationType={'slide'}
         visible={this.props.modalVisible}
         transparent={true}
-        onRequestClose={() => {alert("Modal has been closed.")}}>
+        onRequestClose={() => {this.props.closeModal()}}>
         <View style={styles.modal}>
           <SingleLineInput
             title="Username or Email"
