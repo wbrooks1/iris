@@ -15,6 +15,21 @@ export default class Home extends Component {
             id: 'NewIncident',
             });
     }
+    toYourIncidents = () => {
+        this.props.navigator.push({
+            id: 'YourIncidents',
+        });
+    }
+    toSearchIncidents = () => {
+        this.props.navigator.push({
+            id: 'SearchIncidents',
+        });
+    }
+    toViewReports = () => {
+        this.props.navigator.push({
+            id: 'ViewReports',
+        });
+    }
 
   render() {
     return (
@@ -28,26 +43,26 @@ export default class Home extends Component {
           </Text >
           <View style={styles.row_container}>
               <IconButton
-                  image={require('../../images/google_icon.png')}
+                  image={require('../../images/new_incident_icon.png')}
                   text="New Incident"
                   onPress={() => this.toNewIncident()}
               />
               <IconButton
                   image={require('../../images/twitter_icon.png')}
                   text="Your Incidents"
-                  onPress={() => this.openModal()}
+                  onPress={() => this.toYourIncidents()}
               />
           </View>
           <View style={styles.row_container}>
               <IconButton
                   image={require('../../images/facebook_icon.png')}
                   text="Search Incidents"
-                  onPress={() => this.openModal()}
+                  onPress={() => this.toSearchIncidents()}
               />
               <IconButton
                   image={require('../../images/microsoft_icon.png')}
                   text="View Reports"
-                  onPress={() => this.openModal()}
+                  onPress={() => this.toViewReports()}
               />
           </View>
       </View>
