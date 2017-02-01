@@ -21,7 +21,7 @@ export default class Home extends Component {
       <View style = {styles.container }>
           <Image style = {styles.image } source = {require('../../images/login_image.jpg' ) }/>
           <Text style = {styles.title }>
-            Incident Response In Situ
+            IRIS
           </Text >
           <Text style = {styles.title }>
             Home

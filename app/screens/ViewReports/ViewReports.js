@@ -5,7 +5,7 @@ import {AppRegistry, StyleSheet, Text, Image, View, TextInput, ScrollView, Navig
 import styles from './styles';
 
 
-export default class NewIncident extends Component {
+export default class ViewReports extends Component {
     constructor() {
         super();
     }
@@ -27,10 +27,10 @@ export default class NewIncident extends Component {
                     Incident Response In Situ
                 </Text >
                 <Text style = {styles.title }>
-                    New Incident
+                    View Reports
                 </Text >
             </View>
         );
     }
 }
-AppRegistry.registerComponent('NewIncident', () => NewIncident );
+AppRegistry.registerComponent('ViewReports', () => ViewReports );
