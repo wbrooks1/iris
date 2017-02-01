@@ -27,7 +27,7 @@ export default class Login extends Component {
                 <LoginModal modalVisible = {this.state.modalVisible} openModal = {this.openModal}
                             closeModal = {this.closeModal} navigator = {this.props.navigator}/>
                 <Image style={styles.image}
-                       source={require('../../images/login_image.jpg')}/>
+                       source={require('../../images/iris_logo_loginpage_white.png')}/>
                 <Text style={styles.title}>
                     Incident Response In Situ
                 </Text>
