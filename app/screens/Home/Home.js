@@ -3,7 +3,7 @@
 import React, {Component} from 'react';
 import {AppRegistry, StyleSheet, Text,Image, View, TextInput, ScrollView, Navigator} from 'react-native'
 import styles from './styles';
-import IconButton from '../../components/IconButton';
+import HomeButton from '../../components/HomeButton';
 
 
 export default class Home extends Component {
@@ -34,34 +34,24 @@ export default class Home extends Component {
   render() {
     return (
       <View style = {styles.container }>
-          <Image style = {styles.image } source = {require('../../images/login_image.jpg' ) }/>
-          <Text style = {styles.title }>
-            IRIS
-          </Text >
-          <Text style = {styles.title }>
-            Home
-          </Text >
+          <Image style = {styles.image } source = {require('../../images/iris_logo_homepage.png' ) }/>
           <View style={styles.row_container}>
-              <IconButton
+              <HomeButton
                   image={require('../../images/new_incident_icon.png')}
-                  text="New Incident"
                   onPress={() => this.toNewIncident()}
               />
-              <IconButton
-                  image={require('../../images/twitter_icon.png')}
-                  text="Your Incidents"
+              <HomeButton
+                  image={require('../../images/your_incidents_icon.png')}
                   onPress={() => this.toYourIncidents()}
               />
           </View>
           <View style={styles.row_container}>
-              <IconButton
-                  image={require('../../images/facebook_icon.png')}
-                  text="Search Incidents"
+              <HomeButton
+                  image={require('../../images/search_incidents_icon.png')}
                   onPress={() => this.toSearchIncidents()}
               />
-              <IconButton
-                  image={require('../../images/microsoft_icon.png')}
-                  text="View Reports"
+              <HomeButton
+                  image={require('../../images/view_reports_icon.png')}
                   onPress={() => this.toViewReports()}
               />
           </View>

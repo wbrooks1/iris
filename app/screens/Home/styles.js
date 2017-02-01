@@ -6,12 +6,10 @@ var {height, width} = Dimensions.get('window')
 export default StyleSheet.create({
   container: {
       flex: 1,
-      //justifyContent: 'center',
-      alignItems: 'center',
       backgroundColor: colors.background,
   },
   row_container: {
-    flex: -1,
+    flex: 2,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
@@ -25,7 +23,8 @@ export default StyleSheet.create({
   },
   image: {
       width: width,
-      height: height / 3,
+      height: height / 4,
       justifyContent: 'flex-start',
+      resizeMode: 'contain',
   },
 });
