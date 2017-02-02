@@ -7,7 +7,7 @@ import React, { Component } from 'react';
 import {AppRegistry, StyleSheet, Text, Image, View, TextInput, ScrollView,} from 'react-native'
 import styles from './styles';
 import IconButton from '../../components/IconButton';
-import LoginModal from '../LoginModal/LoginModal'
+import WebViewModal from '../WebViewModal/WebViewModal'
 
 export default class Login extends Component {
     constructor() {
@@ -24,7 +24,7 @@ export default class Login extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <LoginModal modalVisible = {this.state.modalVisible} openModal = {this.openModal}
+                <WebViewModal modalVisible = {this.state.modalVisible} openModal = {this.openModal}
                             closeModal = {this.closeModal} navigator = {this.props.navigator}/>
                 <Image style={styles.image}
                        source={require('../../images/login_image.jpg')}/>
