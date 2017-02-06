@@ -77,7 +77,7 @@ export default class Login extends Component {
             <View style={styles.container}>
                 {this.renderModal()}
                 <Image style={styles.image}
-                       source={require('../../images/login_image.jpg')}/>
+                       source={require('../../images/iris_logo_loginpage_white.png')}/>
                 <Text style={styles.title}>
                     Incident Response In Situ
                 </Text>

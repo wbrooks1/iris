@@ -48,7 +48,10 @@ export default class WebLoginModal extends Component {
             });
         } else if (url === this.props.loginURLs.failure + '#') {
             this.props.closeModal();
-            Alert.alert('Login Error', 'You were not logged in, please try again')
+            Alert.alert('Login Error', 'You were not logged in, please try again');
+        } else if (url === 'http://127.0.0.1:8082/auth/twitter/callback?'+'#') {
+            this.props.closeModal();
+            Alert.alert('Twitter Error', 'You were not logged in, please try again');
         }
     }
 
