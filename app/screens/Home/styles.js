@@ -27,4 +27,10 @@ export default StyleSheet.create({
       justifyContent: 'flex-start',
       resizeMode: 'contain',
   },
+    logout_text: {
+        fontSize: 20,
+        textAlign: 'right',
+        margin: 10,
+        color: colors.buttonTextBlue,
+    },
 });
