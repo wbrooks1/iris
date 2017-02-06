@@ -1,7 +1,7 @@
 'use strict'; /** * Login Screen: holds buttons for opening login modal */
 
 import React, {Component} from 'react';
-import {AppRegistry, StyleSheet, Text,Image, View, TextInput, ScrollView, Navigator} from 'react-native'
+import {AppRegistry, TouchableHighlight, StyleSheet, Text,Image, View, TextInput, ScrollView, Navigator, AsyncStorage} from 'react-native'
 import styles from './styles';
 import HomeButton from '../../components/HomeButton';
 
@@ -30,11 +30,25 @@ export default class Home extends Component {
             id: 'ViewReports',
         });
     }
+    async logout() {
+        try {
+            await AsyncStorage.setItem('@AsyncStorage:loginStatus', 'false');
+            await AsyncStorage.setItem('@AsyncStorage:accessToken', '');
+            this.props.navigator.resetTo({
+                id: 'Login',
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
   render() {
     return (
       <View style = {styles.container }>
           <Image style = {styles.image } source = {require('../../images/iris_logo_homepage.png' ) }/>
+          <TouchableHighlight onPress={() => this.logout()}>
+              <Text style = {styles.logout_text}> Logout </Text>
+          </TouchableHighlight>
           <View style={styles.row_container}>
               <HomeButton
                   image={require('../../images/new_incident_icon.png')}
