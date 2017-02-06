@@ -27,5 +27,6 @@ export default StyleSheet.create({
       width: width,
       height: height / 3,
       justifyContent: 'flex-start',
+      resizeMode: 'contain',
   },
 });

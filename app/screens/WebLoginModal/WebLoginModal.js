@@ -48,7 +48,7 @@ export default class WebLoginModal extends Component {
             });
         } else if (url === this.props.loginURLs.failure + '#') {
             this.props.closeModal();
-            Alert.alert('Login Error', 'You were not logged in, please try again')
+            Alert.alert('Login Error', 'You were not logged in, please try again');
         }
     }
 
