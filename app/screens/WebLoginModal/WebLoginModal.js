@@ -7,7 +7,6 @@ import React, {Component} from 'react';
 import {
     Alert, Modal, Text, TouchableHighlight, View, StyleSheet, Navigator, WebView, Networking, AsyncStorage,
 } from 'react-native';
-import styles from './styles';
 
 
 export default class WebLoginModal extends Component {
