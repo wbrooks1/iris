@@ -28,4 +28,10 @@ export default StyleSheet.create({
         height: height / 3,
         justifyContent: 'flex-start',
     },
+    signIn: {
+        fontSize: 20,
+        textAlign: 'center',
+        margin: 5,
+        color: colors.buttonTextBlue
+    },
 });
