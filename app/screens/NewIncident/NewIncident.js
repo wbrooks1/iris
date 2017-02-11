@@ -9,6 +9,8 @@ import styles from './styles';
 import SingleLineInput from '../../components/SingleLineInput';
 import MultiLineInput from '../../components/MultiLineInput';
 import DateInput from '../../components/DateInput';
+import LocationInput from '../../components/LocationInput';
+
 
 import {components} from '../../config/mandatoryComponentList'
 
@@ -48,40 +50,66 @@ export default class NewIncident extends Component {
             }
             return false;
         });
+        let newFormData = this.state.formData;
+        let date = new Date();
+        newFormData["user"] = "username";
+        newFormData["category"] = "medical";
+        newFormData["time_stamp"] = date.toDateString();
+        newFormData["start_date"] = date.toDateString();
+        date.setFullYear(date.getFullYear() + 3);
+        newFormData["end_date"] = date.toDateString();
     }
 
-    updateTextInput(text, id) {
-        console.log("text:", text);
+    updateTextInput(data, id) {
+        console.log("text:", data);
         console.log("id:", id);
         let newFormData = this.state.formData;
-        newFormData[id] = text;
+        newFormData[id] = data;
         console.log("formData:", newFormData);
         this.setState({formData: newFormData});
     }
 
+
     submitIncident() {
         console.log("Return Object", this.state.formData);
     }
+
 
     _renderRow(rowData, sectionID, rowID) {
         if (rowData[rowID].type === "text") {
             return (
                 <SingleLineInput title={rowData[rowID].title}
                                  placeholder={rowData[rowID].placeholder}
-                                 updateInput={(text, id) => this.updateTextInput(text, id)}
-                                 id={rowID}/>
+                                 updateInput={(data, id) => this.updateTextInput(data, id)}
+                                 id={rowID}
+                />
             );
         } else if (rowData[rowID].type === "multi_text") {
             return (
                 <MultiLineInput title={rowData[rowID].title}
                                 placeholder={rowData[rowID].placeholder}
-                                updateInput={(text, id) => this.updateTextInput(text, id)}
-                                id={rowID}/>
+                                updateInput={(data, id) => this.updateTextInput(data, id)}
+                                id={rowID}
+                />
             );
         } else if (rowData[rowID].type === 'date') {
             return (
-                <DateInput title={rowData[rowID].title}/>
+                <DateInput title={rowData[rowID].title}
+                           updateInput={(data, id) => this.updateTextInput(data, id)}
+                           id={rowID}
+                           date={rowData[rowID].date}
+                />
             )
+        } else if (rowData[rowID].type === 'location') {
+            return (
+                <LocationInput title={rowData[rowID].title}
+                               updateInput={(data, id) => this.updateTextInput(data, id)}
+                               id={rowID}
+                               navigator={this.props.navigator}
+
+                />
+            )
+
         }
     }
 

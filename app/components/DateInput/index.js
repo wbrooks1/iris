@@ -1,2 +1,2 @@
-import SingleLineInput from './DateInput';
-export default SingleLineInput;
+import DateInput from './DateInput';
+export default DateInput;

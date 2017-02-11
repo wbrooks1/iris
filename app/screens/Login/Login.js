@@ -105,7 +105,7 @@ export default class Login extends Component {
                     <IconButton
                         image={require('../../images/microsoft_icon.png')}
                         text="Microsoft"
-                        onPress={() => this.openModal('google')}
+                        onPress={() => this.toHome()}
                     />
                 </View>
             </View>

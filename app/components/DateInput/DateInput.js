@@ -6,23 +6,28 @@ export default class DateInput extends Component {
     constructor() {
         super();
         this.state = {
-            date: '1/1/01',
+            date: null,
             id: null,
         }
     }
 
     componentWillMount() {
+        var date = new Date(this.props.date);
+        this.setState({date: date})
         this.setState({id: this.props.id})
     }
 
     async openAndroidDatePicker() {
         try {
             const {action, year, month, day} = await DatePickerAndroid.open({
-                date: new Date()
+                minDate: new Date()
             });
-            console.log("Picked date", year, month, day);
-        //  TODO: set the date state item and create the update input method in NewIncident.js
-
+            if (action === DatePickerAndroid.dateSetAction ) {
+                var date = new Date(year, month, day);
+                this.setState({date: date});
+                this.props.updateInput(this.state.date.toDateString(),
+                    this.state.id)
+            }
         } catch ({code, message}) {
             console.warn('Cannot open date picker', message);
         }
@@ -39,11 +44,10 @@ export default class DateInput extends Component {
                     style={styles.input}
                     autoCapitalize="none"
                     editable={false}
-                    defaultValue={this.state.date}
+                    defaultValue={this.state.date.toDateString()}
                     >
                 </TextInput>
                 </TouchableHighlight>
-
             </View>
         );
     }

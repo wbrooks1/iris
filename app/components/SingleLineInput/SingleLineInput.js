@@ -23,7 +23,7 @@ export default class SingleLineInput extends Component {
                 </Text>
                 <TextInput
                     style={styles.input}
-                    autoCapitalize="none"
+                    autoCapitalize="sentences"
                     autoCorrect={false}
                     placeholder={this.props.placeholder}
                     defaultValue={this.state.text}
