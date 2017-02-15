@@ -1,56 +1,69 @@
 'use strict'
 /**
-* AddFieldModal: Screen to enter credentials.
-*/
+ * AddFieldModal: Screen to enter credentials.
+ */
 
-import React, { Component } from 'react';
-import { Modal, Text, TouchableHighlight, View, StyleSheet, Navigator, Picker } from 'react-native';
+import React, {Component} from 'react';
+import {Modal, Text, TextInput, TouchableHighlight, View, StyleSheet, Navigator, Picker} from 'react-native';
 import styles from './styles';
 
-import SingleLineInput from '../../components/SingleLineInput'
 
 export default class AddFieldModal extends Component {
     constructor() {
         super();
         this.state = {
-            type: null,
+            type: 'multi_text',
             title: null,
         };
     }
 
     updateFieldInfo = (title, id) => {
-      this.setState({title: title});
+        this.setState({title: title});
+        console.log("type, title:", this.state.type + ", " + this.state.title);
+    }
+
+    addField = () => {
+        this.props.getInfo(this.state.title, this.state.type);
     }
 
 
-
-
-  render() {
-    return (
-      <Modal animationType={'slide'}
-        visible={this.props.modalVisible}
-        transparent={true}
-        onRequestClose={() => {this.props.closeModal()}}>
-        <View style={styles.modal}>
-          <Picker style={styles.picker}
-                  mode="dropdown"
-            selectedValue={'text'}
-            onValueChange={(type) => this.setState({type: type})}>
-              <Picker.Item label="Text" value="multi_text" />
-              <Picker.Item label="Date" value="date" />
-              <Picker.Item label="Location" value="location" />
-          </Picker>
-          <SingleLineInput
-              id="temp"
-            title="Title"
-            placeholder="Enter title for field"
-            updateInput={(title, id) => this.updateFieldInfo(title, id)}
-          />
-          <TouchableHighlight onPress={this.addField}>
-            <Text style={styles.signIn}>ADD</Text>
-          </TouchableHighlight>
-        </View>
-      </Modal>
-    );
-  }
+    render() {
+        return (
+            <Modal style={styles.container}
+                   animationType={'slide'}
+                   visible={this.props.modalVisible}
+                   transparent={true}
+                   onRequestClose={() => {this.props.closeModal()}}>
+                <View style={styles.modal}>
+                    <Text style={styles.title}>
+                        Add New Field
+                    </Text>
+                    <Text style={styles.input}>
+                        Select Field Type
+                    </Text>
+                    <Picker style={styles.picker}
+                            selectedValue={this.state.type}
+                            onValueChange={(type) => this.setState({type: type})}>
+                        <Picker.Item label="Text" value="multi_text"/>
+                        <Picker.Item label="Date" value="date"/>
+                        <Picker.Item label="Location" value="location"/>
+                    </Picker>
+                    <Text style={styles.input}>
+                        Field Title
+                    </Text>
+                    <TextInput
+                        style={styles.input}
+                        autoCapitalize="sentences"
+                        autoCorrect={false}
+                        placeholder="Enter field title"
+                        defaultValue={this.state.title}
+                        onChangeText={(text) => this.setState({title: text})}
+                        />
+                    <TouchableHighlight onPress={() => this.addField()}>
+                        <Text style={styles.signIn}>ADD</Text>
+                    </TouchableHighlight>
+                </View>
+            </Modal>
+        );
+    }
 }

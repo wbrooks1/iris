@@ -98,27 +98,22 @@ export default class NewIncident extends Component {
 
     addField() {
         this.openModal()
-        console.log("DataSource", this.state.dataSource);
+    }
+
+    getNewFieldInfo = (title, type) => {
         let newArray = this.state.db;
-        newArray["dynamic"] = {
-            title: "dynamic",
-            type: "text",
-            placeholder: "this is dynamic"
+        newArray[title] = {
+            title: title,
+            type: type,
         };
         console.log("newArray", newArray);
-
         this.setState({
             dataSource: this.state.dataSource.cloneWithRows(newArray),
             db: newArray,
         });
         console.log("new DataSource", this.state.dataSource);
         console.log("new db", newArray);
-    }
-
-    getNewFieldInfo() {
-        let type = this.state.type;
-        let title = this.state.title;
-        return {type, title};
+        this.closeModal();
     }
 
     closeModal = () => {
@@ -133,6 +128,7 @@ export default class NewIncident extends Component {
         if (this.state.modalVisible) {
             return (
                 <AddFieldModal modalVisible={this.state.modalVisible} closeModal={this.closeModal}
+                               getInfo={this.getNewFieldInfo}
                 />
             );
         }
