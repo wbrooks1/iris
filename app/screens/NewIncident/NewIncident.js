@@ -10,6 +10,7 @@ import SingleLineInput from '../../components/SingleLineInput';
 import MultiLineInput from '../../components/MultiLineInput';
 import DateInput from '../../components/DateInput';
 import LocationInput from '../../components/LocationInput';
+import AddFieldModal from '../AddFieldModal/AddFieldModal';
 
 
 import {components} from '../../config/mandatoryComponentList'
@@ -25,7 +26,13 @@ export default class NewIncident extends Component {
         const {dataBlob, rowIds} = this.formatData(components, "medical");
         this.state = {
             dataSource: ds.cloneWithRows(dataBlob, rowIds),
+            db: dataBlob,
             formData: {},
+            modalVisible: false,
+            location: {
+                latitude: null,
+                longitude: null,
+            },
         };
     }
 
@@ -36,9 +43,11 @@ export default class NewIncident extends Component {
         for (let i = 0; i < comps.length; i++) {
             const rowId = comps[i].id;
             console.log("rowId:", rowId);
+
             rowIds.push(rowId);
             dataBlob[rowId] = comps[i];
         }
+        console.log("DataBlob", dataBlob);
         return {dataBlob, rowIds};
     }
 
@@ -50,6 +59,18 @@ export default class NewIncident extends Component {
             }
             return false;
         });
+        var pos;
+        navigator.geolocation.getCurrentPosition(
+            (position) => { pos = position.coords.latitude + ", " + position.coords.longitude;
+            console.log("Position:", pos);
+            this.initalizeFormData(pos);
+            },
+            (error) => alert(JSON.stringify(error)),
+            { timeout: 20000, maximumAge: 1000});
+
+    }
+
+    initalizeFormData(pos) {
         let newFormData = this.state.formData;
         let date = new Date();
         newFormData["user"] = "username";
@@ -58,6 +79,7 @@ export default class NewIncident extends Component {
         newFormData["start_date"] = date.toDateString();
         date.setFullYear(date.getFullYear() + 3);
         newFormData["end_date"] = date.toDateString();
+        newFormData["location"] = pos;
     }
 
     updateTextInput(data, id) {
@@ -74,6 +96,47 @@ export default class NewIncident extends Component {
         console.log("Return Object", this.state.formData);
     }
 
+    addField() {
+        this.openModal()
+        console.log("DataSource", this.state.dataSource);
+        let newArray = this.state.db;
+        newArray["dynamic"] = {
+            title: "dynamic",
+            type: "text",
+            placeholder: "this is dynamic"
+        };
+        console.log("newArray", newArray);
+
+        this.setState({
+            dataSource: this.state.dataSource.cloneWithRows(newArray),
+            db: newArray,
+        });
+        console.log("new DataSource", this.state.dataSource);
+        console.log("new db", newArray);
+    }
+
+    getNewFieldInfo() {
+        let type = this.state.type;
+        let title = this.state.title;
+        return {type, title};
+    }
+
+    closeModal = () => {
+        this.setState({modalVisible: false});
+    }
+
+    openModal = () => {
+        this.setState({modalVisible: true});
+    }
+
+    renderModal = () => {
+        if (this.state.modalVisible) {
+            return (
+                <AddFieldModal modalVisible={this.state.modalVisible} closeModal={this.closeModal}
+                />
+            );
+        }
+    }
 
     _renderRow(rowData, sectionID, rowID) {
         if (rowData[rowID].type === "text") {
@@ -106,7 +169,7 @@ export default class NewIncident extends Component {
                                updateInput={(data, id) => this.updateTextInput(data, id)}
                                id={rowID}
                                navigator={this.props.navigator}
-
+                               location={this.state.location}
                 />
             )
 
@@ -116,6 +179,7 @@ export default class NewIncident extends Component {
     render() {
         return (
             <View style={styles.container }>
+                {this.renderModal()}
                 <Text style={styles.title }>
                     Incident Response In Situ
                 </Text >
@@ -124,7 +188,11 @@ export default class NewIncident extends Component {
                 </Text >
                 <ListView dataSource={this.state.dataSource}
                           renderRow={(data, sectionID, rowID) => this._renderRow(data, sectionID, rowID)}
-                />
+                /><TouchableHighlight onPress={() => this.addField()}>
+                <Text style={styles.signIn}>
+                    Add Field
+                </Text>
+            </TouchableHighlight>
                 <TouchableHighlight onPress={() => this.submitIncident()}>
                     <Text style={styles.signIn}>
                         Submit Incident

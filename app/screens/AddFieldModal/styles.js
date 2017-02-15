@@ -3,7 +3,14 @@ import { colors } from '../../config/styles';
 
 const window = Dimensions.get('window');
 export default StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 70
+    },
     modal: {
+        // flex: 1,
         marginTop: window.height / 4,
         height: window.height / 2,
         width: window.width - 20,
@@ -14,27 +21,13 @@ export default StyleSheet.create({
         borderRadius: 10,
         alignSelf: 'center',
     },
-    submit: {
-        fontSize: 30,
+    signIn: {
+        fontSize: 20,
         textAlign: 'center',
         margin: 5,
-        color: colors.buttonTextBlue,
-        justifyContent: 'flex-end',
-        width: window.width,
-        backgroundColor: colors.background,
+        color: colors.buttonTextBlue
     },
-    container: {
-        justifyContent: 'flex-end',
-        alignItems: 'center',
-    },
-    map: {
-        flex: 1,
-        height: window.height,
-        width: window.width,
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
+    picker: {
+        width: 100,
     },
 });
