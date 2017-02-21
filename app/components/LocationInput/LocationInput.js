@@ -37,7 +37,7 @@ export default class LocationInput extends Component {
             latitude: loc.latitude,
             longitude: loc.longitude,
         }});
-        this.props.updateInput(loc.latitude + ", " + loc.longitude, this.state.id);
+        this.props.updateInput(loc.latitude + ", " + loc.longitude, this.state.id, this.props.type);
         this.closeModal();
     }
 

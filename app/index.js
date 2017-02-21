@@ -21,6 +21,7 @@ import NewIncident from './screens/NewIncident';
 import YourIncidents from './screens/YourIncidents';
 import SearchIncidents from './screens/SearchIncidents';
 import ViewReports from './screens/ViewReports';
+import EditIncident from './screens/EditIncident';
 
 
 
@@ -73,6 +74,12 @@ export default class IRIS extends Component {
         if (routeId === 'ViewReports') {
             return (
                 <ViewReports
+                    navigator={navigator} />
+            );
+        }
+        if (routeId === 'EditIncident') {
+            return (
+                <EditIncident
                     navigator={navigator} />
             );
         }

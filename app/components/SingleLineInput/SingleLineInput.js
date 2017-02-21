@@ -28,7 +28,7 @@ export default class SingleLineInput extends Component {
                     placeholder={this.props.placeholder}
                     defaultValue={this.state.text}
                     onChangeText={(text) => this.setState({text})}
-                    onEndEditing={(text) => this.props.updateInput(this.state.text, this.state.id)}>
+                    onEndEditing={(text) => this.props.updateInput(this.state.text, this.state.id, this.props.type)}>
                 </TextInput>
             </View>
         );

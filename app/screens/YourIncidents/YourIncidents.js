@@ -1,7 +1,7 @@
 'use strict';
 
 import React, {Component} from 'react';
-import {AppRegistry, StyleSheet, Text, Image, View, TextInput, ScrollView, Navigator, BackAndroid} from 'react-native'
+import {AppRegistry, TouchableHighlight, StyleSheet, Text, Image, View, TextInput, ScrollView, Navigator, BackAndroid} from 'react-native'
 import styles from './styles';
 
 
@@ -20,17 +20,28 @@ export default class YourIncidents extends Component {
         });
     }
 
+    toEditIncident = () => {
+        this.props.navigator.push({
+            id: 'EditIncident',
+        });
+    }
+
     render() {
         return (
-            <View style = {styles.container }>
-                <Text style = {styles.title }>
+            <View style={styles.container }>
+                <Text style={styles.title }>
                     Incident Response In Situ
                 </Text >
-                <Text style = {styles.title }>
+                <Text style={styles.title }>
                     Your Incidents
                 </Text >
+                <TouchableHighlight onPress={() => this.toEditIncident()}>
+                    <Text style={styles.title}>
+                        Edit Incident
+                    </Text>
+                </TouchableHighlight>
             </View>
         );
     }
 }
-AppRegistry.registerComponent('YourIncidents', () => YourIncidents );
+AppRegistry.registerComponent('YourIncidents', () => YourIncidents);

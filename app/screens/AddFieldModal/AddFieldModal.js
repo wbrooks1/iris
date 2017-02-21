@@ -23,7 +23,16 @@ export default class AddFieldModal extends Component {
     }
 
     addField = () => {
-        this.props.getInfo(this.state.title, this.state.type);
+        console.log("dataSource in AddFieldModal", this.props.dataSource.rowIdentities[0]);
+        console.log(this.props.dataSource.rowIdentities[0].includes(this.state.title));
+        if (this.props.dataSource.rowIdentities[0].includes(this.state.title) ) {
+            alert("\"" + this.state.title + "\" already exists as a title. Please try different title.");
+        } else if (this.state.title === null || this.state.title === "") {
+            alert("Title can not be left blank. Please add a title.");
+
+        } else {
+            this.props.getInfo(this.state.title, this.state.type);
+        }
     }
 
 
