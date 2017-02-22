@@ -37,9 +37,13 @@ export default class EditIncident extends Component {
     formatData(data, category) {
         const dataBlob = {};
         const rowIds = [];
-        const comps = data;
+        const comps = data.incident;
+        // this.setState({formData: comps});
         console.log("Edit incident data", data);
-        for (let i = 0; i < comps.length; i++) {
+        console.log("Edit incident comps.length", comps.length);
+        console.log("Edit incident data", data);
+
+        for (let i = 3; i < comps.length; i++) {
             const rowId = comps[i].title;
             console.log("rowId:", rowId);
 
@@ -60,23 +64,29 @@ export default class EditIncident extends Component {
         });
     }
 
+    submitIncident() {
+        console.log("Return Object", this.state.formData);
+    }
+
     _renderRow(rowData, sectionID, rowID) {
         if (rowData[rowID].type === "text") {
             return (
                 <SingleLineInput title={rowData[rowID].title}
                                  type={rowData[rowID].type}
-                                 placeholder={rowData[rowID].placeholder}
+                                 data={rowData[rowID].data}
                                  updateInput={(data, id, type) => this.updateFormInput(data, id, type)}
                                  id={rowID}
+                                 isEdit={true}
                 />
             );
         } else if (rowData[rowID].type === "multi_text") {
             return (
                 <MultiLineInput title={rowData[rowID].title}
                                 type={rowData[rowID].type}
-                                placeholder={rowData[rowID].placeholder}
+                                data={rowData[rowID].data}
                                 updateInput={(data, id, type) => this.updateFormInput(data, id, type)}
                                 id={rowID}
+                                isEdit={true}
                 />
             );
         } else if (rowData[rowID].type === 'date') {
@@ -85,7 +95,7 @@ export default class EditIncident extends Component {
                            type={rowData[rowID].type}
                            updateInput={(data, id, type) => this.updateFormInput(data, id, type)}
                            id={rowID}
-                           date={rowData[rowID].date}
+                           date={rowData[rowID].data}
                 />
             )
         } else if (rowData[rowID].type === 'location') {
@@ -95,7 +105,7 @@ export default class EditIncident extends Component {
                                updateInput={(data, id, type) => this.updateFormInput(data, id, type)}
                                id={rowID}
                                navigator={this.props.navigator}
-                               location={this.state.location}
+                               location={rowData[rowID].data}
                 />
             )
 

@@ -19,6 +19,9 @@ export default class LocationInput extends Component {
     }
 
     componentWillMount() {
+        if (this.props.isEdit) {
+            //TODO: handle incoming location for editing.
+        }
         this.setState({id: this.props.id})
         navigator.geolocation.getCurrentPosition(
             (position) => {

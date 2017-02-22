@@ -1,8 +1,10 @@
 'use strict';
 
 import React, {Component} from 'react';
-import {AppRegistry, StyleSheet, Text, Image, View, TextInput, ScrollView, Navigator, BackAndroid} from 'react-native'
+import {AppRegistry, TouchableHighlight, StyleSheet, Text, Image, View, TextInput, ScrollView, Navigator, BackAndroid} from 'react-native'
 import styles from './styles';
+import SingleLineInput from '../../components/SingleLineInput';
+
 
 
 export default class SearchIncidents extends Component {
@@ -20,6 +22,16 @@ export default class SearchIncidents extends Component {
         });
     }
 
+    searchIncidents = (input) => {
+        console.log('Search input', input);
+    }
+
+    toNewReport = () => {
+        this.props.navigator.push({
+            id: 'NewReport',
+        });
+    }
+
     render() {
         return (
             <View style = {styles.container }>
@@ -29,6 +41,15 @@ export default class SearchIncidents extends Component {
                 <Text style = {styles.title }>
                     Search Incidents
                 </Text >
+                <SingleLineInput title={'Search Incidents'}
+                                 placeholder={'Enter search'}
+                                 updateInput={(input) => this.searchIncidents(input)}
+                />
+                <TouchableHighlight onPress={() => this.toNewReport()}>
+                    <Text style={styles.title}>
+                        New Report
+                    </Text>
+                </TouchableHighlight>
             </View>
         );
     }

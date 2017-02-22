@@ -12,7 +12,10 @@ export default class MultiLineInput extends Component {
     }
 
     componentWillMount() {
-        this.setState({id: this.props.id})
+        this.setState({id: this.props.id});
+        if (this.props.isEdit) {
+            this.setState({text: this.props.data});
+        }
     }
 
     render() {
