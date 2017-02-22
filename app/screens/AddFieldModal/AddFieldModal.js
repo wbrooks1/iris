@@ -47,6 +47,8 @@ export default class AddFieldModal extends Component {
                     <Text style={styles.title}>
                         Add New Field
                     </Text>
+                    <View style={styles.text_box}>
+
                     <Text style={styles.input}>
                         Select Field Type
                     </Text>
@@ -68,8 +70,9 @@ export default class AddFieldModal extends Component {
                         defaultValue={this.state.title}
                         onChangeText={(text) => this.setState({title: text})}
                         />
+                    </View>
                     <TouchableHighlight onPress={() => this.addField()}>
-                        <Text style={styles.signIn}>ADD</Text>
+                        <Text style={styles.add_button}>ADD FIELD</Text>
                     </TouchableHighlight>
                 </View>
             </Modal>

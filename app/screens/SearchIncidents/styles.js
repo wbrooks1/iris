@@ -8,14 +8,14 @@ export default StyleSheet.create({
         flex: 1,
         //justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: colors.background,
+        backgroundColor: colors.lightBackground,
     },
     row_container: {
         flex: -1,
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: colors.background,
+        backgroundColor: colors.lightBackground,
     },
     title: {
         fontSize: 20,

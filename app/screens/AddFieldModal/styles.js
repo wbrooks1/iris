@@ -7,7 +7,6 @@ export default StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 70
     },
     modal: {
         // flex: 1,
@@ -16,28 +15,30 @@ export default StyleSheet.create({
         width: window.width - 20,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'silver',
+        backgroundColor: colors.darkBackground,
         padding: 20,
         borderRadius: 10,
         alignSelf: 'center',
     },
-    signIn: {
+    text_box: {
+      backgroundColor: colors.midBackground,
+      borderRadius: 10,
+
+    },
+    add_button: {
         fontSize: 20,
         textAlign: 'center',
         margin: 5,
-        color: colors.buttonTextBlue
+        color: colors.buttonTextBlue,
     },
     picker: {
         width: window.width - 60,
-        backgroundColor: "#d9dde2",
-
     },
     input: {
         height: 40,
         width: window.width - 60,
         fontSize: 20,
         borderRadius: 5,
-        backgroundColor: "#d9dde2",
         marginHorizontal: 10,
         paddingVertical: 5,
         paddingHorizontal: 15,
@@ -45,16 +46,7 @@ export default StyleSheet.create({
     },
     title: {
         fontSize: 20,
-        textAlign: 'left',
+        textAlign: 'center',
         margin: 5,
-    },
-    container: {
-        flex: 1,
-        // height: 40,
-        width: window.width - 50,
-        backgroundColor: "#d9dde2",
-        marginHorizontal: 5,
-        alignSelf: "center",
-        flexDirection: 'column',
     },
 });

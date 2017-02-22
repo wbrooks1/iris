@@ -21,7 +21,7 @@ export default StyleSheet.create({
         color: colors.buttonTextBlue,
         justifyContent: 'flex-end',
         width: window.width,
-        backgroundColor: colors.background,
+        backgroundColor: colors.lightBackground,
     },
     container: {
         justifyContent: 'flex-end',

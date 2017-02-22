@@ -6,14 +6,14 @@ var {height, width} = Dimensions.get('window')
 export default StyleSheet.create({
   container: {
       flex: 1,
-      backgroundColor: colors.background,
+      backgroundColor: colors.lightBackground,
   },
   row_container: {
     flex: 2,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: colors.background,
+    backgroundColor: colors.lightBackground,
   },
   title: {
       fontSize: 20,
