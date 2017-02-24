@@ -15,3 +15,7 @@ export const loginURLs = {
         failure: 'http://ethan-rowell.ddns.net:8082/auth/twitter/failure',
     }
 };
+
+export const incidentURLs = {
+    incidents: 'http://ethan-rowell.ddns.net:8083/api/incidents',
+};

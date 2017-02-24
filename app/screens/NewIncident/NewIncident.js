@@ -13,7 +13,9 @@ import LocationInput from '../../components/LocationInput';
 import AddFieldModal from '../AddFieldModal/AddFieldModal';
 
 
-import {components} from '../../config/mandatoryComponentList'
+import {components} from '../../config/mandatoryComponentList';
+import {incidentURLs} from '../../config/strings'
+
 
 export default class NewIncident extends Component {
     constructor() {
@@ -94,7 +96,34 @@ export default class NewIncident extends Component {
 
     submitIncident() {
         console.log("Return Object", this.state.formData);
+        let data = {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+            user_id: 1,
+            name:'Name for Incident',
+            desc:'this is a description',
+            cat_id:1,
+            lat:40,
+            long:-22,
+            start:'2017-03-01',
+            end:'2017-03-20',
+            freq:'P1D',
+            keywords:['key', 'word']
+            })
+        }
+        fetch(incidentURLs.incidents, data)
+            .then((response) => response.json())
+            .then((responseJson) => {
+            console.log("Reponse to fetch", responseJson);
+            }).catch((err) => {
+            console.error(err);
+        });
     }
+
 
     addField() {
         this.openModal()
@@ -135,12 +164,11 @@ export default class NewIncident extends Component {
         if (rowData[rowID].type === "text") {
             return (
                 <SingleLineInput title={rowData[rowID].title}
-                                 type={rowData[rowID].type}
-                                 placeholder={rowData[rowID].placeholder}
-                                 updateInput={(data, id, type) => this.updateFormInput(data, id, type)}
-                                 id={rowID}
-                />
-            );
+                                type={rowData[rowID].type}
+                                placeholder={rowData[rowID].placeholder}
+                                updateInput={(data, id, type) => this.updateFormInput(data, id, type)}
+                                id={rowID}
+                />            );
         } else if (rowData[rowID].type === "multi_text") {
             return (
                 <MultiLineInput title={rowData[rowID].title}
