@@ -19,6 +19,7 @@ export default class MultiLineInput extends Component {
     }
 
     render() {
+        console.log("MultiLine is being rerendered");
         return (
             <View style={styles.container}>
                 <Text style={styles.title}>
@@ -32,7 +33,8 @@ export default class MultiLineInput extends Component {
                     placeholder={this.props.placeholder}
                     defaultValue={this.state.text}
                     onChangeText={(text) => this.setState({text})}
-                    onEndEditing={(text) => this.props.updateInput(this.state.text, this.state.id, this.props.type)}>
+                    onEndEditing={(text) => this.props.updateInput(this.state.text, this.state.id, this.props.type)}
+                >
                 </TextInput>
             </View>
         );

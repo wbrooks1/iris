@@ -39,6 +39,8 @@ export default class NewIncident extends Component {
     }
 
     formatData(data, category) {
+        console.log("formatData()");
+
         const dataBlob = {};
         const rowIds = [];
         const comps = data.medical;
@@ -54,6 +56,8 @@ export default class NewIncident extends Component {
     }
 
     componentWillMount() {
+        console.log("componentWillMount()");
+
         BackAndroid.addEventListener('hardwareBackPress', () => {
             if (this.props.navigator && this.props.navigator.getCurrentRoutes().length > 0) {
                 this.props.navigator.pop();
@@ -63,39 +67,45 @@ export default class NewIncident extends Component {
         });
         var pos;
         navigator.geolocation.getCurrentPosition(
-            (position) => { pos = position.coords.latitude + ", " + position.coords.longitude;
-            console.log("Position:", pos);
-            this.initalizeFormData(pos);
+            (position) => {
+                pos = position.coords.latitude + ", " + position.coords.longitude;
+                console.log("Position:", pos);
+                this.initalizeFormData(pos);
             },
             (error) => alert(JSON.stringify(error)),
-            { timeout: 20000, maximumAge: 1000});
+            {timeout: 20000, maximumAge: 1000});
 
     }
 
     initalizeFormData(pos) {
+        console.log("initializeFormData()");
+
         let newFormData = this.state.formData;
         let date = new Date();
         newFormData["user"] = "username";
         newFormData["category"] = "medical";
         newFormData["time_stamp"] = date.toDateString();
-        newFormData["start_date"] = {id:'start_date', data: date.toDateString(), type: 'date'};
+        newFormData["start_date"] = {id: 'start_date', data: date.toDateString(), type: 'date'};
         date.setFullYear(date.getFullYear() + 3);
-        newFormData["end_date"] = {id:'end_date', data: date.toDateString(), type: 'date'};
-        newFormData["location"] = {id:'location', data: pos, type: 'location'};
+        newFormData["end_date"] = {id: 'end_date', data: date.toDateString(), type: 'date'};
+        newFormData["location"] = {id: 'location', data: pos, type: 'location'};
     }
 
     updateFormInput(data, id, type) {
-        console.log("text:", data);
-        console.log("id:", id);
+        console.log("Updatae form data being called", id + ", " + data);
         let newFormData = this.state.formData;
         newFormData[id] = {id, data, type}
-        console.log("formData:", newFormData);
         this.setState({formData: newFormData});
     }
 
 
     submitIncident() {
         console.log("Return Object", this.state.formData);
+        // console.log("keywords", this.state.formData['keywords'].data.split(' '));
+        var location = this.state.formData['location'].data.split(', ');
+        // console.log("location[0]", location[0]);
+        // console.log("location[1]", location[1]);
+
         let data = {
             method: 'POST',
             headers: {
@@ -103,22 +113,22 @@ export default class NewIncident extends Component {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-            user_id: 1,
-            name:'Name for Incident',
-            desc:'this is a description',
-            cat_id:1,
-            lat:40,
-            long:-22,
-            start:'2017-03-01',
-            end:'2017-03-20',
-            freq:'P1D',
-            keywords:['key', 'word']
+                user_id: 1,
+                name: this.state.formData['title'].data,
+                desc: this.state.formData['description'].data,
+                cat_id: 1,
+                lat: location[0],
+                long: location[1],
+                start: this.state.formData['start_date'].data,
+                end: this.state.formData['end_date'].data,
+                freq: 'P1D',
+                keywords: this.state.formData['keywords'].data.toString().split(' '),
             })
         }
         fetch(incidentURLs.incidents, data)
             .then((response) => response.json())
             .then((responseJson) => {
-            console.log("Reponse to fetch", responseJson);
+                console.log("Reponse to fetch", responseJson);
             }).catch((err) => {
             console.error(err);
         });
@@ -126,10 +136,14 @@ export default class NewIncident extends Component {
 
 
     addField() {
+        console.log("addField()");
+
         this.openModal()
     }
 
     getNewFieldInfo = (title, type) => {
+        console.log("getNewFieldInfo()");
+
         let newArray = this.state.db;
         newArray[title] = {
             title: title,
@@ -161,13 +175,14 @@ export default class NewIncident extends Component {
     }
 
     _renderRow(rowData, sectionID, rowID) {
+        console.log("_renderRow()");
         if (rowData[rowID].type === "text") {
             return (
                 <SingleLineInput title={rowData[rowID].title}
-                                type={rowData[rowID].type}
-                                placeholder={rowData[rowID].placeholder}
-                                updateInput={(data, id, type) => this.updateFormInput(data, id, type)}
-                                id={rowID}
+                                 type={rowData[rowID].type}
+                                 placeholder={rowData[rowID].placeholder}
+                                 updateInput={(data, id, type) => this.updateFormInput(data, id, type)}
+                                 id={rowID}
                 />            );
         } else if (rowData[rowID].type === "multi_text") {
             return (
@@ -202,6 +217,7 @@ export default class NewIncident extends Component {
     }
 
     render() {
+        console.log("NewIncident just rerendered!!!!!!!!!!!");
         return (
             <View style={styles.container }>
                 {this.renderModal()}
@@ -213,11 +229,12 @@ export default class NewIncident extends Component {
                 </Text >
                 <ListView dataSource={this.state.dataSource}
                           renderRow={(data, sectionID, rowID) => this._renderRow(data, sectionID, rowID)}
-                /><TouchableHighlight onPress={() => this.addField()}>
-                <Text style={styles.signIn}>
-                    Add Field
-                </Text>
-            </TouchableHighlight>
+                />
+                <TouchableHighlight onPress={() => this.addField()}>
+                    <Text style={styles.signIn}>
+                        Add Field
+                    </Text>
+                </TouchableHighlight>
                 <TouchableHighlight onPress={() => this.submitIncident()}>
                     <Text style={styles.signIn}>
                         Submit Incident

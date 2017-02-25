@@ -12,6 +12,8 @@ import DateInput from '../../components/DateInput';
 import LocationInput from '../../components/LocationInput';
 
 import {incident} from '../../config/EditIncidentTest'
+import {incidentURLs} from '../../config/strings'
+
 
 export default class EditIncident extends Component {
     constructor() {
@@ -46,7 +48,6 @@ export default class EditIncident extends Component {
         for (let i = 3; i < comps.length; i++) {
             const rowId = comps[i].title;
             console.log("rowId:", rowId);
-
             rowIds.push(rowId);
             dataBlob[rowId] = comps[i];
         }
@@ -63,6 +64,18 @@ export default class EditIncident extends Component {
             return false;
         });
     }
+
+    componentDidMount() {
+        console.log("id!!!!!", this.props.id);
+        fetch(incidentURLs.incidents + '/' + this.props.id)
+            .then((response) => response.json())
+            .then((responseJson) => {
+                console.log("responseJson", responseJson);
+            }).catch((err) => {
+            console.error(err);
+        });
+    }
+
 
     submitIncident() {
         console.log("Return Object", this.state.formData);

@@ -16,10 +16,12 @@ export default class Login extends Component {
         this.state = {
             modalVisible: false,
             loginUrl: null,
+            accessToken: null,
         };
     }
 
     toHome = () => {
+        this.checkLoginStatus();
         this.props.navigator.resetTo({
             id: 'Home',
         });
@@ -32,6 +34,9 @@ export default class Login extends Component {
                 let token = await AsyncStorage.getItem('@AsyncStorage:accessToken');
                 this.setState({accessToken: token});
                 this.toHome();
+                //TODO: get email from token.
+                //TODO: save user number for getting user incidents.
+                console.log(token);
             }
         } catch (error) {
             console.error(error);

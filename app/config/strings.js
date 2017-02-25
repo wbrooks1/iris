@@ -18,4 +18,5 @@ export const loginURLs = {
 
 export const incidentURLs = {
     incidents: 'http://ethan-rowell.ddns.net:8083/api/incidents',
+    users: 'http://ethan-rowell.ddns.net:8083/api/users/'
 };

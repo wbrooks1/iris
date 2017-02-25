@@ -1,13 +1,19 @@
 'use strict';
 
 import React, {Component} from 'react';
-import {AppRegistry, TouchableHighlight, StyleSheet, Text, Image, View, TextInput, ScrollView, Navigator, BackAndroid} from 'react-native'
+import {AppRegistry, ListView, TouchableHighlight, StyleSheet, Text, Image, View, TextInput, ScrollView, Navigator, BackAndroid} from 'react-native'
 import styles from './styles';
+import {incidentURLs} from '../../config/strings'
+
 
 
 export default class YourIncidents extends Component {
     constructor() {
         super();
+        this.state = {
+            dataSource: new ListView.DataSource({
+                rowHasChanged: (row1, row2) => row1 !== row2, }),
+            loaded: false, };
     }
 
     componentWillMount() {
@@ -18,12 +24,45 @@ export default class YourIncidents extends Component {
             }
             return false;
         });
+    };
+
+    componentDidMount() {
+        //TODO: add get user logic.
+        fetch(incidentURLs.users + '1/incidents')
+            .then((response) => response.json())
+            .then((responseJson) => {
+                // console.log("responseJson", responseJson.incidents[0].name);
+                this.setState({
+                    dataSource: this.state.dataSource.cloneWithRows(responseJson.incidents),
+                    loaded: true,
+                })
+            }).catch((err) => {
+            console.error(err);
+        });
+        // console.log("Datasource", this.state.dataSource);
     }
 
-    toEditIncident = () => {
+
+
+    toEditIncident = (id) => {
+        console.log("toEditIncidents: id", id);
         this.props.navigator.push({
             id: 'EditIncident',
+            passProps: {
+                id: id
+            }
         });
+    };
+
+    _renderRow(rowData, sectionID, rowID) {
+         // console.log("rowdata", rowData);
+        return (
+            <View style={styles.row_container}>
+                <TouchableHighlight onPress={() => this.toEditIncident(rowData.incident_id)}>
+                    <Text style={styles.title}>{rowData.incident_id + ": " + rowData.name}</Text>
+                </TouchableHighlight>
+            </View>
+        )
     }
 
     render() {
@@ -35,11 +74,8 @@ export default class YourIncidents extends Component {
                 <Text style={styles.title }>
                     Your Incidents
                 </Text >
-                <TouchableHighlight onPress={() => this.toEditIncident()}>
-                    <Text style={styles.title}>
-                        Edit Incident
-                    </Text>
-                </TouchableHighlight>
+                <ListView dataSource={this.state.dataSource}
+                          renderRow={(data, sectionID, rowID) => this._renderRow(data, sectionID, rowID)}                />
             </View>
         );
     }

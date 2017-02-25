@@ -81,7 +81,8 @@ export default class IRIS extends Component {
         if (routeId === 'EditIncident') {
             return (
                 <EditIncident
-                    navigator={navigator} />
+                    navigator={navigator}
+                    {...route.passProps}/>
             );
         }
         if (routeId === 'NewReport') {

@@ -17,6 +17,10 @@ export default class DateInput extends Component {
         this.setState({id: this.props.id})
     }
 
+    // setDate(date) {
+    //     this.setState({date: date})
+    // }
+
     async openAndroidDatePicker() {
         try {
             const {action, year, month, day} = await DatePickerAndroid.open({
@@ -25,7 +29,7 @@ export default class DateInput extends Component {
             if (action === DatePickerAndroid.dateSetAction ) {
                 var date = new Date(year, month, day);
                 this.setState({date: date});
-                this.props.updateInput(this.state.date.toDateString(),
+                this.props.updateInput(this.state.date.toISOString().slice(0,10),
                     this.state.id, this.props.type);
             }
         } catch ({code, message}) {
@@ -44,7 +48,7 @@ export default class DateInput extends Component {
                     style={styles.input}
                     autoCapitalize="none"
                     editable={false}
-                    defaultValue={this.state.date.toDateString()}
+                    defaultValue={this.state.date.toISOString().slice(0,10)}
                     >
                 </TextInput>
                 </TouchableHighlight>
