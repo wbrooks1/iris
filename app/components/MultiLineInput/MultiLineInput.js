@@ -33,7 +33,7 @@ export default class MultiLineInput extends Component {
                     placeholder={this.props.placeholder}
                     defaultValue={this.state.text}
                     onChangeText={(text) => this.setState({text})}
-                    onEndEditing={(text) => this.props.updateInput(this.state.text, this.state.id, this.props.type)}
+                    onEndEditing={(text) => this.props.updateInput(this.state.text, this.state.id, this.props.title, this.props.type)}
                 >
                 </TextInput>
             </View>

@@ -31,15 +31,13 @@ export default class YourIncidents extends Component {
         fetch(incidentURLs.users + '1/incidents')
             .then((response) => response.json())
             .then((responseJson) => {
-                // console.log("responseJson", responseJson.incidents[0].name);
                 this.setState({
-                    dataSource: this.state.dataSource.cloneWithRows(responseJson.incidents),
+                    dataSource: this.state.dataSource.cloneWithRows(responseJson),
                     loaded: true,
                 })
             }).catch((err) => {
             console.error(err);
         });
-        // console.log("Datasource", this.state.dataSource);
     }
 
 
@@ -54,12 +52,12 @@ export default class YourIncidents extends Component {
         });
     };
 
-    _renderRow(rowData, sectionID, rowID) {
-         // console.log("rowdata", rowData);
+    _renderRow(rowData) {
         return (
             <View style={styles.row_container}>
                 <TouchableHighlight onPress={() => this.toEditIncident(rowData.incident_id)}>
-                    <Text style={styles.title}>{rowData.incident_id + ": " + rowData.name}</Text>
+                    <Text style={styles.title}>{rowData.incident_id + ": " +
+                    rowData.title.data + ": " + rowData.desc.data}</Text>
                 </TouchableHighlight>
             </View>
         )
@@ -75,7 +73,7 @@ export default class YourIncidents extends Component {
                     Your Incidents
                 </Text >
                 <ListView dataSource={this.state.dataSource}
-                          renderRow={(data, sectionID, rowID) => this._renderRow(data, sectionID, rowID)}                />
+                          renderRow={(data) => this._renderRow(data)}                />
             </View>
         );
     }

@@ -30,7 +30,7 @@ export default class DateInput extends Component {
                 var date = new Date(year, month, day);
                 this.setState({date: date});
                 this.props.updateInput(this.state.date.toISOString().slice(0,10),
-                    this.state.id, this.props.type);
+                    this.state.id, this.props.title, this.props.type);
             }
         } catch ({code, message}) {
             console.warn('Cannot open date picker', message);

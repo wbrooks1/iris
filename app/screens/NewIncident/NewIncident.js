@@ -39,25 +39,18 @@ export default class NewIncident extends Component {
     }
 
     formatData(data, category) {
-        console.log("formatData()");
-
         const dataBlob = {};
         const rowIds = [];
         const comps = data.medical;
         for (let i = 0; i < comps.length; i++) {
             const rowId = comps[i].id;
-            console.log("rowId:", rowId);
-
             rowIds.push(rowId);
             dataBlob[rowId] = comps[i];
         }
-        console.log("DataBlob", dataBlob);
         return {dataBlob, rowIds};
     }
 
     componentWillMount() {
-        console.log("componentWillMount()");
-
         BackAndroid.addEventListener('hardwareBackPress', () => {
             if (this.props.navigator && this.props.navigator.getCurrentRoutes().length > 0) {
                 this.props.navigator.pop();
@@ -78,33 +71,31 @@ export default class NewIncident extends Component {
     }
 
     initalizeFormData(pos) {
-        console.log("initializeFormData()");
 
         let newFormData = this.state.formData;
         let date = new Date();
-        newFormData["user"] = "username";
-        newFormData["category"] = "medical";
-        newFormData["time_stamp"] = date.toDateString();
-        newFormData["start_date"] = {id: 'start_date', data: date.toDateString(), type: 'date'};
+        newFormData["user_id"] = 1;
+        newFormData["title"] = {id: 'title', data: '', title: 'Title', type: 'text'};
+        newFormData["desc"] = {id: 'desc', data: '', title: 'Description', type: 'multi_text'};
+        newFormData["cat_id"] = 1;
+        newFormData["location"] = {id: 'location', data: pos, title: 'Location', type: 'location'};
+        newFormData["start_date"] = {id: 'start_date', data: date.toDateString(), title: 'Start Date', type: 'date'};
         date.setFullYear(date.getFullYear() + 3);
-        newFormData["end_date"] = {id: 'end_date', data: date.toDateString(), type: 'date'};
-        newFormData["location"] = {id: 'location', data: pos, type: 'location'};
+        newFormData["end_date"] = {id: 'end_date', data: date.toDateString(), title: 'End Date', type: 'date'};
+        newFormData["freq"] = {id: 'freq', data: 'P1H', title: 'Reporting Frequency', type: 'text'};
+        newFormData["keywords"] = {id: 'keywords', data: '', title: 'Keywords', type: 'text'};
     }
 
-    updateFormInput(data, id, type) {
-        console.log("Updatae form data being called", id + ", " + data);
+    updateFormInput(data, id, title, type) {
         let newFormData = this.state.formData;
-        newFormData[id] = {id, data, type}
+        newFormData[id] = {id, data, title, type};
+
         this.setState({formData: newFormData});
     }
 
 
     submitIncident() {
         console.log("Return Object", this.state.formData);
-        // console.log("keywords", this.state.formData['keywords'].data.split(' '));
-        var location = this.state.formData['location'].data.split(', ');
-        // console.log("location[0]", location[0]);
-        // console.log("location[1]", location[1]);
 
         let data = {
             method: 'POST',
@@ -112,18 +103,10 @@ export default class NewIncident extends Component {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-                user_id: 1,
-                name: this.state.formData['title'].data,
-                desc: this.state.formData['description'].data,
-                cat_id: 1,
-                lat: location[0],
-                long: location[1],
-                start: this.state.formData['start_date'].data,
-                end: this.state.formData['end_date'].data,
-                freq: 'P1D',
-                keywords: this.state.formData['keywords'].data.toString().split(' '),
-            })
+            body:
+                JSON.stringify(
+                this.state.formData
+            )
         }
         fetch(incidentURLs.incidents, data)
             .then((response) => response.json())
@@ -136,14 +119,10 @@ export default class NewIncident extends Component {
 
 
     addField() {
-        console.log("addField()");
-
         this.openModal()
     }
 
     getNewFieldInfo = (title, type) => {
-        console.log("getNewFieldInfo()");
-
         let newArray = this.state.db;
         newArray[title] = {
             title: title,
@@ -175,13 +154,12 @@ export default class NewIncident extends Component {
     }
 
     _renderRow(rowData, sectionID, rowID) {
-        console.log("_renderRow()");
         if (rowData[rowID].type === "text") {
             return (
                 <SingleLineInput title={rowData[rowID].title}
                                  type={rowData[rowID].type}
                                  placeholder={rowData[rowID].placeholder}
-                                 updateInput={(data, id, type) => this.updateFormInput(data, id, type)}
+                                 updateInput={(data, id, title, type) => this.updateFormInput(data, id, title, type)}
                                  id={rowID}
                 />            );
         } else if (rowData[rowID].type === "multi_text") {
@@ -189,7 +167,7 @@ export default class NewIncident extends Component {
                 <MultiLineInput title={rowData[rowID].title}
                                 type={rowData[rowID].type}
                                 placeholder={rowData[rowID].placeholder}
-                                updateInput={(data, id, type) => this.updateFormInput(data, id, type)}
+                                updateInput={(data, id, title, type) => this.updateFormInput(data, id, title, type)}
                                 id={rowID}
                 />
             );
@@ -197,7 +175,7 @@ export default class NewIncident extends Component {
             return (
                 <DateInput title={rowData[rowID].title}
                            type={rowData[rowID].type}
-                           updateInput={(data, id, type) => this.updateFormInput(data, id, type)}
+                           updateInput={(data, id, title, type) => this.updateFormInput(data, id, title, type)}
                            id={rowID}
                            date={rowData[rowID].date}
                 />
@@ -206,7 +184,7 @@ export default class NewIncident extends Component {
             return (
                 <LocationInput title={rowData[rowID].title}
                                type={rowData[rowID].type}
-                               updateInput={(data, id, type) => this.updateFormInput(data, id, type)}
+                               updateInput={(data, id, title, type) => this.updateFormInput(data, id, title, type)}
                                id={rowID}
                                navigator={this.props.navigator}
                                location={this.state.location}
@@ -217,7 +195,6 @@ export default class NewIncident extends Component {
     }
 
     render() {
-        console.log("NewIncident just rerendered!!!!!!!!!!!");
         return (
             <View style={styles.container }>
                 {this.renderModal()}

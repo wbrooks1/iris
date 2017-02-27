@@ -18,42 +18,15 @@ import {incidentURLs} from '../../config/strings'
 export default class EditIncident extends Component {
     constructor() {
         super();
-        const getRowData = (dataBlob, rowId) => dataBlob[`${rowId}`];
-        const ds = new ListView.DataSource({
-            rowHasChanged: (r1, r2) => r1 !== r2,
-            getRowData,
-        });
-        const {dataBlob, rowIds} = this.formatData(incident, "medical");
         this.state = {
-            dataSource: ds.cloneWithRows(dataBlob, rowIds),
-            db: dataBlob,
+            dataSource: new ListView.DataSource({
+                rowHasChanged: (row1, row2) => row1 !== row2,
+            }),
             formData: {},
             modalVisible: false,
-            location: {
-                latitude: null,
-                longitude: null,
-            },
         };
     }
 
-    formatData(data, category) {
-        const dataBlob = {};
-        const rowIds = [];
-        const comps = data.incident;
-        // this.setState({formData: comps});
-        console.log("Edit incident data", data);
-        console.log("Edit incident comps.length", comps.length);
-        console.log("Edit incident data", data);
-
-        for (let i = 3; i < comps.length; i++) {
-            const rowId = comps[i].title;
-            console.log("rowId:", rowId);
-            rowIds.push(rowId);
-            dataBlob[rowId] = comps[i];
-        }
-        console.log("DataBlob", dataBlob);
-        return {dataBlob, rowIds};
-    }
 
     componentWillMount() {
         BackAndroid.addEventListener('hardwareBackPress', () => {
@@ -66,59 +39,82 @@ export default class EditIncident extends Component {
     }
 
     componentDidMount() {
-        console.log("id!!!!!", this.props.id);
+        this.fetchData()
+    }
+
+    fetchData() {
         fetch(incidentURLs.incidents + '/' + this.props.id)
             .then((response) => response.json())
             .then((responseJson) => {
-                console.log("responseJson", responseJson);
+                this.formatData(responseJson);
             }).catch((err) => {
             console.error(err);
         });
     }
 
+    formatData(data) {
+        var dataArr = [];
+        for (var title in data) {
+            if (data[title] && data[title].hasOwnProperty('id')) {
+                dataArr.push(data[title]);
+            }
+        }
+        this.setState({
+            dataSource: this.state.dataSource.cloneWithRows(dataArr),
+            formData: data
+        })
+    }
+
+
+    updateFormInput(data, id, title, type) {
+        let newFormData = this.state.formData;
+        newFormData[id] = {id, data, title, type};
+        this.setState({formData: newFormData});
+    }
 
     submitIncident() {
+        //TODO: add submit incident logic.
         console.log("Return Object", this.state.formData);
     }
 
-    _renderRow(rowData, sectionID, rowID) {
-        if (rowData[rowID].type === "text") {
+    _renderRow(rowData) {
+        if (rowData.type === "text") {
             return (
-                <SingleLineInput title={rowData[rowID].title}
-                                 type={rowData[rowID].type}
-                                 data={rowData[rowID].data}
+                <SingleLineInput title={rowData.title}
+                                 type={rowData.type}
+                                 data={rowData.data}
                                  updateInput={(data, id, type) => this.updateFormInput(data, id, type)}
-                                 id={rowID}
+                                 id={rowData.id}
                                  isEdit={true}
                 />
             );
-        } else if (rowData[rowID].type === "multi_text") {
+        } else if (rowData.type === "multi_text") {
             return (
-                <MultiLineInput title={rowData[rowID].title}
-                                type={rowData[rowID].type}
-                                data={rowData[rowID].data}
+                <MultiLineInput title={rowData.title}
+                                type={rowData.type}
+                                data={rowData.data}
                                 updateInput={(data, id, type) => this.updateFormInput(data, id, type)}
-                                id={rowID}
+                                id={rowData.id}
                                 isEdit={true}
                 />
             );
-        } else if (rowData[rowID].type === 'date') {
+        } else if (rowData.type === 'date') {
             return (
-                <DateInput title={rowData[rowID].title}
-                           type={rowData[rowID].type}
+                <DateInput title={rowData.title}
+                           type={rowData.type}
                            updateInput={(data, id, type) => this.updateFormInput(data, id, type)}
-                           id={rowID}
-                           date={rowData[rowID].data}
+                           id={rowData.id}
+                           date={rowData.data}
                 />
             )
-        } else if (rowData[rowID].type === 'location') {
+        } else if (rowData.type === 'location') {
             return (
-                <LocationInput title={rowData[rowID].title}
-                               type={rowData[rowID].type}
+                <LocationInput title={rowData.title}
+                               type={rowData.type}
                                updateInput={(data, id, type) => this.updateFormInput(data, id, type)}
-                               id={rowID}
+                               id={rowData.id}
                                navigator={this.props.navigator}
-                               location={rowData[rowID].data}
+                               location={rowData.data}
                 />
             )
 
@@ -135,7 +131,7 @@ export default class EditIncident extends Component {
                     Edit Incident
                 </Text >
                 <ListView dataSource={this.state.dataSource} enableEmptySections={true}
-                          renderRow={(data, sectionID, rowID) => this._renderRow(data, sectionID, rowID)}
+                          renderRow={(data) => this._renderRow(data)}
                 />
                 <TouchableHighlight onPress={() => this.submitIncident()}>
                     <Text style={styles.signIn}>
