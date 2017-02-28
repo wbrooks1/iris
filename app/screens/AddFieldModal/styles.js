@@ -9,27 +9,20 @@ export default StyleSheet.create({
         alignItems: 'center',
     },
     modal: {
-        // flex: 1,
         marginTop: window.height / 4,
-        height: window.height / 2,
+        height: 275,
         width: window.width - 20,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: colors.darkBackground,
+        backgroundColor: colors.carbon,
         padding: 20,
         borderRadius: 10,
         alignSelf: 'center',
     },
     text_box: {
-      backgroundColor: colors.midBackground,
+      backgroundColor: colors.neutral,
       borderRadius: 10,
 
-    },
-    add_button: {
-        fontSize: 20,
-        textAlign: 'center',
-        margin: 5,
-        color: colors.buttonTextBlue,
     },
     picker: {
         width: window.width - 60,
@@ -46,7 +39,23 @@ export default StyleSheet.create({
     },
     title: {
         fontSize: 20,
-        textAlign: 'center',
+        fontFamily: 'centuryschl',
+        margin: 15,
+        color: colors.black,
+    },
+    label: {
+        fontSize: 20,
+        fontFamily: 'centuryschl',
+        textAlign: 'left',
         margin: 5,
+    },
+    submit_button: {
+        backgroundColor: colors.sky,
+        width: 200,
+        height: 50,
+        borderRadius: 10,
+        marginVertical: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
 });

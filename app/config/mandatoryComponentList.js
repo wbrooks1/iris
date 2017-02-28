@@ -4,8 +4,8 @@ export const components = {
     medical: [
         {"id": "title", "type": "text", "title": "Title", "placeholder": "Enter incident title"},
         {"id": "desc", "type": "multi_text", "title": "Description", "placeholder": "Enter incident description"},
-        {"id": "start_date", "type": "date", "title": "Start Date", "date": new Date().toDateString()},
-        {"id": "end_date", "type": "date", "title": "End Date", "date": date.toDateString()},
+        {"id": "start_date", "type": "date", "title": "Start Date", "data": new Date().toDateString()},
+        {"id": "end_date", "type": "date", "title": "End Date", "data": date.toDateString()},
         {"id": "keywords", "type": "text", "title": "Search Keywords", "placeholder": "Enter search keywords"},
         {"id": "location", "type": "location", "title": "Incident Location"}
 

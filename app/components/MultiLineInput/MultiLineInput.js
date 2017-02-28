@@ -19,7 +19,6 @@ export default class MultiLineInput extends Component {
     }
 
     render() {
-        console.log("MultiLine is being rerendered");
         return (
             <View style={styles.container}>
                 <Text style={styles.title}>
@@ -32,8 +31,10 @@ export default class MultiLineInput extends Component {
                     autoCorrect={false}
                     placeholder={this.props.placeholder}
                     defaultValue={this.state.text}
+                    returnKeyType={'next'}
                     onChangeText={(text) => this.setState({text})}
                     onEndEditing={(text) => this.props.updateInput(this.state.text, this.state.id, this.props.title, this.props.type)}
+                    underlineColorAndroid={'#A9A9A9'}
                 >
                 </TextInput>
             </View>
@@ -41,8 +42,5 @@ export default class MultiLineInput extends Component {
     }
 }
 
-MultiLineInput.propTypes = {
-    borderTop: React.PropTypes.bool,
-};
 
 

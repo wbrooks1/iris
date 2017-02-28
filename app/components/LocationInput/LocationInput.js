@@ -19,20 +19,29 @@ export default class LocationInput extends Component {
     }
 
     componentWillMount() {
-        if (this.props.isEdit) {
-            //TODO: handle incoming location for editing.
-        }
         this.setState({id: this.props.id})
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                this.setState({ location: {
-                    latitude: position.coords.latitude,
-                    longitude: position.coords.longitude},
-                    mapDisabled: false
-                });
-            },
+        if (this.props.isEdit) {
+            var latlon = this.props.data.split(', ');
+            this.setState({
+                location: {
+                    latitude: latlon[0],
+                    longitude: latlon[1]
+                }
+            })
+        } else {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    this.setState({
+                        location: {
+                            latitude: position.coords.latitude,
+                            longitude: position.coords.longitude
+                        },
+                        mapDisabled: false
+                    });
+                },
                 (error) => alert(JSON.stringify(error)),
-                { timeout: 20000, maximumAge: 1000});
+                {timeout: 20000, maximumAge: 1000});
+        }
     }
 
     updateLocation = (loc) => {

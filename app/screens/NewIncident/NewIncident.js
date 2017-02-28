@@ -3,7 +3,7 @@
 import React, {Component} from 'react';
 import {
     AppRegistry, StyleSheet, Text, Image, View, TextInput, ScrollView, Navigator, BackAndroid,
-    ListView, TouchableHighlight
+    ListView, TouchableHighlight, Alert,
 } from 'react-native'
 import styles from './styles';
 import SingleLineInput from '../../components/SingleLineInput';
@@ -71,7 +71,6 @@ export default class NewIncident extends Component {
     }
 
     initalizeFormData(pos) {
-
         let newFormData = this.state.formData;
         let date = new Date();
         newFormData["user_id"] = 1;
@@ -84,37 +83,61 @@ export default class NewIncident extends Component {
         newFormData["end_date"] = {id: 'end_date', data: date.toDateString(), title: 'End Date', type: 'date'};
         newFormData["freq"] = {id: 'freq', data: 'P1H', title: 'Reporting Frequency', type: 'text'};
         newFormData["keywords"] = {id: 'keywords', data: '', title: 'Keywords', type: 'text'};
+        newFormData["custom_fields"] = {id: 'custom_fields', data: {}, title: 'Custom', type: 'custom'};
+        this.setState({formData: newFormData});
     }
 
     updateFormInput(data, id, title, type) {
         let newFormData = this.state.formData;
-        newFormData[id] = {id, data, title, type};
-
+        if (id == title) {
+            newFormData['custom_fields'].data[id] = {id, data, title, type};
+            console.log('input from custom field', newFormData);
+        } else {
+            newFormData[id] = {id, data, title, type};
+        }
         this.setState({formData: newFormData});
     }
 
 
+    verifySubmission() {
+        var formCompleted = true;
+        var toBeFilled = [];
+        for(var item in this.state.formData) {
+            if(this.state.formData[item].id && this.state.formData[item].data == '') {
+                formCompleted = false;
+                toBeFilled.push(' ' + this.state.formData[item].title);
+            }
+        } if (formCompleted) {
+            Alert.alert('Submit Incident', 'Are you sure you want to submit incident?',
+                [{text: 'Cancel', onPress: () => console.log('Cancel Pressed')},
+                    {text: 'OK', onPress: () => this.submitIncident()}]);
+        } else {
+            Alert.alert('Submit Incident', 'Form incomplete. Mandatory fields: '
+                + toBeFilled + ', must not be left blank.',
+                [{text: 'OK', onPress: () => console.log('form not complete')},])
+        }
+    }
+
     submitIncident() {
         console.log("Return Object", this.state.formData);
-
-        let data = {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body:
-                JSON.stringify(
-                this.state.formData
-            )
-        }
-        fetch(incidentURLs.incidents, data)
-            .then((response) => response.json())
-            .then((responseJson) => {
-                console.log("Reponse to fetch", responseJson);
-            }).catch((err) => {
-            console.error(err);
-        });
+        // let data = {
+        //     method: 'POST',
+        //     headers: {
+        //         'Accept': 'application/json',
+        //         'Content-Type': 'application/json',
+        //     },
+        //     body: JSON.stringify(
+        //         this.state.formData
+        //     )
+        // }
+        // fetch(incidentURLs.incidents, data)
+        //     .then((response) => response.json())
+        //     .then((responseJson) => {
+        //         console.log("Reponse to fetch", responseJson);
+        //         this.props.navigator.pop();
+        //     }).catch((err) => {
+        //     console.error("NewIncident submitIncident()", err);
+        // });
     }
 
 
@@ -122,6 +145,11 @@ export default class NewIncident extends Component {
         this.openModal()
     }
 
+    /**
+     * Adds new custom_field component to ListView dataSource
+     * @param title
+     * @param type
+     */
     getNewFieldInfo = (title, type) => {
         let newArray = this.state.db;
         newArray[title] = {
@@ -153,7 +181,7 @@ export default class NewIncident extends Component {
         }
     }
 
-    _renderRow(rowData, sectionID, rowID) {
+    renderRow(rowData, sectionID, rowID) {
         if (rowData[rowID].type === "text") {
             return (
                 <SingleLineInput title={rowData[rowID].title}
@@ -177,7 +205,7 @@ export default class NewIncident extends Component {
                            type={rowData[rowID].type}
                            updateInput={(data, id, title, type) => this.updateFormInput(data, id, title, type)}
                            id={rowID}
-                           date={rowData[rowID].date}
+                           date={rowData[rowID].data}
                 />
             )
         } else if (rowData[rowID].type === 'location') {
@@ -194,26 +222,43 @@ export default class NewIncident extends Component {
         }
     }
 
+    renderHeader() {
+        return (
+            <View style={styles.container}>
+                <Image style={styles.image } source={require('../../images/iris_logo_homepage.png' ) }/>
+                <View style={styles.footer}>
+                    <Text style={styles.header_text}>
+                        New Incident
+                    </Text >
+                </View>
+            </View>
+        );
+    }
+
+    renderFooter() {
+        return (
+            <View style={styles.footer}>
+                <TouchableHighlight onPress={() => this.addField()}>
+                    <Text style={styles.add_field_text}>
+                        +Add Field
+                    </Text>
+                </TouchableHighlight>
+            </View>
+        )
+    }
+
     render() {
         return (
             <View style={styles.container }>
                 {this.renderModal()}
-                <Text style={styles.title }>
-                    Incident Response In Situ
-                </Text >
-                <Text style={styles.title }>
-                    New Incident
-                </Text >
                 <ListView dataSource={this.state.dataSource}
-                          renderRow={(data, sectionID, rowID) => this._renderRow(data, sectionID, rowID)}
+                          renderRow={(data, sectionID, rowID) => this.renderRow(data, sectionID, rowID)}
+                          renderHeader={() => this.renderHeader()}
+                          renderFooter={() => this.renderFooter()}
+
                 />
-                <TouchableHighlight onPress={() => this.addField()}>
-                    <Text style={styles.signIn}>
-                        Add Field
-                    </Text>
-                </TouchableHighlight>
-                <TouchableHighlight onPress={() => this.submitIncident()}>
-                    <Text style={styles.signIn}>
+                <TouchableHighlight onPress={() => this.verifySubmission()} style={styles.submit_button}>
+                    <Text style={styles.submit_text}>
                         Submit Incident
                     </Text>
                 </TouchableHighlight>

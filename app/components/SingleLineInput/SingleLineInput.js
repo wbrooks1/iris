@@ -26,10 +26,12 @@ export default class SingleLineInput extends Component {
                 </Text>
                 <TextInput
                     style={styles.input}
+                    underlineColorAndroid={'#A9A9A9'}
                     autoCapitalize="sentences"
                     autoCorrect={false}
                     placeholder={this.props.placeholder}
                     defaultValue={this.state.text}
+                    returnKeyType={'next'}
                     onChangeText={(text) => this.setState({text})}
                     onEndEditing={(text) => this.props.updateInput(
                         this.state.text, this.state.id, this.props.title, this.props.type)}>

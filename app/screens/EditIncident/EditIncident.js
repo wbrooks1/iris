@@ -3,7 +3,7 @@
 import React, {Component} from 'react';
 import {
     AppRegistry, StyleSheet, Text, Image, View, TextInput, ScrollView, Navigator, BackAndroid,
-    ListView, TouchableHighlight
+    ListView, TouchableHighlight, Alert,
 } from 'react-native'
 import styles from './styles';
 import SingleLineInput from '../../components/SingleLineInput';
@@ -11,10 +11,11 @@ import MultiLineInput from '../../components/MultiLineInput';
 import DateInput from '../../components/DateInput';
 import LocationInput from '../../components/LocationInput';
 
-import {incident} from '../../config/EditIncidentTest'
 import {incidentURLs} from '../../config/strings'
 
-
+/**
+ * Edit incident screen retrieves and updates selected incident data.
+ */
 export default class EditIncident extends Component {
     constructor() {
         super();
@@ -42,6 +43,7 @@ export default class EditIncident extends Component {
         this.fetchData()
     }
 
+
     fetchData() {
         fetch(incidentURLs.incidents + '/' + this.props.id)
             .then((response) => response.json())
@@ -52,11 +54,22 @@ export default class EditIncident extends Component {
         });
     }
 
+    /**
+     * Extract ListView components and custom_fields from incident data.
+     * Set formData equal to incident data.
+     * @param data
+     */
     formatData(data) {
         var dataArr = [];
-        for (var title in data) {
-            if (data[title] && data[title].hasOwnProperty('id')) {
-                dataArr.push(data[title]);
+        for (var item in data) {
+            if (data[item] && data[item].hasOwnProperty('id')) {
+                if (item == 'custom_fields') {
+                    for (var a in data['custom_fields'].data) {
+                        dataArr.push(data['custom_fields'].data[a]);
+                    }
+                } else {
+                    dataArr.push(data[item]);
+                }
             }
         }
         this.setState({
@@ -65,19 +78,53 @@ export default class EditIncident extends Component {
         })
     }
 
-
+    /**
+     * Update formData to reflect field changes.
+     * Custom fields data added to formData[custom_fields].data
+     * @param data
+     * @param id
+     * @param title
+     * @param type
+     */
     updateFormInput(data, id, title, type) {
         let newFormData = this.state.formData;
+        if (id == title) {
+            newFormData['custom_fields'].data[id] = {id, data, title, type};
+            console.log('input from custom field', newFormData);
+        }
         newFormData[id] = {id, data, title, type};
         this.setState({formData: newFormData});
     }
 
+    /**
+     * Submit formData as POST body.
+     */
     submitIncident() {
         //TODO: add submit incident logic.
         console.log("Return Object", this.state.formData);
     }
 
-    _renderRow(rowData) {
+    verifySubmission() {
+        var formCompleted = true;
+        var toBeFilled = [];
+        for(var item in this.state.formData) {
+            if(this.state.formData[item].id && this.state.formData[item].data == '') {
+                formCompleted = false;
+                toBeFilled.push(' ' + this.state.formData[item].title);
+            }
+        } if (formCompleted) {
+            Alert.alert('Edit Incident', 'Are you sure you want to save incident?' +
+                'Overwritten information will be lost.',
+                [{text: 'Cancel', onPress: () => console.log('Cancel Pressed')},
+                    {text: 'OK', onPress: () => this.submitIncident()}]);
+        } else {
+            Alert.alert('Edit Incident', 'Form incomplete. Mandatory fields: '
+                + toBeFilled + ', must not be left blank.',
+                [{text: 'OK', onPress: () => console.log('form not complete')},])
+        }
+    }
+
+    renderRow(rowData) {
         if (rowData.type === "text") {
             return (
                 <SingleLineInput title={rowData.title}
@@ -111,30 +158,39 @@ export default class EditIncident extends Component {
             return (
                 <LocationInput title={rowData.title}
                                type={rowData.type}
+                               data={rowData.data}
                                updateInput={(data, id, type) => this.updateFormInput(data, id, type)}
                                id={rowData.id}
                                navigator={this.props.navigator}
                                location={rowData.data}
+                               isEdit={true}
                 />
             )
 
         }
     }
 
-    render() {
+    renderHeader() {
         return (
-            <View style={styles.container }>
-                <Text style={styles.title }>
-                    Incident Response In Situ
-                </Text >
+            <View style={styles.container}>
+                <Image style = {styles.image } source = {require('../../images/iris_logo_homepage.png' ) }/>
                 <Text style={styles.title }>
                     Edit Incident
                 </Text >
-                <ListView dataSource={this.state.dataSource} enableEmptySections={true}
-                          renderRow={(data) => this._renderRow(data)}
+            </View>
+        );
+    }
+
+    render() {
+        return (
+            <View style={styles.container }>
+                <ListView style={styles.list_container}
+                    dataSource={this.state.dataSource} enableEmptySections={true}
+                          renderRow={(data) => this.renderRow(data)}
+                          renderHeader={() => this.renderHeader()}
                 />
-                <TouchableHighlight onPress={() => this.submitIncident()}>
-                    <Text style={styles.signIn}>
+                <TouchableHighlight style={styles.submit_button} onPress={() => this.verifySubmission()}>
+                    <Text style={styles.save_text}>
                         Save Changes
                     </Text>
                 </TouchableHighlight>

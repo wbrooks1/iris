@@ -25,6 +25,6 @@ export default StyleSheet.create({
         fontSize: 20,
         textAlign: 'center',
         margin: 5,
-        color: colors.buttonTextBlue
+        color: colors.ink
     },
 });

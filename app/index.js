@@ -88,7 +88,8 @@ export default class IRIS extends Component {
         if (routeId === 'NewReport') {
             return (
                 <NewReport
-                    navigator={navigator} />
+                    navigator={navigator}
+                    {...route.passProps}/>
             );
         }
     }

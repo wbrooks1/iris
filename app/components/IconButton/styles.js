@@ -8,7 +8,8 @@ export default StyleSheet.create({
         alignItems: 'center',
     },
     buttonText: {
-        color: colors.buttonText,
+        color: colors.carbon,
+        fontFamily: 'centuryschl',
         fontSize: 14,
         alignSelf: 'center',
     },

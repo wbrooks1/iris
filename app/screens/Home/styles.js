@@ -6,20 +6,20 @@ var {height, width} = Dimensions.get('window')
 export default StyleSheet.create({
   container: {
       flex: 1,
-      backgroundColor: colors.lightBackground,
+      backgroundColor: colors.neutral,
   },
   row_container: {
     flex: 2,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: colors.lightBackground,
+    // backgroundColor: colors.neutral,
   },
   title: {
       fontSize: 20,
       textAlign: 'center',
       margin: 10,
-      color: colors.headerText,
+      color: colors.black,
   },
   image: {
       width: width,
@@ -31,6 +31,10 @@ export default StyleSheet.create({
         fontSize: 20,
         textAlign: 'right',
         margin: 10,
-        color: colors.buttonTextBlue,
+        color: colors.redAccent,
     },
+    background: {
+      width: width,
+        height: height,
+    }
 });

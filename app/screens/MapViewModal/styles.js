@@ -18,10 +18,10 @@ export default StyleSheet.create({
         fontSize: 30,
         textAlign: 'center',
         margin: 5,
-        color: colors.buttonTextBlue,
+        color: colors.ink,
         justifyContent: 'flex-end',
         width: window.width,
-        backgroundColor: colors.lightBackground,
+        backgroundColor: colors.neutral,
     },
     container: {
         justifyContent: 'flex-end',

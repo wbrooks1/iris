@@ -8,20 +8,20 @@ export default StyleSheet.create({
         flex: 1,
         //justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: colors.lightBackground,
+        backgroundColor: colors.neutral,
     },
     row_container: {
         flex: -1,
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: colors.lightBackground,
+        backgroundColor: colors.neutral,
     },
     title: {
         fontSize: 20,
         textAlign: 'center',
         margin: 10,
-        color: colors.headerText,
+        color: colors.black,
     },
     image: {
         width: width,

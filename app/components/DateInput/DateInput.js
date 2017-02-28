@@ -12,14 +12,14 @@ export default class DateInput extends Component {
     }
 
     componentWillMount() {
-        var date = new Date(this.props.date);
-        this.setState({date: date})
+        if (this.props.date) {
+            var date = new Date(this.props.date);
+            this.setState({date: date})
+        } else {
+            this.state.date = new Date();
+        }
         this.setState({id: this.props.id})
     }
-
-    // setDate(date) {
-    //     this.setState({date: date})
-    // }
 
     async openAndroidDatePicker() {
         try {
@@ -57,8 +57,5 @@ export default class DateInput extends Component {
     }
 }
 
-DateInput.propTypes = {
-    borderTop: React.PropTypes.bool,
-};
 
 

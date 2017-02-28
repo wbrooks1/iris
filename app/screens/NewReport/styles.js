@@ -6,32 +6,46 @@ var {height, width} = Dimensions.get('window')
 export default StyleSheet.create({
     container: {
         flex: 1,
-        //justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: colors.lightBackground,
+        backgroundColor: colors.neutral,
     },
     row_container: {
         flex: -1,
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: colors.lightBackground,
+        backgroundColor: colors.neutral,
     },
     title: {
         fontSize: 20,
         textAlign: 'center',
-        margin: 10,
-        color: colors.headerText,
+        marginTop: 10,
+        color: colors.black,
+        fontFamily: 'centuryschl',
     },
     image: {
         width: width,
-        height: height / 3,
+        height: 50,
         justifyContent: 'flex-start',
+        resizeMode: 'contain',
     },
-    signIn: {
-        fontSize: 20,
+    save_text: {
+        fontFamily: 'centuryschl',
+        fontSize: 25,
         textAlign: 'center',
-        margin: 5,
-        color: colors.buttonTextBlue
+        color: colors.black,
+        width: width,
+    },
+    list_container: {
+        borderRadius: 10,
+    },
+    submit_button: {
+        backgroundColor: colors.sky,
+        width: 250,
+        height: 50,
+        borderRadius: 10,
+        marginVertical: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
 });

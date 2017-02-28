@@ -11,48 +11,22 @@ import MultiLineInput from '../../components/MultiLineInput';
 import DateInput from '../../components/DateInput';
 import LocationInput from '../../components/LocationInput';
 
-import {incident} from '../../config/EditIncidentTest'
+import {incidentURLs} from '../../config/strings'
+
 
 export default class NewReport extends Component {
     constructor() {
         super();
-        const getRowData = (dataBlob, rowId) => dataBlob[`${rowId}`];
-        const ds = new ListView.DataSource({
-            rowHasChanged: (r1, r2) => r1 !== r2,
-            getRowData,
-        });
-        const {dataBlob, rowIds} = this.formatData(incident, "medical");
         this.state = {
-            dataSource: ds.cloneWithRows(dataBlob, rowIds),
-            db: dataBlob,
+            dataSource: new ListView.DataSource({
+                rowHasChanged: (row1, row2) => row1 !== row2,
+            }),
             formData: {},
             modalVisible: false,
-            location: {
-                latitude: null,
-                longitude: null,
-            },
+            incidentName: '',
         };
     }
 
-    formatData(data, category) {
-        const dataBlob = {};
-        const rowIds = [];
-        const comps = data.incident;
-        // this.setState({formData: comps});
-        console.log("Edit incident data", data);
-        console.log("Edit incident comps.length", comps.length);
-        console.log("Edit incident data", data);
-
-        for (let i = 3; i < comps.length; i++) {
-            const rowId = comps[i].title;
-            console.log("rowId:", rowId);
-
-            rowIds.push(rowId);
-            dataBlob[rowId] = comps[i];
-        }
-        console.log("DataBlob", dataBlob);
-        return {dataBlob, rowIds};
-    }
 
     componentWillMount() {
         BackAndroid.addEventListener('hardwareBackPress', () => {
@@ -64,69 +38,174 @@ export default class NewReport extends Component {
         });
     }
 
-    submitIncident() {
-        console.log("Return Object", this.state.formData);
+    componentDidMount() {
+        this.fetchData()
     }
 
-    _renderRow(rowData, sectionID, rowID) {
-        if (rowData[rowID].type === "text") {
+    fetchData() {
+        fetch(incidentURLs.incidents + '/' + this.props.id)
+            .then((response) => response.json())
+            .then((responseJson) => {
+                this.formatData(responseJson);
+            }).catch((err) => {
+            console.error(err);
+        });
+    }
+
+    formatData(data) {
+        //TODO: get user_id for report creator and fix naming for title and description.
+        var newUserID = 1;
+        var dataArr = [];
+        this.setState({incidentName: data['title'].data});
+        delete data['created'];
+        delete data['title'];
+        delete data['start_date'];
+        delete data['end_date'];
+        delete data['frequency'];
+        delete data['keywords'];
+        delete data['cat_id'];
+
+
+        for (var item in data) {
+            if (data[item] && data[item].hasOwnProperty('id')) {
+                if (item == 'custom_fields') {
+                    for (var a in data['custom_fields'].data) {
+                        dataArr.push(data['custom_fields'].data[a]);
+                    }
+                } else {
+                    dataArr.push(data[item]);
+                }
+            }
+        }
+        data['user_id'] = newUserID;
+        delete data['title'];
+        this.setState({
+            dataSource: this.state.dataSource.cloneWithRows(dataArr),
+            formData: data
+        })
+        console.log("formData after blanking", this.state.formData);
+    }
+
+
+    updateFormInput(data, id, title, type) {
+        let newFormData = this.state.formData;
+        if (id == title) {
+            newFormData['custom_fields'].data[id] = {id, data, title, type};
+            console.log('input from custom field', newFormData);
+        } else {
+            newFormData[id] = {id, data, title, type};
+        }
+        this.setState({formData: newFormData});
+    }
+
+    verifySubmission() {
+        var formCompleted = true;
+        var toBeFilled = [];
+        for(var item in this.state.formData) {
+            if(this.state.formData[item].id && this.state.formData[item].data == '') {
+                formCompleted = false;
+                toBeFilled.push(' ' + this.state.formData[item].title);
+            }
+        } if (formCompleted) {
+            Alert.alert('New Report', 'Are you sure you want to save incident?',
+                [{text: 'Cancel', onPress: () => console.log('Cancel Pressed')},
+                    {text: 'OK', onPress: () => this.submitReport()}]);
+        } else {
+            Alert.alert('New Report', 'Form incomplete. Mandatory fields: '
+                + toBeFilled + ', must not be left blank.',
+                [{text: 'OK', onPress: () => console.log('form not complete')},])
+        }
+    }
+
+    submitReport() {
+        console.log("Return Object", this.state.formData);
+        let data = {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body:
+                JSON.stringify(
+                    this.state.formData
+                )
+        }
+        fetch(incidentURLs.reports + 'incidents/' + this.props.id + '/reports', data)
+            .then((response) => response.json())
+            .then((responseJson) => {
+                console.log("Reponse to fetch", responseJson);
+            }).catch((err) => {
+            console.error("NewReport submitReport()", err);
+        });
+        this.props.navigator.pop();
+
+    }
+
+
+    renderRow(rowData) {
+        if (rowData.type === "text") {
             return (
-                <SingleLineInput title={rowData[rowID].title}
-                                 type={rowData[rowID].type}
-                                 placeholder={'Enter text'}
+                <SingleLineInput title={rowData.title}
+                                 type={rowData.type}
+                                 placeholder={'Enter info to submit as ' + rowData.title}
                                  updateInput={(data, id, type) => this.updateFormInput(data, id, type)}
-                                 id={rowID}
-                                 isEdit={true}
+                                 id={rowData.id}
                 />
             );
-        } else if (rowData[rowID].type === "multi_text") {
+        } else if (rowData.type === "multi_text") {
             return (
-                <MultiLineInput title={rowData[rowID].title}
-                                type={rowData[rowID].type}
-                                placeholder={'Enter text'}
+                <MultiLineInput title={rowData.title}
+                                type={rowData.type}
+                                placeholder={'Enter info to submit as ' + rowData.title}
                                 updateInput={(data, id, type) => this.updateFormInput(data, id, type)}
-                                id={rowID}
-                                isEdit={true}
+                                id={rowData.id}
                 />
             );
-        } else if (rowData[rowID].type === 'date') {
+        } else if (rowData.type === 'date') {
             return (
-                <DateInput title={rowData[rowID].title}
-                           type={rowData[rowID].type}
+                <DateInput title={rowData.title}
+                           type={rowData.type}
                            updateInput={(data, id, type) => this.updateFormInput(data, id, type)}
-                           id={rowID}
-                           date={rowData[rowID].data}
+                           id={rowData.id}
+                           date={rowData.data}
                 />
             )
-        } else if (rowData[rowID].type === 'location') {
+        } else if (rowData.type === 'location') {
             return (
-                <LocationInput title={rowData[rowID].title}
-                               type={rowData[rowID].type}
+                <LocationInput title={rowData.title}
+                               type={rowData.type}
+                               data={rowData.data}
                                updateInput={(data, id, type) => this.updateFormInput(data, id, type)}
-                               id={rowID}
+                               id={rowData.id}
                                navigator={this.props.navigator}
-                               location={rowData[rowID].data}
+                               location={rowData.data}
                 />
             )
 
         }
     }
 
+    renderHeader() {
+        return (
+            <View style={styles.container}>
+                <Image style = {styles.image } source = {require('../../images/iris_logo_homepage.png' ) }/>
+                <Text style={styles.title}>
+                    New Report: {this.state.incidentName}
+                </Text >
+            </View>
+        );
+    }
+
     render() {
         return (
             <View style={styles.container }>
-                <Text style={styles.title }>
-                    Incident Response In Situ
-                </Text >
-                <Text style={styles.title }>
-                    New Report
-                </Text >
                 <ListView dataSource={this.state.dataSource} enableEmptySections={true}
-                          renderRow={(data, sectionID, rowID) => this._renderRow(data, sectionID, rowID)}
+                          renderRow={(data) => this.renderRow(data)}
+                          renderHeader={() => this.renderHeader()}
                 />
-                <TouchableHighlight onPress={() => this.submitIncident()}>
-                    <Text style={styles.signIn}>
-                        Save Changes
+                <TouchableHighlight  style={styles.submit_button} onPress={() => this.verifySubmission()}>
+                    <Text style={styles.save_text}>
+                        Submit Report
                     </Text>
                 </TouchableHighlight>
             </View>

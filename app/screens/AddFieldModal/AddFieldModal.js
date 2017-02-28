@@ -1,6 +1,6 @@
 'use strict'
 /**
- * AddFieldModal: Screen to enter credentials.
+ * AddFieldModal: Pop up modal to select custom field type and title.
  */
 
 import React, {Component} from 'react';
@@ -12,20 +12,16 @@ export default class AddFieldModal extends Component {
     constructor() {
         super();
         this.state = {
-            type: 'multi_text',
+            type: 'multi_text',     //default type is text.
             title: null,
         };
     }
 
-    updateFieldInfo = (title, id) => {
-        this.setState({title: title});
-        console.log("type, title:", this.state.type + ", " + this.state.title);
-    }
-
+    /**
+     * Calls NewIncident.getNewFieldInfo(title, type)
+     */
     addField = () => {
-        console.log("dataSource in AddFieldModal", this.props.dataSource.rowIdentities[0]);
-        console.log(this.props.dataSource.rowIdentities[0].includes(this.state.title));
-        if (this.props.dataSource.rowIdentities[0].includes(this.state.title) ) {
+        if (this.props.dataSource.rowIdentities[0].includes(this.state.title)) {
             alert("\"" + this.state.title + "\" already exists as a title. Please try different title.");
         } else if (this.state.title === null || this.state.title === "") {
             alert("Title can not be left blank. Please add a title.");
@@ -34,7 +30,6 @@ export default class AddFieldModal extends Component {
             this.props.getInfo(this.state.title, this.state.type);
         }
     }
-
 
     render() {
         return (
@@ -49,7 +44,7 @@ export default class AddFieldModal extends Component {
                     </Text>
                     <View style={styles.text_box}>
 
-                    <Text style={styles.input}>
+                    <Text style={styles.label}>
                         Select Field Type
                     </Text>
                     <Picker style={styles.picker}
@@ -59,7 +54,7 @@ export default class AddFieldModal extends Component {
                         <Picker.Item label="Date" value="date"/>
                         <Picker.Item label="Location" value="location"/>
                     </Picker>
-                    <Text style={styles.input}>
+                    <Text style={styles.label}>
                         Field Title
                     </Text>
                     <TextInput
@@ -71,8 +66,8 @@ export default class AddFieldModal extends Component {
                         onChangeText={(text) => this.setState({title: text})}
                         />
                     </View>
-                    <TouchableHighlight onPress={() => this.addField()}>
-                        <Text style={styles.add_button}>ADD FIELD</Text>
+                    <TouchableHighlight style={styles.submit_button} onPress={() => this.addField()}>
+                        <Text style={styles.title}>Add Field</Text>
                     </TouchableHighlight>
                 </View>
             </Modal>

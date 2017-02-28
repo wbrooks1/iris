@@ -1,37 +1,59 @@
-import { StyleSheet, Dimensions } from 'react-native';
-import { colors } from '../../config/styles';
+import {StyleSheet, Dimensions} from 'react-native';
+import {colors} from '../../config/styles';
 
 var {height, width} = Dimensions.get('window')
 //TODO change all of this.
 export default StyleSheet.create({
     container: {
         flex: 1,
-        //justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: colors.lightBackground,
+        backgroundColor: colors.neutral,
     },
     row_container: {
         flex: -1,
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: colors.lightBackground,
-    },
-    title: {
-        fontSize: 20,
-        textAlign: 'center',
-        margin: 10,
-        color: colors.headerText,
+        backgroundColor: colors.neutral,
     },
     image: {
         width: width,
-        height: height / 3,
+        height: 50,
         justifyContent: 'flex-start',
+        resizeMode: 'contain',
     },
-    signIn: {
-        fontSize: 20,
+    submit_text: {
+        fontFamily: 'centuryschl',
+        fontSize: 25,
         textAlign: 'center',
-        margin: 5,
-        color: colors.buttonTextBlue
+        color: colors.black,
+        width: width,
+    },
+    header_text: {
+        fontSize: 20,
+        fontFamily: 'centuryschl',
+        textAlign: 'left',
+        margin: 10,
+        color: colors.black,
+    },
+    add_field_text: {
+        fontSize: 20,
+        fontFamily: 'centuryschl',
+        textAlign: 'left',
+        margin: 10,
+        color: colors.carbon,
+    },
+    footer: {
+        alignItems: "flex-start",
+        paddingLeft: 20,
+    },
+    submit_button: {
+        backgroundColor: colors.sky,
+        width: 250,
+        height: 50,
+        borderRadius: 10,
+        marginVertical: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
 });

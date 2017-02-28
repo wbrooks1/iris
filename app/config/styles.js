@@ -1,13 +1,11 @@
 export const colors = {
-    lightBackground: '#F5F2F9',
-    errorText: '#FA3256',
-    headerText: '#444444',
-    buttonBackground: '#39BD98',
+    neutral: '#EFEFEF',
+    white: '#FFFFFF',
+    redAccent: '#FF383F',
+    carbon: '#A9A9A9',
+    black: '#000000',
+    ink: '#062F4F',
     buttonText: '#454545',
-    inputBackground: '#FFFFFF',
-    inputDivider: '#E4E2E5',
-    buttonTextBlue: '#0b5ce0',
-    midBackground: '#d9dde2',
-    darkBackground: '#aeb7c4'
-
+    sky: '#CAEBF2',
+    navy: '#18121E'
 };

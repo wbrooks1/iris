@@ -45,7 +45,8 @@ export default class Home extends Component {
   render() {
     return (
       <View style = {styles.container }>
-          <Image style = {styles.image } source = {require('../../images/iris_logo_homepage.png' ) }/>
+          <Image style = {styles.background } source = {require('../../images/home_background.jpg' ) }>
+          <Image style = {styles.image } source = {require('../../images/iris_logo_homepage_white.png' ) }/>
           <TouchableHighlight onPress={() => this.logout()}>
               <Text style = {styles.logout_text}> Logout </Text>
           </TouchableHighlight>
@@ -69,6 +70,7 @@ export default class Home extends Component {
                   onPress={() => this.toViewReports()}
               />
           </View>
+          </Image>
       </View>
       );
     }
