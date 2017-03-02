@@ -33,7 +33,17 @@ export default class WebLoginModal extends Component {
         }
     }
 
+    parseJWT(token) {
+        console.log("parseJWT token", token);
+        var base64Url = token.split('.')[1];
+        var base64 = base64Url.replace('-', '+').replace('_', '/');
+        console.log("parseJWT token", JSON.parse(window.atob(base64)));
+
+        return JSON.parse(window.atob(base64));
+    }
+
     verifyAccount = (webViewState) => {
+        //TODO: get user email and sub #
         var url = webViewState.url.toString();
         if (url === this.props.loginURLs.success + '#') {
             // this.refs.webview.stopLoading();
@@ -42,7 +52,8 @@ export default class WebLoginModal extends Component {
             fetch(this.props.loginURLs.success)
                 .then((response) => response.json())
                 .then((responseJson) => {
-                    this.storeLoginStatus('' + responseJson.access_token)
+                    this.storeLoginStatus(''+ responseJson.access_token);
+                    console.log('JWT', this.parseJWT(responseJson.access_token));
                 }).catch((err) => {
                 console.error(err);
             });

@@ -21,7 +21,7 @@ export default class Login extends Component {
     }
 
     toHome = () => {
-        this.checkLoginStatus();
+        // this.checkLoginStatus();
         this.props.navigator.resetTo({
             id: 'Home',
         });
@@ -32,7 +32,7 @@ export default class Login extends Component {
             let _loginStatus = await AsyncStorage.getItem('@AsyncStorage:loginStatus');
             if (_loginStatus === 'true') {
                 let token = await AsyncStorage.getItem('@AsyncStorage:accessToken');
-                this.setState({accessToken: token});
+                // this.setState({accessToken: token});
                 this.toHome();
                 //TODO: get email from token.
                 //TODO: save user number for getting user incidents.
