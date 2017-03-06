@@ -7,12 +7,18 @@ import HomeButton from '../../components/HomeButton';
 
 
 export default class Home extends Component {
-    // constructor() {
-    //     super();
-    // }
+    constructor(props) {
+        super(props);
+        this.state = {
+            // location: this.props.location,
+        }
+    }
     toNewIncident = () => {
         this.props.navigator.push({
             id: 'NewIncident',
+            passProps: {
+                location: this.props.location,
+            }
             });
     }
     toYourIncidents = () => {
@@ -47,9 +53,12 @@ export default class Home extends Component {
       <View style = {styles.container }>
           <Image style = {styles.background } source = {require('../../images/home_background.jpg' ) }>
           <Image style = {styles.image } source = {require('../../images/iris_logo_homepage_white.png' ) }/>
-          <TouchableHighlight onPress={() => this.logout()}>
+              <View style={styles.text_row}>
+                  <Text style = {styles.user}> {this.props.userName} </Text>
+                  <TouchableHighlight onPress={() => this.logout()}>
               <Text style = {styles.logout_text}> Logout </Text>
           </TouchableHighlight>
+              </View>
           <View style={styles.row_container}>
               <HomeButton
                   image={require('../../images/new_incident_icon.png')}

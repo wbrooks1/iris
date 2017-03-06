@@ -1,54 +1,32 @@
 'use strict'
 import React, {Component} from 'react';
-import {View, TextInput, Text, DatePickerAndroid, TouchableHighlight, } from 'react-native';
+import {View, TextInput, Text, DatePickerAndroid, TouchableHighlight,} from 'react-native';
 import styles from './styles';
 import MapViewModal from '../../screens/MapViewModal/MapViewModal';
 
 export default class LocationInput extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
+        console.log("New incident props.locaiton", this.props.location);
+        var latlon = this.props.location.split(', ');
         this.state = {
             location: {
-                latitude: null,
-                longitude: null,
+                latitude: parseFloat(latlon[0]),
+                longitude: parseFloat(latlon[1])
             },
-            id: null,
+            id: this.props.id,
             modalVisible: false,
-            mapDisabled: true,
-        }
-    }
-
-    componentWillMount() {
-        this.setState({id: this.props.id})
-        if (this.props.isEdit) {
-            var latlon = this.props.data.split(', ');
-            this.setState({
-                location: {
-                    latitude: latlon[0],
-                    longitude: latlon[1]
-                }
-            })
-        } else {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    this.setState({
-                        location: {
-                            latitude: position.coords.latitude,
-                            longitude: position.coords.longitude
-                        },
-                        mapDisabled: false
-                    });
-                },
-                (error) => alert(JSON.stringify(error)),
-                {timeout: 20000, maximumAge: 1000});
+            mapDisabled: false,
         }
     }
 
     updateLocation = (loc) => {
-        this.setState({ location: {
-            latitude: loc.latitude,
-            longitude: loc.longitude,
-        }});
+        this.setState({
+            location: {
+                latitude: loc.latitude,
+                longitude: loc.longitude,
+            }
+        });
         this.props.updateInput(loc.latitude + ", " + loc.longitude, this.state.id, this.props.title, this.props.type);
         this.closeModal();
     }
@@ -80,12 +58,12 @@ export default class LocationInput extends Component {
                     {this.props.title}
                 </Text>
                 <TouchableHighlight onPress={() => this.openModal()} disabled={this.state.mapDisabled}>
-                <TextInput
-                    style={styles.input}
-                    autoCapitalize="none"
-                    editable={false}
-                    defaultValue={this.state.location.latitude + ", " + this.state.location.longitude}>
-                </TextInput>
+                    <TextInput
+                        style={styles.input}
+                        autoCapitalize="none"
+                        editable={false}
+                        defaultValue={this.state.location.latitude + ", " + this.state.location.longitude}>
+                    </TextInput>
                 </TouchableHighlight>
             </View>
         );

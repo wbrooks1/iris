@@ -2,7 +2,7 @@ export const colors = {
     neutral: '#EFEFEF',
     white: '#FFFFFF',
     redAccent: '#FF383F',
-    carbon: '#A9A9A9',
+    carbon: '#454545',
     black: '#000000',
     ink: '#062F4F',
     buttonText: '#454545',

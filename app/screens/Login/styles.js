@@ -32,5 +32,10 @@ export default StyleSheet.create({
       backgroundColor: colors.carbon,
       padding: 10,
       borderRadius: 10,
-  },
+  }, activityIndicator: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 80
+    }
 });

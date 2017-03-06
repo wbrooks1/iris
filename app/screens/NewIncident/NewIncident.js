@@ -18,22 +18,23 @@ import {incidentURLs} from '../../config/strings'
 
 
 export default class NewIncident extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         const getRowData = (dataBlob, rowId) => dataBlob[`${rowId}`];
         const ds = new ListView.DataSource({
             rowHasChanged: (r1, r2) => r1 !== r2,
             getRowData,
         });
         const {dataBlob, rowIds} = this.formatData(components, "medical");
+        var latlon = this.props.location.split(', ');
         this.state = {
             dataSource: ds.cloneWithRows(dataBlob, rowIds),
             db: dataBlob,
             formData: {},
             modalVisible: false,
             location: {
-                latitude: null,
-                longitude: null,
+                latitude: latlon[0],
+                longitude: latlon[1]
             },
         };
     }
@@ -58,33 +59,26 @@ export default class NewIncident extends Component {
             }
             return false;
         });
-        var pos;
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                pos = position.coords.latitude + ", " + position.coords.longitude;
-                console.log("Position:", pos);
-                this.initalizeFormData(pos);
-            },
-            (error) => alert(JSON.stringify(error)),
-            {timeout: 20000, maximumAge: 1000});
-
+        this.initalizeFormData();
     }
 
-    initalizeFormData(pos) {
+    initalizeFormData() {
         let newFormData = this.state.formData;
         let date = new Date();
-        newFormData["user_id"] = 1;
+        newFormData["user_id"] = this.props.userID;
         newFormData["title"] = {id: 'title', data: '', title: 'Title', type: 'text'};
         newFormData["desc"] = {id: 'desc', data: '', title: 'Description', type: 'multi_text'};
         newFormData["cat_id"] = 1;
-        newFormData["location"] = {id: 'location', data: pos, title: 'Location', type: 'location'};
+        newFormData["location"] = {id: 'location', data: this.state.location, title: 'Location', type: 'location'};
         newFormData["start_date"] = {id: 'start_date', data: date.toDateString(), title: 'Start Date', type: 'date'};
         date.setFullYear(date.getFullYear() + 3);
         newFormData["end_date"] = {id: 'end_date', data: date.toDateString(), title: 'End Date', type: 'date'};
         newFormData["freq"] = {id: 'freq', data: 'P1H', title: 'Reporting Frequency', type: 'text'};
         newFormData["keywords"] = {id: 'keywords', data: '', title: 'Keywords', type: 'text'};
         newFormData["custom_fields"] = {id: 'custom_fields', data: {}, title: 'Custom', type: 'custom'};
-        this.setState({formData: newFormData});
+        this.setState({
+            formData: newFormData,
+        });
     }
 
     updateFormInput(data, id, title, type) {
@@ -102,12 +96,13 @@ export default class NewIncident extends Component {
     verifySubmission() {
         var formCompleted = true;
         var toBeFilled = [];
-        for(var item in this.state.formData) {
-            if(this.state.formData[item].id && this.state.formData[item].data == '') {
+        for (var item in this.state.formData) {
+            if (this.state.formData[item].id && this.state.formData[item].data == '') {
                 formCompleted = false;
                 toBeFilled.push(' ' + this.state.formData[item].title);
             }
-        } if (formCompleted) {
+        }
+        if (formCompleted) {
             Alert.alert('Submit Incident', 'Are you sure you want to submit incident?',
                 [{text: 'Cancel', onPress: () => console.log('Cancel Pressed')},
                     {text: 'OK', onPress: () => this.submitIncident()}]);
@@ -215,7 +210,7 @@ export default class NewIncident extends Component {
                                updateInput={(data, id, title, type) => this.updateFormInput(data, id, title, type)}
                                id={rowID}
                                navigator={this.props.navigator}
-                               location={this.state.location}
+                               location={this.state.location.latitude + ", " + this.state.location.longitude}
                 />
             )
 
