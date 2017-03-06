@@ -4,7 +4,16 @@
  */
 
 import React, {Component} from 'react';
-import {AsyncStorage, AppRegistry, StyleSheet, Text, Image, View, TextInput, ScrollView,} from 'react-native'
+import {
+    ActivityIndicator,
+    AsyncStorage,
+    AppRegistry,
+    StyleSheet,
+    Text,
+    Image,
+    View,
+} from 'react-native';
+import LocationServicesDialogBox from "react-native-android-location-services-dialog-box";
 import styles from './styles';
 import IconButton from '../../components/IconButton';
 import WebLoginModal from '../WebLoginModal/WebLoginModal'
@@ -17,13 +26,18 @@ export default class Login extends Component {
             modalVisible: false,
             loginUrl: null,
             accessToken: null,
+            loaded: false,
         };
     }
 
-    toHome = () => {
-        // this.checkLoginStatus();
+    toHome = (location, userName, userID) => {
         this.props.navigator.resetTo({
             id: 'Home',
+            passProps: {
+                location: location,
+                userName: userName,
+                userID: userID,
+            }
         });
     }
 
@@ -31,20 +45,39 @@ export default class Login extends Component {
         try {
             let _loginStatus = await AsyncStorage.getItem('@AsyncStorage:loginStatus');
             if (_loginStatus === 'true') {
-                let token = await AsyncStorage.getItem('@AsyncStorage:accessToken');
-                // this.setState({accessToken: token});
-                this.toHome();
-                //TODO: get email from token.
-                //TODO: save user number for getting user incidents.
-                console.log(token);
+                var location = await AsyncStorage.getItem('@AsyncStorage:location');
+                var userName = await AsyncStorage.getItem('@AsyncStorage:userName');
+                var userID = await AsyncStorage.getItem('@AsyncStorage:userID');
+                this.toHome(location, userName, userID);
+            } else {
+                let check = await LocationServicesDialogBox.checkLocationServicesIsEnabled({
+                    message: "Location must be enabled?",
+                    ok: "Okay",
+                    cancel: "Cancel"
+                }).then(function (success) {
+                        navigator.geolocation.getCurrentPosition(
+                            (position) => {
+                                var location = position.coords.latitude + ", " + position.coords.longitude;
+                                console.log("Position:", location);
+                                this.setState({
+                                    location: location,
+                                    loaded: true,
+                                });
+                            },
+                            (error) => console.log(JSON.stringify(error)),
+                            {timeout: 20000, maximumAge: 100000});
+                    }.bind(this)
+                ).catch((error) => {
+                    console.error(error);
+                });
             }
         } catch (error) {
             console.error(error);
         }
     }
 
-    componentDidMount() {
-        this.checkLoginStatus()
+    componentWillMount() {
+        this.checkLoginStatus();
     }
 
     openModal = (route) => {
@@ -72,8 +105,48 @@ export default class Login extends Component {
         if (this.state.modalVisible) {
             return (
                 <WebLoginModal modalVisible={this.state.modalVisible} closeModal={this.closeModal}
-                               navigator={this.props.navigator} loginURLs={this.state.loginUrl}/>
+                               navigator={this.props.navigator} loginURLs={this.state.loginUrl}
+                               location={this.state.location}/>
             );
+        }
+    }
+
+    renderLoginButtons = () => {
+        if (this.state.loaded) {
+            return (
+                <View style={styles.container}>
+
+                    <View style={styles.row_container}>
+                        <IconButton
+                            image={require('../../images/google_icon.png')}
+                            text="Google"
+                            onPress={() => this.openModal('google')}
+                        />
+                        <IconButton
+                            image={require('../../images/twitter_icon.png')}
+                            text="Twitter"
+                            onPress={() => this.openModal('twitter')}
+                        />
+                    </View>
+                    <View style={styles.row_container}>
+                        <IconButton
+                            image={require('../../images/facebook_icon.png')}
+                            text="Facebook"
+                            onPress={() => this.openModal('facebook')}
+                        />
+                        <IconButton
+                            image={require('../../images/microsoft_icon.png')}
+                            text="Microsoft"
+                            onPress={() => this.toHome()}/>
+                    </View>
+                </View>
+
+            )
+        } else {
+            return (
+                <ActivityIndicator animating={true}
+                                   style={styles.activityIndicator} size="large"/>
+            )
         }
     }
 
@@ -89,30 +162,7 @@ export default class Login extends Component {
                 <Text style={styles.title}>
                     Login
                 </Text>
-                <View style={styles.row_container}>
-                    <IconButton
-                        image={require('../../images/google_icon.png')}
-                        text="Google"
-                        onPress={() => this.openModal('google')}
-                    />
-                    <IconButton
-                        image={require('../../images/twitter_icon.png')}
-                        text="Twitter"
-                        onPress={() => this.openModal('twitter')}
-                    />
-                </View>
-                <View style={styles.row_container}>
-                    <IconButton
-                        image={require('../../images/facebook_icon.png')}
-                        text="Facebook"
-                        onPress={() => this.openModal('facebook')}
-                    />
-                    <IconButton
-                        image={require('../../images/microsoft_icon.png')}
-                        text="Microsoft"
-                        onPress={() => this.toHome()}
-                    />
-                </View>
+                {this.renderLoginButtons()}
             </View>
         );
     }

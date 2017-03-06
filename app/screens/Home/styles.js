@@ -34,7 +34,19 @@ export default StyleSheet.create({
         color: colors.redAccent,
     },
     background: {
-      width: width,
+        width: width,
         height: height,
+    },
+    text_row: {
+        width: width,
+        flexDirection: 'row',
+        backgroundColor: colors.ink,
+        justifyContent: 'space-between',
+    },
+    user: {
+        fontSize: 20,
+        textAlign: 'left',
+        margin: 10,
+        color: colors.sky,
     }
 });

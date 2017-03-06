@@ -51,31 +51,36 @@ export default class IRIS extends Component {
         if (routeId === 'Home') {
             return (
                 <Home
-                    navigator={navigator} />
+                    navigator={navigator}
+                    {...route.passProps}/>
             );
         }
         if (routeId === 'NewIncident') {
             return (
                 <NewIncident
-                    navigator={navigator} />
+                    navigator={navigator}
+                    {...route.passProps}/>
             );
         }
         if (routeId === 'YourIncidents') {
             return (
                 <YourIncidents
-                    navigator={navigator} />
+                    navigator={navigator}
+                    {...route.passProps}/>
             );
         }
         if (routeId === 'SearchIncidents') {
             return (
                 <SearchIncidents
-                    navigator={navigator} />
+                    navigator={navigator}
+                    {...route.passProps}/>
             );
         }
         if (routeId === 'ViewReports') {
             return (
                 <ViewReports
-                    navigator={navigator} />
+                    navigator={navigator}
+                    {...route.passProps}/>
             );
         }
         if (routeId === 'EditIncident') {

@@ -29,6 +29,7 @@
 		15D845E1E50C46DC860E777D /* CenturySchL-Roma.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5578B172E73041859B52BC7F /* CenturySchL-Roma.ttf */; };
 		39149B16E54249E3B798F318 /* centuryschl_bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 339EC1948CA743AE9AD1D241 /* centuryschl_bold.ttf */; };
 		F7895C82BF964165AB1D3493 /* centuryschl.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4804D379130D44C98C0A1255 /* centuryschl.ttf */; };
+		53337CC642844C458BEE14CA /* libRNRandomBytes.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 96614E4D78384599896B9794 /* libRNRandomBytes.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -246,6 +247,8 @@
 		5578B172E73041859B52BC7F /* CenturySchL-Roma.ttf */ = {isa = PBXFileReference; name = "CenturySchL-Roma.ttf"; path = "../fonts/CenturySchL-Roma.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		339EC1948CA743AE9AD1D241 /* centuryschl_bold.ttf */ = {isa = PBXFileReference; name = "centuryschl_bold.ttf"; path = "../fonts/centuryschl_bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		4804D379130D44C98C0A1255 /* centuryschl.ttf */ = {isa = PBXFileReference; name = "centuryschl.ttf"; path = "../fonts/centuryschl.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		0E81D6EB1FEE4C9D96337F3B /* RNRandomBytes.xcodeproj */ = {isa = PBXFileReference; name = "RNRandomBytes.xcodeproj"; path = "../node_modules/react-native-randombytes/RNRandomBytes.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		96614E4D78384599896B9794 /* libRNRandomBytes.a */ = {isa = PBXFileReference; name = "libRNRandomBytes.a"; path = "libRNRandomBytes.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -273,6 +276,7 @@
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
 				C5B2C13FB7774BF098976049 /* libAirMaps.a in Frameworks */,
+				53337CC642844C458BEE14CA /* libRNRandomBytes.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -418,6 +422,7 @@
 				00C302DF1ABCB9EE00DB3ED1 /* RCTVibration.xcodeproj */,
 				139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */,
 				3D235A66180F4C96B2CB48E5 /* AirMaps.xcodeproj */,
+				0E81D6EB1FEE4C9D96337F3B /* RNRandomBytes.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -861,6 +866,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 			};
 			name = Debug;
@@ -877,6 +883,7 @@
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/IRIS.app/IRIS";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 			};

@@ -8,54 +8,50 @@ import {
     Alert, Modal, Text, TouchableHighlight, View, StyleSheet, Navigator, WebView, Networking, AsyncStorage,
 } from 'react-native';
 
-
 export default class WebLoginModal extends Component {
     constructor() {
         super();
         this.state = {
-            username: null,
             accessToken: null,
         };
     }
 
-    toHome = () => {
+    toHome = (userName, userID) => {
         this.props.navigator.resetTo({
             id: 'Home',
+            passProps: {
+                location: this.props.location,
+                userName: userName,
+                userID: userID,
+            }
         });
     }
 
-    async storeLoginStatus(token) {
+    async storeLoginStatus(token, decode) {
         try {
             await AsyncStorage.setItem('@AsyncStorage:loginStatus', 'true');
             await AsyncStorage.setItem('@AsyncStorage:accessToken', token);
+            await AsyncStorage.setItem('@AsyncStorage:userName', decode.email);
+            await AsyncStorage.setItem('@AsyncStorage:userID', '' + decode.sub);
+            await AsyncStorage.setItem('@AsyncStorage:location', this.props.location);
         } catch (error) {
             console.error(error);
         }
     }
 
-    parseJWT(token) {
-        console.log("parseJWT token", token);
-        var base64Url = token.split('.')[1];
-        var base64 = base64Url.replace('-', '+').replace('_', '/');
-        console.log("parseJWT token", JSON.parse(window.atob(base64)));
-
-        return JSON.parse(window.atob(base64));
-    }
-
     verifyAccount = (webViewState) => {
-        //TODO: get user email and sub #
+        var jwtDecode = require('jwt-decode');
         var url = webViewState.url.toString();
         if (url === this.props.loginURLs.success + '#') {
-            // this.refs.webview.stopLoading();
             this.props.closeModal();
-            this.toHome();
             fetch(this.props.loginURLs.success)
                 .then((response) => response.json())
                 .then((responseJson) => {
-                    this.storeLoginStatus(''+ responseJson.access_token);
-                    console.log('JWT', this.parseJWT(responseJson.access_token));
+                    var decoded = jwtDecode(responseJson.access_token)
+                    this.toHome(decoded.email, decoded.sub);
+                    this.storeLoginStatus(responseJson.access_token, decoded);
                 }).catch((err) => {
-                console.error(err);
+                console.error('verify account', err);
             });
         } else if (url === this.props.loginURLs.failure + '#') {
             this.props.closeModal();
@@ -69,7 +65,7 @@ export default class WebLoginModal extends Component {
                    visible={this.props.modalVisible}
                    transparent={true}
                    onRequestClose={() => {this.props.closeModal()}}>
-                <WebView ref='webview' source={{uri: this.props.loginURLs.login}}
+                <WebView ref='webview' source={{uri: this.props.loginURLs.login + this.props.location}}
                          onNavigationStateChange={this.verifyAccount.bind(this)}/>
             </Modal>
         );
