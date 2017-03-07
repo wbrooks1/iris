@@ -7,7 +7,7 @@ import MapViewModal from '../../screens/MapViewModal/MapViewModal';
 export default class LocationInput extends Component {
     constructor(props) {
         super(props);
-        console.log("New incident props.locaiton", this.props.location);
+        console.log(this.props.location);
         var latlon = this.props.location.split(', ');
         this.state = {
             location: {
@@ -21,6 +21,7 @@ export default class LocationInput extends Component {
     }
 
     updateLocation = (loc) => {
+        console.log(loc);
         this.setState({
             location: {
                 latitude: loc.latitude,

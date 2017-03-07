@@ -1,40 +1,39 @@
 import { StyleSheet, Dimensions } from 'react-native';
 import { colors } from '../../config/styles';
 
-const window = Dimensions.get('window');
+var {height, width} = Dimensions.get('window')
 export default StyleSheet.create({
-    modal: {
-        marginTop: window.height / 4,
-        height: window.height / 2,
-        width: window.width - 20,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'silver',
-        padding: 20,
-        borderRadius: 10,
-        alignSelf: 'center',
-    },
+
     submit: {
-        fontSize: 30,
+        fontFamily: 'centuryschl',
+        fontSize: 25,
         textAlign: 'center',
-        margin: 5,
-        color: colors.ink,
-        justifyContent: 'flex-end',
-        width: window.width,
-        backgroundColor: colors.neutral,
+        color: colors.black,
+        width: width,
     },
     container: {
-        justifyContent: 'flex-end',
+        justifyContent: 'center',
         alignItems: 'center',
     },
     map: {
         flex: 1,
-        height: window.height,
-        width: window.width,
+        height: height,
+        width: width,
         position: 'absolute',
         top: 0,
         left: 0,
         right: 0,
         bottom: 0,
+    },
+    submit_button: {
+        backgroundColor: colors.sky,
+        width: 250,
+        height: 50,
+        borderRadius: 10,
+        marginVertical: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
+        alignSelf: 'center',
+        marginTop: height - 100,
     },
 });

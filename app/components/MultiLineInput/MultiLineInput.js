@@ -3,8 +3,8 @@ import {View, TextInput, Text} from 'react-native';
 import styles from './styles';
 
 export default class MultiLineInput extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             text: '',
             id: null,
@@ -32,7 +32,7 @@ export default class MultiLineInput extends Component {
                     placeholder={this.props.placeholder}
                     defaultValue={this.state.text}
                     returnKeyType={'next'}
-                    onChangeText={(text) => this.setState({text})}
+                    onChangeText={(text) => this.setState({text: text})}
                     onEndEditing={(text) => this.props.updateInput(this.state.text, this.state.id, this.props.title, this.props.type)}
                     underlineColorAndroid={'#A9A9A9'}
                 >

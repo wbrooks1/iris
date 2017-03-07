@@ -52,7 +52,9 @@ export default class SearchIncidents extends Component {
         this.props.navigator.push({
             id: 'NewReport',
             passProps: {
-                id: id
+                id: id,
+                userID: this.props.userID,
+                token: this.props.token,
             }
         });
     };
@@ -64,9 +66,9 @@ export default class SearchIncidents extends Component {
                 <View style={styles.row_container}>
                     <Image style={styles.icon} source={require('../../images/globe_icon_red.png')}/>
                     <View style={styles.container}>
-                        <Text style={styles.list_title}>{rowData.desc.data}</Text>
+                        <Text style={styles.list_title}>{rowData.title.data}</Text>
                         <Text numberOfLines={1} style={styles.list_desc}> {rowData.start_date.data}</Text>
-                        <Text numberOfLines={1} style={styles.list_desc}> {rowData.title.data}</Text>
+                        <Text numberOfLines={1} style={styles.list_desc}> {rowData.desc.data}</Text>
                     </View>
                 </View>
             </TouchableHighlight>
@@ -76,7 +78,11 @@ export default class SearchIncidents extends Component {
     renderHeader() {
         return (
             <View style={styles.container}>
-                <Image style={styles.image } source={require('../../images/iris_logo_homepage.png' ) }/>
+                <Image style={styles.image } source={require('../../images/iris_logo_homepage.png')}>
+                    <TouchableHighlight onPress={() => this.props.navigator.pop()}>
+                        <Image style={styles.back_arrow} source={require('../../images/back_icon.png')}/>
+                    </TouchableHighlight>
+                </Image>
                 <Text style = {styles.title }>
                     Search Incidents
                 </Text >

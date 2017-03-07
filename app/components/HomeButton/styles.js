@@ -6,10 +6,10 @@ export default StyleSheet.create({
         paddingHorizontal: 20,
     },
     buttonIcon: {
-        width: 120,
-        height: 120,
+        width: 125,
+        height: 125,
         justifyContent: 'center',
-        resizeMode: 'stretch',
+        resizeMode: 'contain',
     },
     container: {
         width: 125,

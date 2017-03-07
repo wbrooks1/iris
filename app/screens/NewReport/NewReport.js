@@ -2,7 +2,7 @@
 
 import React, {Component} from 'react';
 import {
-    AppRegistry, StyleSheet, Text, Image, View, TextInput, ScrollView, Navigator, BackAndroid,
+    AppRegistry, Alert, StyleSheet, Text, Image, View, TextInput, ScrollView, Navigator, BackAndroid,
     ListView, TouchableHighlight
 } from 'react-native'
 import styles from './styles';
@@ -10,7 +10,7 @@ import SingleLineInput from '../../components/SingleLineInput';
 import MultiLineInput from '../../components/MultiLineInput';
 import DateInput from '../../components/DateInput';
 import LocationInput from '../../components/LocationInput';
-
+import Toast from 'react-native-simple-toast';
 import {incidentURLs} from '../../config/strings'
 
 
@@ -54,7 +54,6 @@ export default class NewReport extends Component {
 
     formatData(data) {
         //TODO: get user_id for report creator and fix naming for title and description.
-        var newUserID = 1;
         var dataArr = [];
         this.setState({incidentName: data['title'].data});
         delete data['created'];
@@ -64,7 +63,7 @@ export default class NewReport extends Component {
         delete data['frequency'];
         delete data['keywords'];
         delete data['cat_id'];
-
+        delete data['title'];
 
         for (var item in data) {
             if (data[item] && data[item].hasOwnProperty('id')) {
@@ -77,8 +76,7 @@ export default class NewReport extends Component {
                 }
             }
         }
-        data['user_id'] = newUserID;
-        delete data['title'];
+        data['user_id'] = this.props.userID;
         this.setState({
             dataSource: this.state.dataSource.cloneWithRows(dataArr),
             formData: data
@@ -88,10 +86,10 @@ export default class NewReport extends Component {
 
 
     updateFormInput(data, id, title, type) {
+        console.log('udateFromInput', data, id, title, type)
         let newFormData = this.state.formData;
         if (id == title) {
             newFormData['custom_fields'].data[id] = {id, data, title, type};
-            console.log('input from custom field', newFormData);
         } else {
             newFormData[id] = {id, data, title, type};
         }
@@ -124,6 +122,7 @@ export default class NewReport extends Component {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + this.props.token,
             },
             body:
                 JSON.stringify(
@@ -134,11 +133,13 @@ export default class NewReport extends Component {
             .then((response) => response.json())
             .then((responseJson) => {
                 console.log("Reponse to fetch", responseJson);
+                this.props.navigator.pop();
+                if (responseJson.location) {
+                    Toast.show('Report was created.');
+                } //TODO: Handle error for creating report.
             }).catch((err) => {
             console.error("NewReport submitReport()", err);
         });
-        this.props.navigator.pop();
-
     }
 
 
@@ -148,7 +149,7 @@ export default class NewReport extends Component {
                 <SingleLineInput title={rowData.title}
                                  type={rowData.type}
                                  placeholder={'Enter info to submit as ' + rowData.title}
-                                 updateInput={(data, id, type) => this.updateFormInput(data, id, type)}
+                                 updateInput={(data, id, title, type) => this.updateFormInput(data, id, title, type)}
                                  id={rowData.id}
                 />
             );
@@ -157,7 +158,7 @@ export default class NewReport extends Component {
                 <MultiLineInput title={rowData.title}
                                 type={rowData.type}
                                 placeholder={'Enter info to submit as ' + rowData.title}
-                                updateInput={(data, id, type) => this.updateFormInput(data, id, type)}
+                                updateInput={(data, id, title, type) => this.updateFormInput(data, id, title, type)}
                                 id={rowData.id}
                 />
             );
@@ -165,7 +166,7 @@ export default class NewReport extends Component {
             return (
                 <DateInput title={rowData.title}
                            type={rowData.type}
-                           updateInput={(data, id, type) => this.updateFormInput(data, id, type)}
+                           updateInput={(data, id, title, type) => this.updateFormInput(data, id, title, type)}
                            id={rowData.id}
                            date={rowData.data}
                 />
@@ -175,10 +176,10 @@ export default class NewReport extends Component {
                 <LocationInput title={rowData.title}
                                type={rowData.type}
                                data={rowData.data}
-                               updateInput={(data, id, type) => this.updateFormInput(data, id, type)}
+                               updateInput={(data, id, title, type) => this.updateFormInput(data, id, title, type)}
                                id={rowData.id}
                                navigator={this.props.navigator}
-                               location={rowData.data}
+                               location={rowData.data.latitude + ", " + rowData.data.longitude}
                 />
             )
 
@@ -188,7 +189,11 @@ export default class NewReport extends Component {
     renderHeader() {
         return (
             <View style={styles.container}>
-                <Image style = {styles.image } source = {require('../../images/iris_logo_homepage.png' ) }/>
+                <Image style={styles.image } source={require('../../images/iris_logo_homepage.png')}>
+                    <TouchableHighlight onPress={() => this.props.navigator.pop()}>
+                        <Image style={styles.back_arrow} source={require('../../images/back_icon.png')}/>
+                    </TouchableHighlight>
+                </Image>
                 <Text style={styles.title}>
                     New Report: {this.state.incidentName}
                 </Text >

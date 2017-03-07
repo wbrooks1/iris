@@ -12,10 +12,10 @@ import styles from './styles';
 
 
 export default class WebLoginModal extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
-            location: null,
+            location: this.props.location,
         }
     }
 
@@ -35,7 +35,8 @@ export default class WebLoginModal extends Component {
                                     onDragEnd={(loc) => this.setState({ location: loc.nativeEvent.coordinate })}
                     />
                 </MapView>
-                <TouchableHighlight onPress={() => this.props.updateLocation(this.state.location)}>
+                <TouchableHighlight onPress={() => this.props.updateLocation(this.state.location)}
+                                    style={styles.submit_button}>
                     <Text style={styles.submit}>
                         Submit Location
                     </Text>

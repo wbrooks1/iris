@@ -6,16 +6,14 @@ var {height, width} = Dimensions.get('window')
 export default StyleSheet.create({
     container: {
         flex: 1,
-        //justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: colors.neutral,
     },
-    row_container: {
-        flex: -1,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: colors.neutral,
+    image: {
+        width: width,
+        height: 50,
+        alignSelf: 'center',
+        resizeMode: 'contain',
     },
     title: {
         fontSize: 20,
@@ -23,9 +21,10 @@ export default StyleSheet.create({
         margin: 10,
         color: colors.black,
     },
-    image: {
-        width: width,
-        height: height / 3,
+    back_arrow: {
+        width: 50,
+        height: 50,
         justifyContent: 'flex-start',
-    },
+        resizeMode: 'contain',
+    }
 });

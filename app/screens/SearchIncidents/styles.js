@@ -59,4 +59,10 @@ export default StyleSheet.create({
         justifyContent: 'flex-start',
         resizeMode: 'contain',
     },
+    back_arrow: {
+        width: 50,
+        height: 50,
+        justifyContent: 'flex-start',
+        resizeMode: 'contain',
+    },
 });

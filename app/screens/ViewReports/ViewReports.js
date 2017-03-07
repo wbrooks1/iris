@@ -1,7 +1,7 @@
 'use strict';
 
 import React, {Component} from 'react';
-import {AppRegistry, StyleSheet, Text, Image, View, TextInput, ScrollView, Navigator, BackAndroid} from 'react-native'
+import {AppRegistry, StyleSheet, TouchableHighlight, Text, Image, View, TextInput, ScrollView, Navigator, BackAndroid} from 'react-native'
 import styles from './styles';
 
 
@@ -22,10 +22,12 @@ export default class ViewReports extends Component {
 
     render() {
         return (
-            <View style = {styles.container }>
-                <Text style = {styles.title }>
-                    Incident Response In Situ
-                </Text >
+            <View style={styles.container}>
+                <Image style={styles.image } source={require('../../images/iris_logo_homepage.png')}>
+                    <TouchableHighlight onPress={() => this.props.navigator.pop()}>
+                        <Image style={styles.back_arrow} source={require('../../images/back_icon.png')}/>
+                    </TouchableHighlight>
+                </Image>
                 <Text style = {styles.title }>
                     View Reports
                 </Text >

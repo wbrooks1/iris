@@ -9,17 +9,10 @@ export default StyleSheet.create({
         alignItems: 'center',
         backgroundColor: colors.neutral,
     },
-    row_container: {
-        flex: -1,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: colors.neutral,
-    },
     image: {
         width: width,
         height: 50,
-        justifyContent: 'flex-start',
+        alignSelf: 'center',
         resizeMode: 'contain',
     },
     submit_text: {
@@ -56,4 +49,10 @@ export default StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    back_arrow: {
+        width: 50,
+        height: 50,
+        justifyContent: 'flex-start',
+        resizeMode: 'contain',
+    }
 });

@@ -5,7 +5,7 @@
  * @flow
  */
 
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
     AppRegistry,
     StyleSheet,
@@ -25,7 +25,6 @@ import EditIncident from './screens/EditIncident';
 import NewReport from './screens/NewReport';
 
 
-
 export default class IRIS extends Component {
     render() {
         return (
@@ -37,15 +36,16 @@ export default class IRIS extends Component {
           return route.sceneConfig;
         }
         return Navigator.SceneConfigs.FloatFromRight;
-      }} />
+      }}/>
         );
     }
+
     renderScene(route, navigator) {
         var routeId = route.id;
         if (routeId === 'Login') {
             return (
                 <Login
-                    navigator={navigator} />
+                    navigator={navigator}/>
             );
         }
         if (routeId === 'Home') {

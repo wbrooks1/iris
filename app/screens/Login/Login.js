@@ -5,13 +5,7 @@
 
 import React, {Component} from 'react';
 import {
-    ActivityIndicator,
-    AsyncStorage,
-    AppRegistry,
-    StyleSheet,
-    Text,
-    Image,
-    View,
+    ActivityIndicator, AsyncStorage, AppRegistry, StyleSheet, Text, Image, View, BackAndroid,
 } from 'react-native';
 import LocationServicesDialogBox from "react-native-android-location-services-dialog-box";
 import styles from './styles';
@@ -30,13 +24,14 @@ export default class Login extends Component {
         };
     }
 
-    toHome = (location, userName, userID) => {
+    toHome = (location, userName, userID, token) => {
         this.props.navigator.resetTo({
             id: 'Home',
             passProps: {
                 location: location,
                 userName: userName,
                 userID: userID,
+                token: token,
             }
         });
     }
@@ -48,12 +43,14 @@ export default class Login extends Component {
                 var location = await AsyncStorage.getItem('@AsyncStorage:location');
                 var userName = await AsyncStorage.getItem('@AsyncStorage:userName');
                 var userID = await AsyncStorage.getItem('@AsyncStorage:userID');
-                this.toHome(location, userName, userID);
+                var token = await AsyncStorage.getItem('@AsyncStorage:accessToken')
+                console.log("Login.js checkLoginStatus()", location, userName, userID)
+                this.toHome(location, userName, userID, token);
             } else {
                 let check = await LocationServicesDialogBox.checkLocationServicesIsEnabled({
                     message: "Location must be enabled?",
                     ok: "Okay",
-                    cancel: "Cancel"
+                    cancel: "Close"
                 }).then(function (success) {
                         navigator.geolocation.getCurrentPosition(
                             (position) => {
@@ -68,7 +65,8 @@ export default class Login extends Component {
                             {timeout: 20000, maximumAge: 100000});
                     }.bind(this)
                 ).catch((error) => {
-                    console.error(error);
+                    console.log(error);
+                    BackAndroid.exitApp();
                 });
             }
         } catch (error) {
@@ -155,7 +153,10 @@ export default class Login extends Component {
             <View style={styles.container}>
                 {this.renderModal()}
                 <Image style={styles.image}
-                       source={require('../../images/iris_logo_loginpage_white.png')}/>
+                       source={require('../../images/map_transparent.png')} >
+                       <Image style={styles.image}
+                              source={require('../../images/iris_logo_homepage.png')} />
+                </Image>
                 <Text style={styles.title}>
                     Incident Response In Situ
                 </Text>

@@ -11,23 +11,22 @@ import {
 export default class WebLoginModal extends Component {
     constructor() {
         super();
-        this.state = {
-            accessToken: null,
-        };
     }
 
-    toHome = (userName, userID) => {
+    toHome = (userName, userID, token) => {
         this.props.navigator.resetTo({
             id: 'Home',
             passProps: {
                 location: this.props.location,
                 userName: userName,
                 userID: userID,
+                token: token,
             }
         });
     }
 
     async storeLoginStatus(token, decode) {
+        console.log(token);
         try {
             await AsyncStorage.setItem('@AsyncStorage:loginStatus', 'true');
             await AsyncStorage.setItem('@AsyncStorage:accessToken', token);
@@ -48,7 +47,7 @@ export default class WebLoginModal extends Component {
                 .then((response) => response.json())
                 .then((responseJson) => {
                     var decoded = jwtDecode(responseJson.access_token)
-                    this.toHome(decoded.email, decoded.sub);
+                    this.toHome(decoded.email, decoded.sub, responseJson.access_token);
                     this.storeLoginStatus(responseJson.access_token, decoded);
                 }).catch((err) => {
                 console.error('verify account', err);
@@ -60,6 +59,7 @@ export default class WebLoginModal extends Component {
     }
 
     render() {
+        console.log("Login url", this.props.loginURLs.login + this.props.location);
         return (
             <Modal animationType={'slide'}
                    visible={this.props.modalVisible}

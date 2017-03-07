@@ -90,7 +90,6 @@ export default class EditIncident extends Component {
         let newFormData = this.state.formData;
         if (id == title) {
             newFormData['custom_fields'].data[id] = {id, data, title, type};
-            console.log('input from custom field', newFormData);
         }
         newFormData[id] = {id, data, title, type};
         this.setState({formData: newFormData});
@@ -102,6 +101,7 @@ export default class EditIncident extends Component {
     submitIncident() {
         //TODO: add submit incident logic.
         console.log("Return Object", this.state.formData);
+        this.props.navigator.pop();
     }
 
     verifySubmission() {
@@ -130,7 +130,7 @@ export default class EditIncident extends Component {
                 <SingleLineInput title={rowData.title}
                                  type={rowData.type}
                                  data={rowData.data}
-                                 updateInput={(data, id, type) => this.updateFormInput(data, id, type)}
+                                 updateInput={(data, id, title, type) => this.updateFormInput(data, id, title, type)}
                                  id={rowData.id}
                                  isEdit={true}
                 />
@@ -140,7 +140,7 @@ export default class EditIncident extends Component {
                 <MultiLineInput title={rowData.title}
                                 type={rowData.type}
                                 data={rowData.data}
-                                updateInput={(data, id, type) => this.updateFormInput(data, id, type)}
+                                updateInput={(data, id, title, type) => this.updateFormInput(data, id, title, type)}
                                 id={rowData.id}
                                 isEdit={true}
                 />
@@ -149,7 +149,7 @@ export default class EditIncident extends Component {
             return (
                 <DateInput title={rowData.title}
                            type={rowData.type}
-                           updateInput={(data, id, type) => this.updateFormInput(data, id, type)}
+                           updateInput={(data, id, title, type) => this.updateFormInput(data, id, title, type)}
                            id={rowData.id}
                            date={rowData.data}
                 />
@@ -159,10 +159,10 @@ export default class EditIncident extends Component {
                 <LocationInput title={rowData.title}
                                type={rowData.type}
                                data={rowData.data}
-                               updateInput={(data, id, type) => this.updateFormInput(data, id, type)}
+                               updateInput={(data, id, title, type) => this.updateFormInput(data, id, title, type)}
                                id={rowData.id}
                                navigator={this.props.navigator}
-                               location={rowData.data}
+                               location={rowData.data.latitude + ", " + rowData.data.longitude}
                                isEdit={true}
                 />
             )
@@ -173,7 +173,11 @@ export default class EditIncident extends Component {
     renderHeader() {
         return (
             <View style={styles.container}>
-                <Image style = {styles.image } source = {require('../../images/iris_logo_homepage.png' ) }/>
+                <Image style={styles.image } source={require('../../images/iris_logo_homepage.png')}>
+                    <TouchableHighlight onPress={() => this.props.navigator.pop()}>
+                        <Image style={styles.back_arrow} source={require('../../images/back_icon.png')}/>
+                    </TouchableHighlight>
+                </Image>
                 <Text style={styles.title }>
                     Edit Incident
                 </Text >

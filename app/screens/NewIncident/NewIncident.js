@@ -10,7 +10,9 @@ import SingleLineInput from '../../components/SingleLineInput';
 import MultiLineInput from '../../components/MultiLineInput';
 import DateInput from '../../components/DateInput';
 import LocationInput from '../../components/LocationInput';
+import DropDownInput from '../../components/DropDownInput';
 import AddFieldModal from '../AddFieldModal/AddFieldModal';
+import Toast from 'react-native-simple-toast';
 
 
 import {components} from '../../config/mandatoryComponentList';
@@ -26,16 +28,11 @@ export default class NewIncident extends Component {
             getRowData,
         });
         const {dataBlob, rowIds} = this.formatData(components, "medical");
-        var latlon = this.props.location.split(', ');
         this.state = {
             dataSource: ds.cloneWithRows(dataBlob, rowIds),
             db: dataBlob,
             formData: {},
             modalVisible: false,
-            location: {
-                latitude: latlon[0],
-                longitude: latlon[1]
-            },
         };
     }
 
@@ -73,7 +70,7 @@ export default class NewIncident extends Component {
         newFormData["start_date"] = {id: 'start_date', data: date.toDateString(), title: 'Start Date', type: 'date'};
         date.setFullYear(date.getFullYear() + 3);
         newFormData["end_date"] = {id: 'end_date', data: date.toDateString(), title: 'End Date', type: 'date'};
-        newFormData["freq"] = {id: 'freq', data: 'P1H', title: 'Reporting Frequency', type: 'text'};
+        newFormData["freq"] = {id: 'freq', data: 'P1H', title: 'Reporting Frequency', type: 'drop'};
         newFormData["keywords"] = {id: 'keywords', data: '', title: 'Keywords', type: 'text'};
         newFormData["custom_fields"] = {id: 'custom_fields', data: {}, title: 'Custom', type: 'custom'};
         this.setState({
@@ -85,7 +82,6 @@ export default class NewIncident extends Component {
         let newFormData = this.state.formData;
         if (id == title) {
             newFormData['custom_fields'].data[id] = {id, data, title, type};
-            console.log('input from custom field', newFormData);
         } else {
             newFormData[id] = {id, data, title, type};
         }
@@ -97,7 +93,10 @@ export default class NewIncident extends Component {
         var formCompleted = true;
         var toBeFilled = [];
         for (var item in this.state.formData) {
+            console.log("verifySubmission", this.state.formData);
             if (this.state.formData[item].id && this.state.formData[item].data == '') {
+                console.log("verifySubmission formData", this.state.formData[item]);
+
                 formCompleted = false;
                 toBeFilled.push(' ' + this.state.formData[item].title);
             }
@@ -115,24 +114,29 @@ export default class NewIncident extends Component {
 
     submitIncident() {
         console.log("Return Object", this.state.formData);
-        // let data = {
-        //     method: 'POST',
-        //     headers: {
-        //         'Accept': 'application/json',
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify(
-        //         this.state.formData
-        //     )
-        // }
-        // fetch(incidentURLs.incidents, data)
-        //     .then((response) => response.json())
-        //     .then((responseJson) => {
-        //         console.log("Reponse to fetch", responseJson);
-        //         this.props.navigator.pop();
-        //     }).catch((err) => {
-        //     console.error("NewIncident submitIncident()", err);
-        // });
+        console.log("Return object string", JSON.stringify(this.state.formData));
+        let data = {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + this.props.token,
+            },
+            body: JSON.stringify(
+                this.state.formData
+            )
+        }
+        fetch(incidentURLs.incidents, data)
+            .then((response) => response.json())
+            .then((responseJson) => {
+                console.log("Reponse to fetch", responseJson);
+                this.props.navigator.pop();
+                if (responseJson.location) {
+                    Toast.show('Incident was created.');
+                } //TODO: Handle error for creating report.
+            }).catch((err) => {
+            console.error("NewIncident submitIncident()", err);
+        });
     }
 
 
@@ -210,22 +214,32 @@ export default class NewIncident extends Component {
                                updateInput={(data, id, title, type) => this.updateFormInput(data, id, title, type)}
                                id={rowID}
                                navigator={this.props.navigator}
-                               location={this.state.location.latitude + ", " + this.state.location.longitude}
+                               location={this.props.location}
                 />
             )
-
+        }else if (rowData[rowID].type === 'drop') {
+            return (
+                <DropDownInput title={rowData[rowID].title}
+                               type={rowData[rowID].type}
+                               updateInput={(data, id, title, type) => this.updateFormInput(data, id, title, type)}
+                               id={rowID}
+                               navigator={this.props.navigator}
+                />
+            )
         }
     }
 
     renderHeader() {
         return (
             <View style={styles.container}>
-                <Image style={styles.image } source={require('../../images/iris_logo_homepage.png' ) }/>
-                <View style={styles.footer}>
-                    <Text style={styles.header_text}>
-                        New Incident
-                    </Text >
-                </View>
+                <Image style={styles.image } source={require('../../images/iris_logo_homepage.png')}>
+                    <TouchableHighlight onPress={() => this.props.navigator.pop()}>
+                        <Image style={styles.back_arrow} source={require('../../images/back_icon.png')}/>
+                    </TouchableHighlight>
+                </Image>
+                <Text style={styles.header_text}>
+                    New Incident
+                </Text >
             </View>
         );
     }

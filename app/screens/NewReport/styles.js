@@ -48,4 +48,10 @@ export default StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    back_arrow: {
+        width: 50,
+        height: 50,
+        justifyContent: 'flex-start',
+        resizeMode: 'contain',
+    },
 });
