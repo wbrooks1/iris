@@ -21,6 +21,7 @@ import HomeButton from '../../components/HomeButton';
 export default class Home extends Component {
     constructor(props) {
         super(props);
+        console.log(this.props.userID);
         this.state = {
             // location: this.props.location,
         }
@@ -51,6 +52,7 @@ export default class Home extends Component {
             passProps: {
                 userID: this.props.userID,
                 token: this.props.token,
+                location: this.props.location,
             }
         });
     }

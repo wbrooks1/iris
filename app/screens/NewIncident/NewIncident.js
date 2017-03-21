@@ -12,6 +12,7 @@ import DateInput from '../../components/DateInput';
 import LocationInput from '../../components/LocationInput';
 import DropDownInput from '../../components/DropDownInput';
 import AddFieldModal from '../AddFieldModal/AddFieldModal';
+import {Select, Option} from "react-native-chooser";
 import Toast from 'react-native-simple-toast';
 
 
@@ -63,15 +64,15 @@ export default class NewIncident extends Component {
         let newFormData = this.state.formData;
         let date = new Date();
         newFormData["user_id"] = this.props.userID;
+        newFormData["cat_id"] = 1;
         newFormData["title"] = {id: 'title', data: '', title: 'Title', type: 'text'};
         newFormData["desc"] = {id: 'desc', data: '', title: 'Description', type: 'multi_text'};
-        newFormData["cat_id"] = 1;
-        newFormData["location"] = {id: 'location', data: this.state.location, title: 'Location', type: 'location'};
-        newFormData["start_date"] = {id: 'start_date', data: date.toDateString(), title: 'Start Date', type: 'date'};
-        date.setFullYear(date.getFullYear() + 3);
-        newFormData["end_date"] = {id: 'end_date', data: date.toDateString(), title: 'End Date', type: 'date'};
-        newFormData["freq"] = {id: 'freq', data: 'P1H', title: 'Reporting Frequency', type: 'drop'};
+        newFormData["location"] = {id: 'location', data: this.props.location, title: 'Location', type: 'location'};
+        newFormData["start_date"] = {id: 'start_date', data: date.toISOString().slice(0,10), title: 'Start Date', type: 'date'};
+        date.setFullYear(date.getFullYear() + 1);
+        newFormData["end_date"] = {id: 'end_date', data: date.toISOString().slice(0,10), title: 'End Date', type: 'date'};
         newFormData["keywords"] = {id: 'keywords', data: '', title: 'Keywords', type: 'text'};
+        newFormData["freq"] = {id: 'freq', data: 'P1H', title: 'Reporting Frequency', type: 'drop'};
         newFormData["custom_fields"] = {id: 'custom_fields', data: {}, title: 'Custom', type: 'custom'};
         this.setState({
             formData: newFormData,
@@ -88,20 +89,26 @@ export default class NewIncident extends Component {
         this.setState({formData: newFormData});
     }
 
+    updateCategoryID(id) {
+        let newFormData = this.state.formData;
+        newFormData['cat_id'] = id;
+        this.setState({formData: newFormData});
+    }
+
 
     verifySubmission() {
         var formCompleted = true;
         var toBeFilled = [];
         for (var item in this.state.formData) {
-            console.log("verifySubmission", this.state.formData);
             if (this.state.formData[item].id && this.state.formData[item].data == '') {
-                console.log("verifySubmission formData", this.state.formData[item]);
-
                 formCompleted = false;
                 toBeFilled.push(' ' + this.state.formData[item].title);
             }
         }
-        if (formCompleted) {
+        if (this.state.formData['start_date'].data > this.state.formData['end_date'].data){
+            Alert.alert('Submit Incident', 'End Date must be after Start Date',
+                [{text: 'OK', onPress: () => console.log('form not complete')},])
+        } else if (formCompleted) {
             Alert.alert('Submit Incident', 'Are you sure you want to submit incident?',
                 [{text: 'Cancel', onPress: () => console.log('Cancel Pressed')},
                     {text: 'OK', onPress: () => this.submitIncident()}]);
@@ -130,13 +137,17 @@ export default class NewIncident extends Component {
             .then((response) => response.json())
             .then((responseJson) => {
                 console.log("Reponse to fetch", responseJson);
-                this.props.navigator.pop();
                 if (responseJson.location) {
                     Toast.show('Incident was created.');
-                } //TODO: Handle error for creating report.
+                    this.props.navigator.pop();
+                } else {
+                    Toast.show('Something went wrong' + responseJson.error);
+                }
             }).catch((err) => {
             console.error("NewIncident submitIncident()", err);
         });
+        console.log(this.props.token);
+
     }
 
 
@@ -217,7 +228,8 @@ export default class NewIncident extends Component {
                                location={this.props.location}
                 />
             )
-        }else if (rowData[rowID].type === 'drop') {
+        }
+        else if (rowData[rowID].type === 'drop') {
             return (
                 <DropDownInput title={rowData[rowID].title}
                                type={rowData[rowID].type}
@@ -240,6 +252,25 @@ export default class NewIncident extends Component {
                 <Text style={styles.header_text}>
                     New Incident
                 </Text >
+                <Text style={styles.title}>
+                    Incident Category
+                </Text>
+                <Select
+                    onSelect = {(id) => this.updateCategoryID(id)}
+                    defaultText  = "Medical"
+                    style = {styles.select}
+                    textStyle = {styles.option_list_text}
+                    backdropStyle  = {styles.select}
+                    optionListStyle = {styles.option_list}
+                    transparent = {true}
+                    indicator={'down'}
+                    selected={1}
+                >
+                    <Option styleText={styles.option_list_text} value = {1}>Medical</Option>
+                    <Option styleText={styles.option_list_text} value = {2}>Natural Disaster</Option>
+                    <Option styleText={styles.option_list_text} value = {3}>Military</Option>
+                    <Option styleText={styles.option_list_text} value = {4}>Other</Option>
+                </Select>
             </View>
         );
     }
@@ -249,7 +280,7 @@ export default class NewIncident extends Component {
             <View style={styles.footer}>
                 <TouchableHighlight onPress={() => this.addField()}>
                     <Text style={styles.add_field_text}>
-                        +Add Field
+                        +Add Custom Input
                     </Text>
                 </TouchableHighlight>
             </View>

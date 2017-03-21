@@ -6,7 +6,7 @@ var {height, width} = Dimensions.get('window')
 export default StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
+        alignSelf: 'center',
         backgroundColor: colors.neutral,
     },
     image: {
@@ -25,7 +25,7 @@ export default StyleSheet.create({
     header_text: {
         fontSize: 20,
         fontFamily: 'centuryschl',
-        textAlign: 'left',
+        textAlign: 'center',
         margin: 10,
         color: colors.black,
     },
@@ -48,11 +48,42 @@ export default StyleSheet.create({
         marginVertical: 10,
         alignItems: 'center',
         justifyContent: 'center',
+        alignSelf: 'center',
     },
     back_arrow: {
         width: 50,
         height: 50,
         justifyContent: 'flex-start',
         resizeMode: 'contain',
-    }
+    },
+    option_list: {
+        width: width - 60,
+        backgroundColor: colors.white,
+        alignSelf: 'center',
+        borderRadius: 10,
+        borderColor: colors.carbon,
+    },
+    option_list_text: {
+        fontSize: 16,
+        textAlign: 'left',
+        margin: 10,
+        color: colors.carbon,
+        fontFamily: 'centuryschl',
+    },
+    select: {
+        backgroundColor: 'rgba(255, 255, 255, 0.5)',
+        borderRadius: 10,
+        width: width - 60,
+        borderColor: colors.white,
+        alignSelf: 'center'
+    },
+    title: {
+        fontSize: 20,
+        fontFamily: 'centuryschl',
+        textAlign: 'left',
+        margin: 5,
+        color: colors.carbon,
+        marginLeft: 30,
+    },
+
 });

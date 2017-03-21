@@ -55,6 +55,7 @@ export default class SearchIncidents extends Component {
                 id: id,
                 userID: this.props.userID,
                 token: this.props.token,
+                location: this.props.location,
             }
         });
     };

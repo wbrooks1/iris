@@ -8,12 +8,14 @@ import {incidentURLs} from '../../config/strings'
 
 
 export default class YourIncidents extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
+        console.log(this.props.userID);
         this.state = {
             dataSource: new ListView.DataSource({
                 rowHasChanged: (row1, row2) => row1 !== row2,
             }),
+            userID: this.props.userID,
             loaded: false,
         };
     }
@@ -29,10 +31,11 @@ export default class YourIncidents extends Component {
     };
 
     componentDidMount() {
-        //TODO: add get user logic.
-        fetch(incidentURLs.users + '1/incidents')
+        fetch(incidentURLs.users + this.props.userID + '/incidents')
             .then((response) => response.json())
             .then((responseJson) => {
+                console.log("responseJson", responseJson)
+
                 this.setState({
                     dataSource: this.state.dataSource.cloneWithRows(responseJson),
                     loaded: true,
@@ -54,7 +57,7 @@ export default class YourIncidents extends Component {
     };
 
     renderRow(rowData) {
-        //TODO: Fix desc and title on saving and displaying.
+        console.log("row data", rowData)
         return (
             <TouchableHighlight onPress={() => this.toEditIncident(rowData.incident_id)}>
                 <View style={styles.row_container}>

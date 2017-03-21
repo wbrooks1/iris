@@ -1,26 +1,36 @@
+'use strict';
 import React, {Component} from 'react';
 import {View, TextInput, Text, DatePickerAndroid, TouchableHighlight} from 'react-native';
 import styles from './styles';
 
+/**
+ * Date Input component for form input
+ * @author Winfield Brooks
+ */
 export default class DateInput extends Component {
     constructor() {
         super();
         this.state = {
             date: null,
-            id: null,
         }
     }
 
+    //if incoming date set state to incoming date, else set state to current date.
     componentWillMount() {
         if (this.props.date) {
             var date = new Date(this.props.date);
-            this.setState({date: date})
+            this.setState({date: date});
         } else {
             this.state.date = new Date();
         }
-        this.setState({id: this.props.id})
     }
 
+    //TODO: Implement iOS datePicker
+    /**
+     * Async method opens R.N. DatePickerAndroid and sets component state
+     * and updates form input when date is selected.
+     * @returns {Promise.<void>}
+     */
     async openAndroidDatePicker() {
         try {
             const {action, year, month, day} = await DatePickerAndroid.open({
@@ -30,7 +40,7 @@ export default class DateInput extends Component {
                 var date = new Date(year, month, day);
                 this.setState({date: date});
                 this.props.updateInput(this.state.date.toISOString().slice(0,10),
-                    this.state.id, this.props.title, this.props.type);
+                    this.props.id, this.props.title, this.props.type);
             }
         } catch ({code, message}) {
             console.warn('Cannot open date picker', message);
@@ -46,7 +56,7 @@ export default class DateInput extends Component {
                 <TouchableHighlight onPress={() => this.openAndroidDatePicker()}>
                 <TextInput
                     style={styles.input}
-                    autoCapitalize="none"
+                    autoCapitalize='none'
                     editable={false}
                     defaultValue={this.state.date.toISOString().slice(0,10)}
                     >

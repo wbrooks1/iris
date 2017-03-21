@@ -15,8 +15,9 @@ import {incidentURLs} from '../../config/strings'
 
 
 export default class NewReport extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
+        console.log(this.props.location)
         this.state = {
             dataSource: new ListView.DataSource({
                 rowHasChanged: (row1, row2) => row1 !== row2,
@@ -179,7 +180,7 @@ export default class NewReport extends Component {
                                updateInput={(data, id, title, type) => this.updateFormInput(data, id, title, type)}
                                id={rowData.id}
                                navigator={this.props.navigator}
-                               location={rowData.data.latitude + ", " + rowData.data.longitude}
+                               location={this.props.location}
                 />
             )
 

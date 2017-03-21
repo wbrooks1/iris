@@ -10,6 +10,7 @@ import SingleLineInput from '../../components/SingleLineInput';
 import MultiLineInput from '../../components/MultiLineInput';
 import DateInput from '../../components/DateInput';
 import LocationInput from '../../components/LocationInput';
+import DropDownInput from '../../components/DropDownInput';
 
 import {incidentURLs} from '../../config/strings'
 
@@ -112,7 +113,10 @@ export default class EditIncident extends Component {
                 formCompleted = false;
                 toBeFilled.push(' ' + this.state.formData[item].title);
             }
-        } if (formCompleted) {
+        } if (this.state.formData['start_date'].data > this.state.formData['end_date'].data){
+            Alert.alert('Submit Incident', 'End Date must be after Start Date',
+                [{text: 'OK', onPress: () => console.log('form not complete')},])
+        } else if (formCompleted) {
             Alert.alert('Edit Incident', 'Are you sure you want to save incident?' +
                 'Overwritten information will be lost.',
                 [{text: 'Cancel', onPress: () => console.log('Cancel Pressed')},
@@ -162,11 +166,19 @@ export default class EditIncident extends Component {
                                updateInput={(data, id, title, type) => this.updateFormInput(data, id, title, type)}
                                id={rowData.id}
                                navigator={this.props.navigator}
-                               location={rowData.data.latitude + ", " + rowData.data.longitude}
+                               location={rowData.data}
                                isEdit={true}
                 />
             )
-
+        } else if (rowData.type === 'drop') {
+            return (
+                <DropDownInput title={rowData.title}
+                               type={rowData.type}
+                               updateInput={(data, id, title, type) => this.updateFormInput(data, id, title, type)}
+                               id={rowData.id}
+                               navigator={this.props.navigator}
+                />
+            )
         }
     }
 

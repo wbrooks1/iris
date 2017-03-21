@@ -7,8 +7,10 @@ export const components = {
         {"id": "start_date", "type": "date", "title": "Start Date", "data": new Date().toDateString()},
         {"id": "end_date", "type": "date", "title": "End Date", "data": date.toDateString()},
         {"id": "keywords", "type": "text", "title": "Search Keywords", "placeholder": "Enter search keywords"},
-        {"id": "location", "type": "location", "title": "Incident Location"},
-        {"id": 'freq', "data": 'P1H', "title": 'Reporting Frequency', "type": 'drop'},
+        {"id": "location", "type": "location", "data": "", "title": "Incident Location"},
+        {"id": "freq", "type": "drop", "title": "Reporting Frequency", "data": "P1H"},
+
+
     ],
     natural : {
         "title" : {"type": "text", "title": "Title", "placeholder": "Enter incident title"},
