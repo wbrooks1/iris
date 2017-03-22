@@ -1,13 +1,17 @@
 'use strict';
 
 import React, {Component} from 'react';
-import {AppRegistry, ListView, TouchableHighlight, StyleSheet, Text, Image, View, TextInput, ScrollView, Navigator, BackAndroid} from 'react-native'
+import {ListView, TouchableHighlight, StyleSheet, Text, Image, View, TextInput, ScrollView, Navigator, BackAndroid} from 'react-native'
 import styles from './styles';
-import SingleLineInput from '../../components/SingleLineInput';
 import {incidentURLs} from '../../config/strings'
 
-
-
+/**
+ * Screen to search incidents to report on.
+ * @author Winfield Brooks
+ * @props userID: user id
+ * @props location: user default location
+ * @props token: security token
+ */
 export default class SearchIncidents extends Component {
     constructor() {
         super();
@@ -19,6 +23,7 @@ export default class SearchIncidents extends Component {
         };
     }
 
+    //Set up navigator for back arrow press on android
     componentWillMount() {
         BackAndroid.addEventListener('hardwareBackPress', () => {
             if (this.props.navigator && this.props.navigator.getCurrentRoutes().length > 0) {
@@ -29,8 +34,10 @@ export default class SearchIncidents extends Component {
         });
     }
 
+    /**
+     * Fetch and list all incidents upon opening.
+     */
     componentDidMount() {
-        //TODO: add get user logic.
         fetch(incidentURLs.incidents)
             .then((response) => response.json())
             .then((responseJson) => {
@@ -43,8 +50,12 @@ export default class SearchIncidents extends Component {
         });
     }
 
+    /**
+     * Search incidents, search implemented in backend.
+     * Fetches only incidents with keywords that match input.
+     * @param input
+     */
     searchIncidents = (input) => {
-        console.log('Search input', input);
         fetch(incidentURLs.search + input)
             .then((response) => response.json())
             .then((responseJson) => {
@@ -57,6 +68,10 @@ export default class SearchIncidents extends Component {
         });
     }
 
+    /**
+     * To new report screen for selected incident.
+     * @param id
+     */
     toNewReport = (id) => {
         console.log("toNewReport: id", id);
         this.props.navigator.push({
@@ -89,11 +104,14 @@ export default class SearchIncidents extends Component {
         }
     }
 
+    /**
+     * Render header and search bar. Search is conducted as text changes in search bar.
+     */
     renderHeader() {
         return (
             <View style={styles.container}>
                 <Image style={styles.image } source={require('../../images/iris_logo_homepage.png')}>
-                    <TouchableHighlight onPress={() => this.props.navigator.pop()}>
+                    <TouchableHighlight style={styles.back_arrow} onPress={() => this.props.navigator.pop()}>
                         <Image style={styles.back_arrow} source={require('../../images/back_icon.png')}/>
                     </TouchableHighlight>
                 </Image>
@@ -125,4 +143,3 @@ export default class SearchIncidents extends Component {
         );
     }
 }
-AppRegistry.registerComponent('SearchIncidents', () => SearchIncidents );

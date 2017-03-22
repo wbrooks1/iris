@@ -1,5 +1,5 @@
 import { StyleSheet, Dimensions } from 'react-native';
-import { colors } from '../../config/styles';
+import { colors, style } from '../../config/styles';
 
 const window = Dimensions.get('window');
 export default StyleSheet.create({
@@ -7,55 +7,80 @@ export default StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: colors.translucent,
+        height: window.height,
+        width: window.width,
+    },
+    rowContainer: {
+        flexDirection: 'row',
+        width: window.width - style.modalWidthDifference,
+    },
+    background: {
+        backgroundColor: colors.translucent,
+        height: window.height,
+        width: window.width,
     },
     modal: {
         marginTop: window.height / 4,
         height: 275,
-        width: window.width - 20,
+        width: window.width - style.modalWidthDifference,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: colors.carbon,
-        padding: 20,
-        borderRadius: 10,
+        backgroundColor: colors.neutral,
+        padding: style.padding,
+        borderRadius: style.borderRadius,
         alignSelf: 'center',
+        borderColor: colors.carbon,
+        borderWidth: StyleSheet.hairlineWidth,
     },
     text_box: {
-      backgroundColor: colors.neutral,
-      borderRadius: 10,
-
+      backgroundColor: colors.white,
+      borderRadius: style.borderRadius,
     },
     picker: {
-        width: window.width - 60,
+        width: window.width - style.inputWidthDifference,
     },
     input: {
-        height: 40,
-        width: window.width - 60,
-        fontSize: 20,
-        borderRadius: 5,
-        marginHorizontal: 10,
-        paddingVertical: 5,
-        paddingHorizontal: 15,
+        height: style.textInputHeight,
+        width: window.width - style.inputWidthDifference,
+        fontSize: style.inputFontSize,
+        borderRadius: style.inputBorderRadius,
+        marginHorizontal: style.inputMarginHorizontal,
+        paddingVertical: style.inputPaddingVertical,
+        paddingHorizontal: style.inputPaddingHorizontal,
         alignSelf: "center"
     },
-    title: {
-        fontSize: 20,
+    title: {flex: 1,
+        fontSize: style.titleFontSize,
         fontFamily: 'centuryschl',
-        margin: 15,
+        color: colors.black,
+        textAlignVertical: 'center',
+        textAlign: 'center',
+        right: 40 / 2,
+    },
+    submitButtonText: {
+        fontSize: style.largeFontSize,
+        fontFamily: 'centuryschl',
+        margin: style.margin,
         color: colors.black,
     },
     label: {
-        fontSize: 20,
+        fontSize: style.titleFontSize,
         fontFamily: 'centuryschl',
         textAlign: 'left',
-        margin: 5,
+        margin: style.titleMargin,
     },
     submit_button: {
         backgroundColor: colors.sky,
         width: 200,
-        height: 50,
-        borderRadius: 10,
-        marginVertical: 10,
+        height: style.submitButtonHeight,
+        borderRadius: style.borderRadius,
+        marginVertical: style.margin,
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    back_arrow: {
+        width: 40,
+        height: 40,
     },
 });

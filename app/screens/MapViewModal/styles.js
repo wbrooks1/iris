@@ -1,12 +1,12 @@
 import { StyleSheet, Dimensions } from 'react-native';
-import { colors } from '../../config/styles';
+import { colors, style } from '../../config/styles';
 
 var {height, width} = Dimensions.get('window')
 export default StyleSheet.create({
 
     submit: {
         fontFamily: 'centuryschl',
-        fontSize: 25,
+        fontSize: style.largeFontSize,
         textAlign: 'center',
         color: colors.black,
         width: width,
@@ -27,10 +27,10 @@ export default StyleSheet.create({
     },
     submit_button: {
         backgroundColor: colors.sky,
-        width: 250,
-        height: 50,
-        borderRadius: 10,
-        marginVertical: 10,
+        width: style.submitButtonWidth,
+        height: style.submitButtonHeight,
+        borderRadius: style.borderRadius,
+        marginVertical: style.margin,
         alignItems: 'center',
         justifyContent: 'center',
         alignSelf: 'center',

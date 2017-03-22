@@ -1,44 +1,42 @@
 import {StyleSheet, Dimensions} from 'react-native';
-import {colors} from '../../config/styles';
+import {colors, style} from '../../config/styles';
 
 var {height, width} = Dimensions.get('window')
 export default StyleSheet.create({
     title: {
-        fontSize: 20,
+        fontSize: style.titleFontSize,
         fontFamily: 'centuryschl',
         textAlign: 'left',
-        margin: 5,
+        margin: style.titleMargin,
         color: colors.carbon,
     },
     container: {
         flex: 1,
         width: window.width,
-        marginHorizontal: 5,
+        marginHorizontal: style.containerMarginHorizontal,
         alignSelf: "center",
     },
     option_list: {
-        width: width - 60,
+        width: width - style.inputWidthDifference,
         backgroundColor: colors.white,
         alignSelf: 'center',
-        borderRadius: 10,
+        borderRadius: style.borderRadius,
         borderColor: colors.carbon,
     },
     option_list_text: {
-        fontSize: 16,
+        fontSize: style.inputFontSize,
         textAlign: 'left',
-        margin: 10,
+        margin: style.margin,
         color: colors.carbon,
         fontFamily: 'centuryschl',
     },
     select: {
-        backgroundColor: 'rgba(255, 255, 255, 0.5)',
-        borderRadius: 10,
-        width: width - 60,
+        backgroundColor: colors.translucent,
+        borderRadius: style.borderRadius,
+        width: width - style.inputWidthDifference,
         borderColor: colors.white,
         alignSelf: 'center'
     },
-
-
 });
 
 

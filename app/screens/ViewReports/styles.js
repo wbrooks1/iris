@@ -1,8 +1,7 @@
 import { StyleSheet, Dimensions } from 'react-native';
-import { colors } from '../../config/styles';
+import { colors, style } from '../../config/styles';
 
 var {height, width} = Dimensions.get('window')
-//TODO change all of this.
 export default StyleSheet.create({
     container: {
         flex: 1,
@@ -11,20 +10,19 @@ export default StyleSheet.create({
     },
     image: {
         width: width,
-        height: 50,
+        height: style.headerImageSize,
         alignSelf: 'center',
         resizeMode: 'contain',
     },
     title: {
-        fontSize: 20,
+        fontSize: style.titleFontSize,
         textAlign: 'center',
-        margin: 10,
+        margin: style.margin,
         color: colors.black,
     },
     back_arrow: {
-        width: 50,
-        height: 50,
+        width: style.headerImageSize,
+        height: style.headerImageSize,
         justifyContent: 'flex-start',
-        resizeMode: 'contain',
     }
 });

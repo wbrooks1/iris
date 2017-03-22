@@ -1,8 +1,7 @@
 import {StyleSheet, Dimensions} from 'react-native';
-import {colors} from '../../config/styles';
+import {colors, style} from '../../config/styles';
 
 var {height, width} = Dimensions.get('window')
-//TODO change all of this.
 export default StyleSheet.create({
     container: {
         flex: 1,
@@ -20,9 +19,9 @@ export default StyleSheet.create({
         resizeMode: 'contain',
     },
     logout_text: {
-        fontSize: 20,
+        fontSize: style.titleFontSize,
         textAlign: 'right',
-        margin: 10,
+        margin: style.margin,
         color: colors.redAccent,
     },
     background: {
@@ -36,9 +35,9 @@ export default StyleSheet.create({
         justifyContent: 'space-between',
     },
     user: {
-        fontSize: 20,
+        fontSize: style.titleFontSize,
         textAlign: 'left',
-        margin: 10,
+        margin: style.margin,
         color: colors.carbon,
         fontFamily: 'centuryschl',
     }

@@ -1,19 +1,19 @@
 import { StyleSheet } from 'react-native';
-import { colors } from '../../config/styles';
+import { colors, style } from '../../config/styles';
 
 export default StyleSheet.create({
     button: {
-        paddingHorizontal: 20,
+        paddingHorizontal: style.buttonPadding,
     },
     buttonIcon: {
-        width: 125,
-        height: 125,
+        width: style.homeButtonSize,
+        height: style.homeButtonSize,
         justifyContent: 'center',
         resizeMode: 'contain',
     },
     container: {
-        width: 125,
-        height: 125,
+        width: style.homeButtonSize,
+        height: style.homeButtonSize,
         justifyContent: 'center',
         alignItems: 'center',
     }

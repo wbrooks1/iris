@@ -1,8 +1,7 @@
 import { StyleSheet, Dimensions } from 'react-native';
-import { colors } from '../../config/styles';
+import { colors, style } from '../../config/styles';
 
 var {height, width} = Dimensions.get('window')
-//TODO change all of this.
 export default StyleSheet.create({
     container: {
         flex: 1,
@@ -10,20 +9,20 @@ export default StyleSheet.create({
     },
     row_container: {
         flexDirection: 'row',
-        padding: 10,
+        padding: style.listRowPadding,
         backgroundColor: colors.neutral,
     },
     title: {
-        fontSize: 20,
+        fontSize: style.titleFontSize,
         fontFamily: 'centuryschl',
         textAlign: 'center',
-        margin: 10,
+        margin: style.margin,
         color: colors.black,
     },
     icon: {
-        width: 60,
-        height: 60,
-        marginRight: 10,
+        width: style.listRowIconSize,
+        height: style.listRowIconSize,
+        marginRight: style.margin,
     },
     separator: {
         height: StyleSheet.hairlineWidth,
@@ -31,38 +30,37 @@ export default StyleSheet.create({
     },
     search_box: {
         backgroundColor: colors.sky,
-        padding: 10,
+        padding: style.listRowPadding,
         flex: 1,
-        borderRadius: 10,
+        borderRadius: style.borderRadius,
     },
     list_desc: {
-        fontSize: 16,
+        fontSize: style.inputFontSize,
         fontFamily: 'centuryschl',
         color: colors.carbon,
     },
     list_title: {
-        fontSize: 20,
+        fontSize: style.titleFontSize,
         fontFamily: 'centuryschl',
         color: colors.black,
     },
     input: {
-        height: 50,
+        height: style.headerImageSize,
         flex: 1,
-        paddingHorizontal: 8,
-        fontSize: 20,
+        paddingHorizontal: style.listRowPadding,
+        fontSize: style.titleFontSize,
         backgroundColor: '#FFFFFF',
-        borderRadius: 2,
+        borderRadius: style.inputBorderRadius,
     },
     image: {
         width: width,
-        height: 50,
+        height: style.headerImageSize,
         justifyContent: 'flex-start',
         resizeMode: 'contain',
     },
     back_arrow: {
-        width: 50,
-        height: 50,
+        width: style.headerImageSize,
+        height: style.headerImageSize,
         justifyContent: 'flex-start',
-        resizeMode: 'contain',
     },
 });

@@ -1,7 +1,7 @@
 'use strict'
 
 import React, {Component} from 'react';
-import {Modal, Text, TextInput, TouchableHighlight, View, Navigator, Picker} from 'react-native';
+import {Modal, Text, TextInput, TouchableHighlight, View, Navigator, Picker, Image} from 'react-native';
 import styles from './styles';
 
 /**
@@ -42,12 +42,17 @@ export default class AddFieldModal extends Component {
                    visible={this.props.modalVisible}
                    transparent={true}
                    onRequestClose={() => {this.props.closeModal()}}>
+                <View style={styles.background}>
                 <View style={styles.modal}>
+                    <View style={styles.rowContainer}>
+                    <TouchableHighlight style={styles.back_arrow} onPress={() => this.props.closeModal()}>
+                        <Image style={styles.back_arrow} source={require('../../images/back_icon.png')}/>
+                    </TouchableHighlight>
                     <Text style={styles.title}>
                         Add New Field
                     </Text>
+                </View>
                     <View style={styles.text_box}>
-
                     <Text style={styles.label}>
                         Select Field Type
                     </Text>
@@ -71,8 +76,9 @@ export default class AddFieldModal extends Component {
                         />
                     </View>
                     <TouchableHighlight style={styles.submit_button} onPress={() => this.addField()}>
-                        <Text style={styles.title}>Add Field</Text>
+                        <Text style={styles.submitButtonText}>Add Field</Text>
                     </TouchableHighlight>
+                </View>
                 </View>
             </Modal>
         );

@@ -1,16 +1,21 @@
 'use strict';
 
 import React, {Component} from 'react';
-import {
-    AppRegistry, Alert, StyleSheet, Text, Image, View, TextInput, ScrollView, Navigator, BackAndroid,
-    ListView, TouchableHighlight
-} from 'react-native'
+import {Alert, StyleSheet, Text, Image, View, TextInput, ScrollView, Navigator, BackAndroid,
+    ListView, TouchableHighlight} from 'react-native'
 import styles from './styles';
 import InputFormRow from '../../components/InputFormRow';
 import Toast from 'react-native-simple-toast';
 import {incidentURLs} from '../../config/strings'
 
-
+/**
+ * Form screen for creating a new report under a specified incident.
+ * @author Winfield Brooks
+ * @props userID: user id
+ * @props location: user default location
+ * @props token: security token
+ * @props id: selected incident id
+ */
 export default class NewReport extends Component {
     constructor(props) {
         super(props);
@@ -25,7 +30,7 @@ export default class NewReport extends Component {
         };
     }
 
-
+    //Set up navigator for back arrow press on android
     componentWillMount() {
         BackAndroid.addEventListener('hardwareBackPress', () => {
             if (this.props.navigator && this.props.navigator.getCurrentRoutes().length > 0) {
@@ -40,6 +45,9 @@ export default class NewReport extends Component {
         this.fetchData()
     }
 
+    /**
+     * Fetch input component data from selected incident.
+     */
     fetchData() {
         fetch(incidentURLs.incidents + '/' + this.props.id)
             .then((response) => response.json())
@@ -50,8 +58,13 @@ export default class NewReport extends Component {
         });
     }
 
+    /**
+     * Remove data elements from incident data that are not to be reported on and formats data into two main parts
+     * this.state.dataSource is formatted to create form input components in the ListView.
+     * this.state.formData is formatted to be uploaded to database.
+     * @param data
+     */
     formatData(data) {
-        //TODO: get user_id for report creator and fix naming for title and description.
         var dataArr = [];
         this.setState({incidentName: data['title'].data});
         delete data['created'];
@@ -62,7 +75,6 @@ export default class NewReport extends Component {
         delete data['keywords'];
         delete data['cat_id'];
         delete data['title'];
-
         for (var item in data) {
             if (data[item] && data[item].hasOwnProperty('id')) {
                 if (item == 'custom_fields') {
@@ -79,12 +91,16 @@ export default class NewReport extends Component {
             dataSource: this.state.dataSource.cloneWithRows(dataArr),
             formData: data
         })
-        console.log("formData after blanking", this.state.formData);
     }
 
-
+    /**
+     * Update the formData when changes are made to an input component.
+     * @param data
+     * @param id
+     * @param title
+     * @param type
+     */
     updateFormInput(data, id, title, type) {
-        console.log('udateFromInput', data, id, title, type)
         let newFormData = this.state.formData;
         if (id == title) {
             newFormData['custom_fields'].data[id] = {id, data, title, type};
@@ -94,6 +110,9 @@ export default class NewReport extends Component {
         this.setState({formData: newFormData});
     }
 
+    /**
+     * Verify that all fields have data before incident can be uploaded.
+     */
     verifySubmission() {
         var formCompleted = true;
         var toBeFilled = [];
@@ -113,6 +132,9 @@ export default class NewReport extends Component {
         }
     }
 
+    /**
+     * POST request to upload formData to database as report under the selected incident.
+     */
     submitReport() {
         console.log("Return Object", this.state.formData);
         let data = {
@@ -130,17 +152,22 @@ export default class NewReport extends Component {
         fetch(incidentURLs.reports + 'incidents/' + this.props.id + '/reports', data)
             .then((response) => response.json())
             .then((responseJson) => {
-                console.log("Reponse to fetch", responseJson);
-                this.props.navigator.pop();
                 if (responseJson.location) {
+                    this.props.navigator.pop();
                     Toast.show('Report was created.');
-                } //TODO: Handle error for creating report.
+                } else {
+                    Toast.show('Something went wrong' + responseJson.error);
+                }
             }).catch((err) => {
             console.error("NewReport submitReport()", err);
         });
     }
 
-
+    /**
+     * Render appropriate input component based on rowData using InputFormRow.
+     * @param rowData
+     * @returns input component
+     */
     renderRow(rowData) {
         return (
             <InputFormRow rowData={rowData}
@@ -157,7 +184,7 @@ export default class NewReport extends Component {
         return (
             <View style={styles.container}>
                 <Image style={styles.image } source={require('../../images/iris_logo_homepage.png')}>
-                    <TouchableHighlight onPress={() => this.props.navigator.pop()}>
+                    <TouchableHighlight style={styles.back_arrow} onPress={() => this.props.navigator.pop()}>
                         <Image style={styles.back_arrow} source={require('../../images/back_icon.png')}/>
                     </TouchableHighlight>
                 </Image>
@@ -185,4 +212,3 @@ export default class NewReport extends Component {
     }
 }
 
-AppRegistry.registerComponent('NewReport', () => NewReport);

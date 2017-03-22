@@ -1,5 +1,5 @@
 import {StyleSheet, Dimensions} from 'react-native';
-import {colors} from '../../config/styles';
+import {colors, style} from '../../config/styles';
 
 var {height, width} = Dimensions.get('window')
 
@@ -16,18 +16,18 @@ export default StyleSheet.create({
         alignItems: 'center',
     },
     title: {
-        fontSize: 25,
+        fontSize: style.largeFontSize,
         fontFamily: 'centuryschl',
         textAlign: 'center',
-        margin: 10,
+        margin: style.margin,
         color: colors.black,
     },
     image: {
         width: width,
         height: height / 3,
         resizeMode: 'contain',
-        padding: 10,
-        borderRadius: 10,
+        padding: style.margin,
+        borderRadius: style.borderRadius,
     },
     activityIndicator: {
         flex: 1,

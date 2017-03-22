@@ -101,7 +101,7 @@ export default class EditIncident extends Component {
      * Submit formData as POST body.
      */
     submitIncident() {
-        //TODO: add submit incident logic.
+        //TODO: add update incident logic.
         console.log("Return Object", this.state.formData);
         this.props.navigator.pop();
     }
@@ -154,7 +154,7 @@ export default class EditIncident extends Component {
         return (
             <View style={styles.container}>
                 <Image style={styles.image } source={require('../../images/iris_logo_homepage.png')}>
-                    <TouchableHighlight onPress={() => this.props.navigator.pop()}>
+                    <TouchableHighlight style={styles.back_arrow} onPress={() => this.props.navigator.pop()}>
                         <Image style={styles.back_arrow} source={require('../../images/back_icon.png')}/>
                     </TouchableHighlight>
                 </Image>

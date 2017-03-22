@@ -7,13 +7,12 @@ import {AppRegistry, StyleSheet, Text, Image, View, TextInput, ScrollView, Navig
 import styles from './styles';
 import InputFormRow from '../../components/InputFormRow';
 import AddFieldModal from '../AddFieldModal/AddFieldModal';
-import {Select, Option} from "react-native-chooser";
+import {Select, Option} from 'react-native-chooser';
 import Toast from 'react-native-simple-toast';
-import {components} from '../../config/mandatoryComponentList';
 import {incidentURLs} from '../../config/strings'
 
 /**
- * Form screen for creating a new incident. Incorporates all input components.
+ * Form screen for creating a new incident.
  * @author Winfield Brooks
  * @props userID: user id
  * @props location: user default location
@@ -22,12 +21,6 @@ import {incidentURLs} from '../../config/strings'
 export default class NewIncident extends Component {
     constructor(props) {
         super(props);
-        // const getRowData = (dataBlob, rowData.id) => dataBlob[`${rowData.id}`];
-        // const ds = new ListView.DataSource({
-            // rowHasChanged: (r1, r2) => r1 !== r2,
-            // getRowData,
-        // });
-        // const {dataBlob, rowData.ids} = this.formatData(components);
         this.state = {
             dataSource: new ListView.DataSource({
                 rowHasChanged: (row1, row2) => row1 !== row2,
@@ -37,7 +30,12 @@ export default class NewIncident extends Component {
         };
     }
 
-
+    /**
+     * Formats data into two main parts.
+     * this.state.dataSource is formatted to create form input components in the ListView.
+     * this.state.formData is formatted to be uploaded to database.
+     * @param data
+     */
     formatData(data) {
         var dataArr = [];
         for (var item in data) {
@@ -57,6 +55,7 @@ export default class NewIncident extends Component {
         });
     }
 
+    //Set up navigator for back arrow press on android and call initializeFormData()
     componentWillMount() {
         BackAndroid.addEventListener('hardwareBackPress', () => {
             if (this.props.navigator && this.props.navigator.getCurrentRoutes().length > 0) {
@@ -68,25 +67,36 @@ export default class NewIncident extends Component {
         this.initalizeFormData();
     }
 
+    /**
+     * Create base for data, initializes all mandatory input fields fields.
+     */
     initalizeFormData() {
         var newFormData = {};
         let date = new Date();
-        newFormData["user_id"] = this.props.userID;
-        newFormData["cat_id"] = 1;
-        newFormData["title"] = {id: 'title', data: '', title: 'Title', type: 'text'};
-        newFormData["desc"] = {id: 'desc', data: '', title: 'Description', type: 'multi_text'};
-        newFormData["location"] = {id: 'location', data: this.props.location, title: 'Location', type: 'location'};
-        newFormData["start_date"] = {id: 'start_date', data: date.toISOString().slice(0,10), title: 'Start Date', type: 'date'};
+        newFormData['user_id'] = this.props.userID;
+        newFormData['cat_id'] = 1;
+        newFormData['title'] = {id: 'title', data: '', title: 'Title', type: 'text'};
+        newFormData['desc'] = {id: 'desc', data: '', title: 'Description', type: 'multi_text'};
+        newFormData['location'] = {id: 'location', data: this.props.location, title: 'Location', type: 'location'};
+        newFormData['start_date'] = {id: 'start_date', data: date.toISOString().slice(0,10), title: 'Start Date', type: 'date'};
         date.setFullYear(date.getFullYear() + 1);
-        newFormData["end_date"] = {id: 'end_date', data: date.toISOString().slice(0,10), title: 'End Date', type: 'date'};
-        newFormData["keywords"] = {id: 'keywords', data: '', title: 'Keywords', type: 'text'};
-        newFormData["freq"] = {id: 'freq', data: 'P1H', title: 'Reporting Frequency', type: 'drop'};
-        newFormData["custom_fields"] = {id: 'custom_fields', data: {}, title: 'Custom', type: 'custom'};
+        newFormData['end_date'] = {id: 'end_date', data: date.toISOString().slice(0,10), title: 'End Date', type: 'date'};
+        newFormData['keywords'] = {id: 'keywords', data: '', title: 'Keywords', type: 'text'};
+        newFormData['freq'] = {id: 'freq', data: 'P1H', title: 'Reporting Frequency', type: 'drop'};
+        newFormData['custom_fields'] = {id: 'custom_fields', data: {}, title: 'Custom', type: 'custom'};
         this.formatData(newFormData);
     }
 
+    /**
+     * Update the formData when changes are made to an input component.
+     * @param data
+     * @param id
+     * @param title
+     * @param type
+     */
     updateFormInput(data, id, title, type) {
         let newFormData = this.state.formData;
+        //custom input fields will have the same title and id and must be added to formData[custom_fields].data
         if (id == title) {
             newFormData['custom_fields'].data[id] = {id, data, title, type};
         } else {
@@ -95,13 +105,19 @@ export default class NewIncident extends Component {
         this.setState({formData: newFormData});
     }
 
+    /**
+     * Change category id.
+     * @param id
+     */
     updateCategoryID(id) {
         let newFormData = this.state.formData;
         newFormData['cat_id'] = id;
         this.setState({formData: newFormData});
     }
 
-
+    /**
+     * Verify that all fields have data and that end date is after start date before incident can be uploaded.
+     */
     verifySubmission() {
         var formCompleted = true;
         var toBeFilled = [];
@@ -125,9 +141,11 @@ export default class NewIncident extends Component {
         }
     }
 
+    /**
+     * POST request to upload formData to database.
+     */
     submitIncident() {
-        console.log("Return Object", this.state.formData);
-        console.log("Return object string", JSON.stringify(this.state.formData));
+        console.log('NewIncident formData string', JSON.stringify(this.state.formData));
         let data = {
             method: 'POST',
             headers: {
@@ -142,7 +160,7 @@ export default class NewIncident extends Component {
         fetch(incidentURLs.incidents, data)
             .then((response) => response.json())
             .then((responseJson) => {
-                console.log("Reponse to fetch", responseJson);
+                console.log('Reponse to fetch', responseJson);
                 if (responseJson.location) {
                     Toast.show('Incident was created.');
                     this.props.navigator.pop();
@@ -150,15 +168,22 @@ export default class NewIncident extends Component {
                     Toast.show('Something went wrong' + responseJson.error);
                 }
             }).catch((err) => {
-            console.error("NewIncident submitIncident()", err);
+            console.error('NewIncident submitIncident()', err);
         });
-        console.log(this.props.token);
-
     }
 
-
-    addField() {
-        this.openModal()
+    /**
+     * Renders AddFieldModal.
+     * @returns {XML}
+     */
+    renderModal = () => {
+        if (this.state.modalVisible) {
+            return (
+                <AddFieldModal modalVisible={this.state.modalVisible} closeModal={this.closeModal}
+                               getInfo={this.getNewFieldInfo} dataSource={this.state.dataSource}
+                />
+            );
+        }
     }
 
     /**
@@ -189,16 +214,11 @@ export default class NewIncident extends Component {
         this.setState({modalVisible: true});
     }
 
-    renderModal = () => {
-        if (this.state.modalVisible) {
-            return (
-                <AddFieldModal modalVisible={this.state.modalVisible} closeModal={this.closeModal}
-                               getInfo={this.getNewFieldInfo} dataSource={this.state.dataSource}
-                />
-            );
-        }
-    }
-
+    /**
+     * Render appropriate input component based on rowData using InputFormRow.
+     * @param rowData
+     * @returns input component
+     */
     renderRow(rowData) {
         return (
             <InputFormRow rowData={rowData}
@@ -211,11 +231,17 @@ export default class NewIncident extends Component {
         );
     }
 
+    //TODO: handle adding categories.
+    /**
+     * Render header and a react-native-chooser (Details-> https://github.com/gs-akhan/react-native-chooser) to select
+     * the incident category.
+     * @returns {XML}
+     */
     renderHeader() {
         return (
             <View style={styles.container}>
                 <Image style={styles.image } source={require('../../images/iris_logo_homepage.png')}>
-                    <TouchableHighlight onPress={() => this.props.navigator.pop()}>
+                    <TouchableHighlight style={styles.back_arrow} onPress={() => this.props.navigator.pop()}>
                         <Image style={styles.back_arrow} source={require('../../images/back_icon.png')}/>
                     </TouchableHighlight>
                 </Image>
@@ -227,7 +253,7 @@ export default class NewIncident extends Component {
                 </Text>
                 <Select
                     onSelect = {(id) => this.updateCategoryID(id)}
-                    defaultText  = "Medical"
+                    defaultText  = 'Medical'
                     style = {styles.select}
                     textStyle = {styles.option_list_text}
                     backdropStyle  = {styles.select}
@@ -248,7 +274,7 @@ export default class NewIncident extends Component {
     renderFooter() {
         return (
             <View style={styles.footer}>
-                <TouchableHighlight onPress={() => this.addField()}>
+                <TouchableHighlight onPress={() => this.openModal()}>
                     <Text style={styles.add_field_text}>
                         +Add Custom Input
                     </Text>

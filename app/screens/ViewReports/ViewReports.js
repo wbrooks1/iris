@@ -24,7 +24,7 @@ export default class ViewReports extends Component {
         return (
             <View style={styles.container}>
                 <Image style={styles.image } source={require('../../images/iris_logo_homepage.png')}>
-                    <TouchableHighlight onPress={() => this.props.navigator.pop()}>
+                    <TouchableHighlight style={styles.back_arrow} onPress={() => this.props.navigator.pop()}>
                         <Image style={styles.back_arrow} source={require('../../images/back_icon.png')}/>
                     </TouchableHighlight>
                 </Image>

@@ -1,8 +1,7 @@
 import { StyleSheet, Dimensions } from 'react-native';
-import { colors } from '../../config/styles';
+import { colors, style } from '../../config/styles';
 
 var {height, width} = Dimensions.get('window')
-//TODO change all of this.
 export default StyleSheet.create({
     container: {
         flex: 1,
@@ -17,41 +16,40 @@ export default StyleSheet.create({
         backgroundColor: colors.neutral,
     },
     title: {
-        fontSize: 20,
+        fontSize: style.titleFontSize,
         textAlign: 'center',
-        marginTop: 10,
+        marginTop: style.margin,
         color: colors.black,
         fontFamily: 'centuryschl',
     },
     image: {
         width: width,
-        height: 50,
+        height: style.headerImageSize,
         justifyContent: 'flex-start',
         resizeMode: 'contain',
     },
     save_text: {
         fontFamily: 'centuryschl',
-        fontSize: 25,
+        fontSize: style.largeFontSize,
         textAlign: 'center',
         color: colors.black,
         width: width,
     },
     list_container: {
-        borderRadius: 10,
+        borderRadius: style.borderRadius,
     },
     submit_button: {
         backgroundColor: colors.sky,
-        width: 250,
-        height: 50,
-        borderRadius: 10,
-        marginVertical: 10,
+        width: style.submitButtonWidth,
+        height: style.submitButtonHeight,
+        borderRadius: style.borderRadius,
+        marginVertical: style.margin,
         alignItems: 'center',
         justifyContent: 'center',
     },
     back_arrow: {
-        width: 50,
-        height: 50,
+        width: style.headerImageSize,
+        height: style.headerImageSize,
         justifyContent: 'flex-start',
-        resizeMode: 'contain',
     },
 });

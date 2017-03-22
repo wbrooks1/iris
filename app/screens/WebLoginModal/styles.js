@@ -1,5 +1,5 @@
 import { StyleSheet, Dimensions } from 'react-native';
-import { colors } from '../../config/styles';
+import { colors, style } from '../../config/styles';
 
 const window = Dimensions.get('window');
 export default StyleSheet.create({
@@ -13,18 +13,18 @@ export default StyleSheet.create({
         // flex: 1,
         marginTop: window.height / 4,
         height: window.height / 2,
-        width: window.width - 20,
+        width: window.width - style.modalWidthDifference,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'silver',
-        padding: 20,
-        borderRadius: 10,
+        padding: style.padding,
+        borderRadius: style.borderRadius,
         alignSelf: 'center',
     },
     signIn: {
-        fontSize: 20,
+        fontSize: style.titleFontSize,
         textAlign: 'center',
-        margin: 5,
+        margin: style.titleMargin,
         color: colors.ink
     },
 });

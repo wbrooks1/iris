@@ -1,21 +1,21 @@
 import { StyleSheet } from 'react-native';
-import { colors } from '../../config/styles';
+import { colors, style } from '../../config/styles';
 
 export default StyleSheet.create({
     button: {
-        paddingVertical: 20,
-        paddingHorizontal: 20,
+        paddingVertical: style.buttonPadding,
+        paddingHorizontal: style.buttonPadding,
         alignItems: 'center',
     },
     buttonText: {
         color: colors.carbon,
         fontFamily: 'centuryschl',
-        fontSize: 14,
+        fontSize: style.iconButtonFontSize,
         alignSelf: 'center',
     },
     buttonIcon: {
-        width: 60,
-        height: 60,
+        width: style.iconButtonSize,
+        height: style.iconButtonSize,
         justifyContent: 'center',
     },
     container: {
