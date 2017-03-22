@@ -1,30 +1,21 @@
 'use strict';
-/** * Login Screen: holds buttons for opening login modal */
 
 import React, {Component} from 'react';
-import {
-    AppRegistry,
-    TouchableHighlight,
-    StyleSheet,
-    Text,
-    Image,
-    View,
-    TextInput,
-    ScrollView,
-    Navigator,
-    AsyncStorage
+import {TouchableHighlight, StyleSheet, Text, Image, View, TextInput, ScrollView, Navigator, AsyncStorage
 } from 'react-native'
 import styles from './styles';
 import HomeButton from '../../components/HomeButton';
 
-
+/**
+ * Home screen for app, serves as navigation hub.
+ * @author Winfield Brooks
+ * @props userID: user id
+ * @props location: user default location
+ * @props token: security token
+ */
 export default class Home extends Component {
     constructor(props) {
         super(props);
-        console.log(this.props.userID);
-        this.state = {
-            // location: this.props.location,
-        }
     }
 
     toNewIncident = () => {
@@ -62,6 +53,10 @@ export default class Home extends Component {
         });
     }
 
+    /**
+     * Logout user. Set async storage elements to defaults and navigate to login screen.
+     * @returns {Promise.<void>}
+     */
     async logout() {
         try {
             await AsyncStorage.setItem('@AsyncStorage:loginStatus', 'false');
@@ -110,4 +105,3 @@ export default class Home extends Component {
         );
     }
 }
-AppRegistry.registerComponent('Home', () => Home);

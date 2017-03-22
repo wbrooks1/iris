@@ -6,6 +6,10 @@ import styles from './styles';
 /**
  * Date Input component for form input
  * @author Winfield Brooks
+ * @props date: incoming date
+ * @props id: name of component
+ * @props title: displayed title of component
+ * @props type: type of component: "date"
  */
 export default class DateInput extends Component {
     constructor() {

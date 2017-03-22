@@ -1,17 +1,19 @@
 'use strict'
-/**
- * WebViewModal: Screen to enter credentials.
- */
 
 import React, {Component} from 'react';
-import {
-    Modal, Text, TouchableHighlight, View, StyleSheet, Navigator,
-} from 'react-native';
+import { Modal, Text, TouchableHighlight, View, Navigator } from 'react-native';
 import MapView from 'react-native-maps';
 import styles from './styles';
 
-
-export default class WebLoginModal extends Component {
+/**
+ * Full page map view modal. Uses react-native-maps, see https://github.com/airbnb/react-native-maps
+ * @author Winfield Brooks
+ * @props location: incoming location w/ latitude and longitude
+ * @props modalVisible: boolean
+ * @props updateLocation: LocationInput.updateLocation(location)
+ * @props closeModal: LocationInput.closeModal()
+ */
+export default class MapViewModal extends Component {
     constructor(props) {
         super(props);
         this.state = {

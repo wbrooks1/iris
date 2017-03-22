@@ -1,52 +1,60 @@
 'use strict';
 
 import React, {Component} from 'react';
-import {
-    AppRegistry, StyleSheet, Text, Image, View, TextInput, ScrollView, Navigator, BackAndroid,
+import {AppRegistry, StyleSheet, Text, Image, View, TextInput, ScrollView, Navigator, BackAndroid,
     ListView, TouchableHighlight, Alert,
 } from 'react-native'
 import styles from './styles';
-import SingleLineInput from '../../components/SingleLineInput';
-import MultiLineInput from '../../components/MultiLineInput';
-import DateInput from '../../components/DateInput';
-import LocationInput from '../../components/LocationInput';
-import DropDownInput from '../../components/DropDownInput';
+import InputFormRow from '../../components/InputFormRow';
 import AddFieldModal from '../AddFieldModal/AddFieldModal';
 import {Select, Option} from "react-native-chooser";
 import Toast from 'react-native-simple-toast';
-
-
 import {components} from '../../config/mandatoryComponentList';
 import {incidentURLs} from '../../config/strings'
 
-
+/**
+ * Form screen for creating a new incident. Incorporates all input components.
+ * @author Winfield Brooks
+ * @props userID: user id
+ * @props location: user default location
+ * @props token: security token
+ */
 export default class NewIncident extends Component {
     constructor(props) {
         super(props);
-        const getRowData = (dataBlob, rowId) => dataBlob[`${rowId}`];
-        const ds = new ListView.DataSource({
-            rowHasChanged: (r1, r2) => r1 !== r2,
-            getRowData,
-        });
-        const {dataBlob, rowIds} = this.formatData(components, "medical");
+        // const getRowData = (dataBlob, rowData.id) => dataBlob[`${rowData.id}`];
+        // const ds = new ListView.DataSource({
+            // rowHasChanged: (r1, r2) => r1 !== r2,
+            // getRowData,
+        // });
+        // const {dataBlob, rowData.ids} = this.formatData(components);
         this.state = {
-            dataSource: ds.cloneWithRows(dataBlob, rowIds),
-            db: dataBlob,
+            dataSource: new ListView.DataSource({
+                rowHasChanged: (row1, row2) => row1 !== row2,
+            }),
             formData: {},
             modalVisible: false,
         };
     }
 
-    formatData(data, category) {
-        const dataBlob = {};
-        const rowIds = [];
-        const comps = data.medical;
-        for (let i = 0; i < comps.length; i++) {
-            const rowId = comps[i].id;
-            rowIds.push(rowId);
-            dataBlob[rowId] = comps[i];
+
+    formatData(data) {
+        var dataArr = [];
+        for (var item in data) {
+            if (data[item] && data[item].hasOwnProperty('id')) {
+                if (item == 'custom_fields') {
+                    for (var a in data['custom_fields'].data) {
+                        dataArr.push(data['custom_fields'].data[a]);
+                    }
+                } else {
+                    dataArr.push(data[item]);
+                }
+            }
         }
-        return {dataBlob, rowIds};
+        this.setState({
+            dataSource: this.state.dataSource.cloneWithRows(dataArr),
+            formData: data,
+        });
     }
 
     componentWillMount() {
@@ -61,7 +69,7 @@ export default class NewIncident extends Component {
     }
 
     initalizeFormData() {
-        let newFormData = this.state.formData;
+        var newFormData = {};
         let date = new Date();
         newFormData["user_id"] = this.props.userID;
         newFormData["cat_id"] = 1;
@@ -74,9 +82,7 @@ export default class NewIncident extends Component {
         newFormData["keywords"] = {id: 'keywords', data: '', title: 'Keywords', type: 'text'};
         newFormData["freq"] = {id: 'freq', data: 'P1H', title: 'Reporting Frequency', type: 'drop'};
         newFormData["custom_fields"] = {id: 'custom_fields', data: {}, title: 'Custom', type: 'custom'};
-        this.setState({
-            formData: newFormData,
-        });
+        this.formatData(newFormData);
     }
 
     updateFormInput(data, id, title, type) {
@@ -161,14 +167,16 @@ export default class NewIncident extends Component {
      * @param type
      */
     getNewFieldInfo = (title, type) => {
-        let newArray = this.state.db;
-        newArray[title] = {
+        let newArray = this.state.dataSource._dataBlob.s1;
+        newArray.push({
+            id: title,
+            data: '',
             title: title,
             type: type,
-        };
+        });
+        console.log('new array', newArray);
         this.setState({
             dataSource: this.state.dataSource.cloneWithRows(newArray),
-            db: newArray,
         });
         this.closeModal();
     }
@@ -191,54 +199,16 @@ export default class NewIncident extends Component {
         }
     }
 
-    renderRow(rowData, sectionID, rowID) {
-        if (rowData[rowID].type === "text") {
-            return (
-                <SingleLineInput title={rowData[rowID].title}
-                                 type={rowData[rowID].type}
-                                 placeholder={rowData[rowID].placeholder}
-                                 updateInput={(data, id, title, type) => this.updateFormInput(data, id, title, type)}
-                                 id={rowID}
-                />            );
-        } else if (rowData[rowID].type === "multi_text") {
-            return (
-                <MultiLineInput title={rowData[rowID].title}
-                                type={rowData[rowID].type}
-                                placeholder={rowData[rowID].placeholder}
-                                updateInput={(data, id, title, type) => this.updateFormInput(data, id, title, type)}
-                                id={rowID}
-                />
-            );
-        } else if (rowData[rowID].type === 'date') {
-            return (
-                <DateInput title={rowData[rowID].title}
-                           type={rowData[rowID].type}
-                           updateInput={(data, id, title, type) => this.updateFormInput(data, id, title, type)}
-                           id={rowID}
-                           date={rowData[rowID].data}
-                />
-            )
-        } else if (rowData[rowID].type === 'location') {
-            return (
-                <LocationInput title={rowData[rowID].title}
-                               type={rowData[rowID].type}
-                               updateInput={(data, id, title, type) => this.updateFormInput(data, id, title, type)}
-                               id={rowID}
-                               navigator={this.props.navigator}
-                               location={this.props.location}
-                />
-            )
-        }
-        else if (rowData[rowID].type === 'drop') {
-            return (
-                <DropDownInput title={rowData[rowID].title}
-                               type={rowData[rowID].type}
-                               updateInput={(data, id, title, type) => this.updateFormInput(data, id, title, type)}
-                               id={rowID}
-                               navigator={this.props.navigator}
-                />
-            )
-        }
+    renderRow(rowData) {
+        return (
+            <InputFormRow rowData={rowData}
+                          isEdit={false}
+                          location={this.props.location}
+                          navigator={this.props.navigator}
+                          updateInput={(data, id, title, type) => this.updateFormInput(data, id, title, type)}
+
+            />
+        );
     }
 
     renderHeader() {
@@ -292,7 +262,7 @@ export default class NewIncident extends Component {
             <View style={styles.container }>
                 {this.renderModal()}
                 <ListView dataSource={this.state.dataSource}
-                          renderRow={(data, sectionID, rowID) => this.renderRow(data, sectionID, rowID)}
+                          renderRow={(data) => this.renderRow(data)}
                           renderHeader={() => this.renderHeader()}
                           renderFooter={() => this.renderFooter()}
 

@@ -1,6 +1,6 @@
 'use strict'
 /**
- * WebLoginModal: Screen to enter credentials.
+ * MapViewModal: Screen to enter credentials.
  */
 
 import React, {Component} from 'react';

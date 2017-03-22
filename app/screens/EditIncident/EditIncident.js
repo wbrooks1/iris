@@ -6,16 +6,14 @@ import {
     ListView, TouchableHighlight, Alert,
 } from 'react-native'
 import styles from './styles';
-import SingleLineInput from '../../components/SingleLineInput';
-import MultiLineInput from '../../components/MultiLineInput';
-import DateInput from '../../components/DateInput';
-import LocationInput from '../../components/LocationInput';
-import DropDownInput from '../../components/DropDownInput';
+import InputFormRow from '../../components/InputFormRow';
 
 import {incidentURLs} from '../../config/strings'
 
 /**
  * Edit incident screen retrieves and updates selected incident data.
+ * @author Winfield Brooks
+ * @props id: incident id to edit
  */
 export default class EditIncident extends Component {
     constructor() {
@@ -29,7 +27,7 @@ export default class EditIncident extends Component {
         };
     }
 
-
+    //Set up navigator for back arrow press on android.
     componentWillMount() {
         BackAndroid.addEventListener('hardwareBackPress', () => {
             if (this.props.navigator && this.props.navigator.getCurrentRoutes().length > 0) {
@@ -44,12 +42,15 @@ export default class EditIncident extends Component {
         this.fetchData()
     }
 
-
+    /**
+     * Fetches incident data for selected incident id
+     */
     fetchData() {
         fetch(incidentURLs.incidents + '/' + this.props.id)
             .then((response) => response.json())
             .then((responseJson) => {
                 this.formatData(responseJson);
+                console.log("fetchData()", JSON.stringify(responseJson));
             }).catch((err) => {
             console.error(err);
         });
@@ -105,6 +106,10 @@ export default class EditIncident extends Component {
         this.props.navigator.pop();
     }
 
+    /**
+     * Verify that all mandatory data has been entered and that the end date is not before the start date
+     * and call submitIncident if verified.
+     */
     verifySubmission() {
         var formCompleted = true;
         var toBeFilled = [];
@@ -129,57 +134,20 @@ export default class EditIncident extends Component {
     }
 
     renderRow(rowData) {
-        if (rowData.type === "text") {
-            return (
-                <SingleLineInput title={rowData.title}
-                                 type={rowData.type}
-                                 data={rowData.data}
-                                 updateInput={(data, id, title, type) => this.updateFormInput(data, id, title, type)}
-                                 id={rowData.id}
-                                 isEdit={true}
-                />
-            );
-        } else if (rowData.type === "multi_text") {
-            return (
-                <MultiLineInput title={rowData.title}
-                                type={rowData.type}
-                                data={rowData.data}
-                                updateInput={(data, id, title, type) => this.updateFormInput(data, id, title, type)}
-                                id={rowData.id}
-                                isEdit={true}
-                />
-            );
-        } else if (rowData.type === 'date') {
-            return (
-                <DateInput title={rowData.title}
-                           type={rowData.type}
-                           updateInput={(data, id, title, type) => this.updateFormInput(data, id, title, type)}
-                           id={rowData.id}
-                           date={rowData.data}
-                />
-            )
-        } else if (rowData.type === 'location') {
-            return (
-                <LocationInput title={rowData.title}
-                               type={rowData.type}
-                               data={rowData.data}
-                               updateInput={(data, id, title, type) => this.updateFormInput(data, id, title, type)}
-                               id={rowData.id}
-                               navigator={this.props.navigator}
-                               location={rowData.data}
-                               isEdit={true}
-                />
-            )
-        } else if (rowData.type === 'drop') {
-            return (
-                <DropDownInput title={rowData.title}
-                               type={rowData.type}
-                               updateInput={(data, id, title, type) => this.updateFormInput(data, id, title, type)}
-                               id={rowData.id}
-                               navigator={this.props.navigator}
-                />
-            )
+        console.log("Row data", rowData);
+        var location;
+        if(rowData.type === 'location') {
+            location = rowData.data;
         }
+        return (
+            <InputFormRow rowData={rowData}
+                          isEdit={true}
+                          location={location}
+                          navigator={this.props.navigator}
+                          updateInput={(data, id, title, type) => this.updateFormInput(data, id, title, type)}
+
+            />
+        );
     }
 
     renderHeader() {

@@ -1,23 +1,36 @@
+'use strict';
+
 import React, {Component} from 'react';
 import {View, TextInput, Text} from 'react-native';
 import styles from './styles';
 
+/**
+ * Multi line text input component for form input.
+ * @author Winfield Brooks
+ * @props data: incoming text
+ * @props id: name of component
+ * @props title: displayed title of component
+ * @props type: type of component: 'multi'
+ */
 export default class MultiLineInput extends Component {
     constructor(props) {
         super(props);
         this.state = {
             text: '',
-            id: null,
         }
     }
 
+    //If editing incident set state text to incoming text.
     componentWillMount() {
-        this.setState({id: this.props.id});
         if (this.props.isEdit) {
             this.setState({text: this.props.data});
         }
     }
 
+    /**
+     * Renders component and updates state and form input when text input is deselected.
+     * @returns {XML}
+     */
     render() {
         return (
             <View style={styles.container}>
@@ -33,7 +46,8 @@ export default class MultiLineInput extends Component {
                     defaultValue={this.state.text}
                     returnKeyType={'next'}
                     onChangeText={(text) => this.setState({text: text})}
-                    onEndEditing={(text) => this.props.updateInput(this.state.text, this.state.id, this.props.title, this.props.type)}
+                    onEndEditing={(text) => this.props.updateInput(
+                        this.state.text, this.props.id, this.props.title, this.props.type)}
                     underlineColorAndroid={'#A9A9A9'}
                 >
                 </TextInput>

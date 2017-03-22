@@ -1,13 +1,16 @@
 'use strict'
-/**
- * AddFieldModal: Pop up modal to select custom field type and title.
- */
 
 import React, {Component} from 'react';
-import {Modal, Text, TextInput, TouchableHighlight, View, StyleSheet, Navigator, Picker} from 'react-native';
+import {Modal, Text, TextInput, TouchableHighlight, View, Navigator, Picker} from 'react-native';
 import styles from './styles';
 
-
+/**
+ * Pop up modal to select custom field type and title.
+ * @author Winfield Brooks
+ * @props modalVisible: boolean
+ * @props getInfo: NewIncident.getNewFieldInfo(title, type)
+ * @props closeModal: NewIncident.closeModal()
+ */
 export default class AddFieldModal extends Component {
     constructor() {
         super();
@@ -18,14 +21,15 @@ export default class AddFieldModal extends Component {
     }
 
     /**
-     * Calls NewIncident.getNewFieldInfo(title, type)
+     * Verifies that a title is not a duplicate and has been entered
+     * then calls props.getInfo
      */
     addField = () => {
+        // console.log('row identiities', this.props.dataSource.rowIdentities[0]);
         if (this.props.dataSource.rowIdentities[0].includes(this.state.title)) {
             alert("\"" + this.state.title + "\" already exists as a title. Please try different title.");
         } else if (this.state.title === null || this.state.title === "") {
             alert("Title can not be left blank. Please add a title.");
-
         } else {
             this.props.getInfo(this.state.title, this.state.type);
         }

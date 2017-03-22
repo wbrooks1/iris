@@ -1,8 +1,16 @@
+'use strict';
 
 import React, { Component } from 'react';
 import { AppRegistry, View, Text, TouchableOpacity, Image } from 'react-native';
 import styles from './styles';
 
+/**
+ * Simple image button with text under
+ * @author Winfield Brooks
+ * @props onPress: method to execute when button is pressed
+ * @props image: image source file path
+ * @props text: text under image
+ */
 export default class IconButton extends Component {
     render() {
         return (
@@ -20,4 +28,5 @@ export default class IconButton extends Component {
         );
     };
 }
+
 AppRegistry.registerComponent('IconButton', () => IconButton);

@@ -1,3 +1,4 @@
+//URLs to handle login
 export const loginURLs = {
     google : {
         login: 'http://ethan-rowell.ddns.net:8083/auth/google?location=',
@@ -16,8 +17,10 @@ export const loginURLs = {
     }
 };
 
+//URLs to handle incident activities
 export const incidentURLs = {
     incidents: 'http://ethan-rowell.ddns.net:8083/api/incidents',
     reports: 'http://ethan-rowell.ddns.net:8083/api/',
-    users: 'http://ethan-rowell.ddns.net:8083/api/users/'
+    users: 'http://ethan-rowell.ddns.net:8083/api/users/',
+    search: 'http://ethan-rowell.ddns.net:8083/api/incidents?keywords=',
 };

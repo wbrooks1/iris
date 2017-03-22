@@ -1,8 +1,15 @@
+'use strict';
 
 import React, { Component } from 'react';
-import { AppRegistry, View, Text, TouchableOpacity, Image } from 'react-native';
+import { AppRegistry, View, TouchableOpacity, Image } from 'react-native';
 import styles from './styles';
 
+/**
+ * Simple image button.
+ * @author Winfield Brooks
+ * @props onPress: method to execute when button is pressed
+ * @props image: image source file path
+ */
 export default class HomeButton extends Component {
     render() {
         return (
@@ -17,4 +24,6 @@ export default class HomeButton extends Component {
         );
     };
 }
+
 AppRegistry.registerComponent('HomeButton', () => HomeButton);
+

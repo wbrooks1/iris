@@ -45,6 +45,16 @@ export default class SearchIncidents extends Component {
 
     searchIncidents = (input) => {
         console.log('Search input', input);
+        fetch(incidentURLs.search + input)
+            .then((response) => response.json())
+            .then((responseJson) => {
+                this.setState({
+                    dataSource: this.state.dataSource.cloneWithRows(responseJson),
+                    loaded: true,
+                })
+            }).catch((err) => {
+            console.error(err);
+        });
     }
 
     toNewReport = (id) => {
@@ -61,19 +71,22 @@ export default class SearchIncidents extends Component {
     };
 
     renderRow(rowData) {
-        //TODO: Fix desc and title on saving and displaying.
-        return (
-            <TouchableHighlight onPress={() => this.toNewReport(rowData.incident_id)}>
-                <View style={styles.row_container}>
-                    <Image style={styles.icon} source={require('../../images/globe_icon_red.png')}/>
-                    <View style={styles.container}>
-                        <Text style={styles.list_title}>{rowData.title.data}</Text>
-                        <Text numberOfLines={1} style={styles.list_desc}> {rowData.start_date.data}</Text>
-                        <Text numberOfLines={1} style={styles.list_desc}> {rowData.desc.data}</Text>
+        if (rowData.title) {
+            return (
+                <TouchableHighlight onPress={() => this.toNewReport(rowData.incident_id)}>
+                    <View style={styles.row_container}>
+                        <Image style={styles.icon} source={require('../../images/globe_icon_red.png')}/>
+                        <View style={styles.container}>
+                            <Text style={styles.list_title}>{rowData.title.data}</Text>
+                            <Text numberOfLines={1} style={styles.list_desc}> {rowData.start_date.data}</Text>
+                            <Text numberOfLines={1} style={styles.list_desc}> {rowData.desc.data}</Text>
+                        </View>
                     </View>
-                </View>
-            </TouchableHighlight>
-        );
+                </TouchableHighlight>
+            );
+        } else {
+            return null;
+        }
     }
 
     renderHeader() {
@@ -90,8 +103,8 @@ export default class SearchIncidents extends Component {
                 <View style={styles.search_box}>
                 <TextInput
                     style={styles.input}
-                    placeholder="Search..."
-                    onChangeText={(text) => console.log('searching for ', text)}
+                    placeholder="Search keywords..."
+                    onChangeText={(text) => this.searchIncidents(text)}
                 />
                 </View>
             </View>

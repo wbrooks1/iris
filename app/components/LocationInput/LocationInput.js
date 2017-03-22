@@ -1,9 +1,18 @@
-'use strict'
+'use strict';
+
 import React, {Component} from 'react';
-import {View, TextInput, Text, DatePickerAndroid, TouchableHighlight,} from 'react-native';
+import {View, TextInput, Text, TouchableHighlight,} from 'react-native';
 import styles from './styles';
 import MapViewModal from '../../screens/MapViewModal/MapViewModal';
 
+/**
+ * Location input component for form input.
+ * @author Winfield Brooks
+ * @props location: incoming location
+ * @props id: name of component
+ * @props title: displayed title of component
+ * @props type: type of component: 'location'
+ */
 export default class LocationInput extends Component {
     constructor(props) {
         super(props);
@@ -20,26 +29,25 @@ export default class LocationInput extends Component {
         }
     }
 
+    /**
+     * After location selection has been made updates component state and from input data.
+     * @param loc new location
+     */
     updateLocation = (loc) => {
-        console.log(loc);
         this.setState({
             location: {
                 latitude: loc.latitude,
                 longitude: loc.longitude,
             }
         });
-        this.props.updateInput(loc.latitude + ", " + loc.longitude, this.state.id, this.props.title, this.props.type);
+        this.props.updateInput(loc.latitude + ', ' + loc.longitude, this.state.id, this.props.title, this.props.type);
         this.closeModal();
     }
 
-    closeModal = () => {
-        this.setState({modalVisible: false});
-    }
-
-    openModal = () => {
-        this.setState({modalVisible: true});
-    }
-
+    /**
+     * Renders modal for map view. Details: /app/screens/MapViewModal/MapViewModal.js
+     * @returns {XML}
+     */
     renderModal = () => {
         if (this.state.modalVisible) {
             return (
@@ -49,6 +57,14 @@ export default class LocationInput extends Component {
                 />
             );
         }
+    }
+
+    closeModal = () => {
+        this.setState({modalVisible: false});
+    }
+
+    openModal = () => {
+        this.setState({modalVisible: true});
     }
 
     render() {
@@ -61,9 +77,9 @@ export default class LocationInput extends Component {
                 <TouchableHighlight onPress={() => this.openModal()} disabled={this.state.mapDisabled}>
                     <TextInput
                         style={styles.input}
-                        autoCapitalize="none"
+                        autoCapitalize='none'
                         editable={false}
-                        defaultValue={this.state.location.latitude + ", " + this.state.location.longitude}>
+                        defaultValue={this.state.location.latitude + ', ' + this.state.location.longitude}>
                     </TextInput>
                 </TouchableHighlight>
             </View>

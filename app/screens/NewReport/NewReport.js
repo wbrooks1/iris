@@ -6,10 +6,7 @@ import {
     ListView, TouchableHighlight
 } from 'react-native'
 import styles from './styles';
-import SingleLineInput from '../../components/SingleLineInput';
-import MultiLineInput from '../../components/MultiLineInput';
-import DateInput from '../../components/DateInput';
-import LocationInput from '../../components/LocationInput';
+import InputFormRow from '../../components/InputFormRow';
 import Toast from 'react-native-simple-toast';
 import {incidentURLs} from '../../config/strings'
 
@@ -145,46 +142,15 @@ export default class NewReport extends Component {
 
 
     renderRow(rowData) {
-        if (rowData.type === "text") {
-            return (
-                <SingleLineInput title={rowData.title}
-                                 type={rowData.type}
-                                 placeholder={'Enter info to submit as ' + rowData.title}
-                                 updateInput={(data, id, title, type) => this.updateFormInput(data, id, title, type)}
-                                 id={rowData.id}
-                />
-            );
-        } else if (rowData.type === "multi_text") {
-            return (
-                <MultiLineInput title={rowData.title}
-                                type={rowData.type}
-                                placeholder={'Enter info to submit as ' + rowData.title}
-                                updateInput={(data, id, title, type) => this.updateFormInput(data, id, title, type)}
-                                id={rowData.id}
-                />
-            );
-        } else if (rowData.type === 'date') {
-            return (
-                <DateInput title={rowData.title}
-                           type={rowData.type}
-                           updateInput={(data, id, title, type) => this.updateFormInput(data, id, title, type)}
-                           id={rowData.id}
-                           date={rowData.data}
-                />
-            )
-        } else if (rowData.type === 'location') {
-            return (
-                <LocationInput title={rowData.title}
-                               type={rowData.type}
-                               data={rowData.data}
-                               updateInput={(data, id, title, type) => this.updateFormInput(data, id, title, type)}
-                               id={rowData.id}
-                               navigator={this.props.navigator}
-                               location={this.props.location}
-                />
-            )
+        return (
+            <InputFormRow rowData={rowData}
+                          isEdit={false}
+                          location={this.props.location}
+                          navigator={this.props.navigator}
+                          updateInput={(data, id, title, type) => this.updateFormInput(data, id, title, type)}
 
-        }
+            />
+        );
     }
 
     renderHeader() {
