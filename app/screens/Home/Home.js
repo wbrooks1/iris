@@ -20,6 +20,7 @@ export default class Home extends Component {
         super(props);
         this.state = {
             location: this.props.location,
+            locationDate: this.props.locationDate,
         }
     }
 
@@ -83,9 +84,14 @@ export default class Home extends Component {
                 navigator.geolocation.getCurrentPosition(
                     (position) => {
                         var location = position.coords.latitude + ', ' + position.coords.longitude;
+                        var date = new Date().toISOString().slice(0, 10);
                         AsyncStorage.setItem('@AsyncStorage:location', location);
-                        AsyncStorage.setItem('@AsyncStorage:locationDate', new Date().toISOString().slice(0, 10));
-                        this.setState({location: location});
+                        AsyncStorage.setItem('@AsyncStorage:locationDate', date);
+                        this.setState({
+                            location: location,
+                            locationDate: date,
+                        });
+
                     },
                     (error) => console.log(JSON.stringify(error)),
                     {timeout: 20000, maximumAge: 100000});
@@ -109,7 +115,7 @@ export default class Home extends Component {
                     </View>
                     <View style={styles.text_row}>
                         <TouchableHighlight onPress={() => this.updateLocation()}>
-                            <Text style={styles.logout_text}> Update Location (Last update {this.props.locationDate}) </Text>
+                            <Text style={styles.logout_text}> Update Location (Last update {this.state.locationDate}) </Text>
                         </TouchableHighlight>
                     </View>
                     <View style={styles.row_container}>

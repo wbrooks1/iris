@@ -20,7 +20,7 @@ export default class WebLoginModal extends Component {
      * @param userID
      * @param token
      */
-    toHome = (userName, userID, token) => {
+    toHome = (userName, userID, token, locationDate) => {
         this.props.navigator.resetTo({
             id: 'Home',
             passProps: {
@@ -28,6 +28,7 @@ export default class WebLoginModal extends Component {
                 userName: userName,
                 userID: userID,
                 token: token,
+                locationDate: locationDate,
             }
         });
     }
@@ -65,7 +66,7 @@ export default class WebLoginModal extends Component {
                 .then((response) => response.json())
                 .then((responseJson) => {
                     var decoded = jwtDecode(responseJson.access_token)
-                    this.toHome(decoded.email, decoded.sub, responseJson.access_token);
+                    this.toHome(decoded.email, decoded.sub, responseJson.access_token, new Date().toISOString().slice(0, 10));
                     this.storeLoginStatus(responseJson.access_token, decoded);
                 }).catch((err) => {
                 console.error('WebLoginModal verifyAccount()', err);
