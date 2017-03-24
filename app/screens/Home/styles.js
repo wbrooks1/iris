@@ -23,6 +23,7 @@ export default StyleSheet.create({
         textAlign: 'right',
         margin: style.margin,
         color: colors.redAccent,
+        fontFamily: 'centuryschl',
     },
     background: {
         width: width,

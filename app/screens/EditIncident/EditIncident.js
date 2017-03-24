@@ -7,6 +7,7 @@ import {
 } from 'react-native'
 import styles from './styles';
 import InputFormRow from '../../components/InputFormRow';
+import Toast from 'react-native-simple-toast';
 
 import {incidentURLs} from '../../config/strings'
 
@@ -14,6 +15,7 @@ import {incidentURLs} from '../../config/strings'
  * Edit incident screen retrieves and updates selected incident data.
  * @author Winfield Brooks
  * @props id: incident id to edit
+ * @props token: security token
  */
 export default class EditIncident extends Component {
     constructor() {
@@ -100,15 +102,38 @@ export default class EditIncident extends Component {
     /**
      * Submit formData as POST body.
      */
-    submitIncident() {
-        //TODO: add update incident logic.
-        console.log("Return Object", this.state.formData);
-        this.props.navigator.pop();
+    updateIncident() {
+        console.log('EditIncident formData string', JSON.stringify(this.state.formData));
+        let data = {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + this.props.token,
+            },
+            body: JSON.stringify(
+                this.state.formData
+            )
+        }
+        console.log(incidentURLs.update + this.props.id, data)
+        fetch(incidentURLs.update + this.props.id, data)
+            .then((response) => response.json())
+            .then((responseJson) => {
+                console.log('Reponse to fetch', responseJson);
+                if (responseJson.message) {
+                    Toast.show('Incident was updated.');
+                    this.props.navigator.popN(2);
+                } else {
+                    Toast.show('Something went wrong' + responseJson.error);
+                }
+            }).catch((err) => {
+            console.error('NewIncident updateIncident()', err);
+        });
     }
 
     /**
      * Verify that all mandatory data has been entered and that the end date is not before the start date
-     * and call submitIncident if verified.
+     * and call updateIncident if verified.
      */
     verifySubmission() {
         var formCompleted = true;
@@ -125,7 +150,7 @@ export default class EditIncident extends Component {
             Alert.alert('Edit Incident', 'Are you sure you want to save incident?' +
                 'Overwritten information will be lost.',
                 [{text: 'Cancel', onPress: () => console.log('Cancel Pressed')},
-                    {text: 'OK', onPress: () => this.submitIncident()}]);
+                    {text: 'OK', onPress: () => this.updateIncident()}]);
         } else {
             Alert.alert('Edit Incident', 'Form incomplete. Mandatory fields: '
                 + toBeFilled + ', must not be left blank.',

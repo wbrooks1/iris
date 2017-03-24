@@ -45,6 +45,7 @@ export default class WebLoginModal extends Component {
             await AsyncStorage.setItem('@AsyncStorage:userName', decode.email);
             await AsyncStorage.setItem('@AsyncStorage:userID', '' + decode.sub);
             await AsyncStorage.setItem('@AsyncStorage:location', this.props.location);
+            await AsyncStorage.setItem('@AsyncStorage:locationDate', new Date().toISOString().slice(0,10));
         } catch (error) {
             console.error(error);
         }

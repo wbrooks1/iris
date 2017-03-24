@@ -122,7 +122,7 @@ export default class NewReport extends Component {
                 toBeFilled.push(' ' + this.state.formData[item].title);
             }
         } if (formCompleted) {
-            Alert.alert('New Report', 'Are you sure you want to save incident?',
+            Alert.alert('New Report', 'Are you sure you want to save report?',
                 [{text: 'Cancel', onPress: () => console.log('Cancel Pressed')},
                     {text: 'OK', onPress: () => this.submitReport()}]);
         } else {

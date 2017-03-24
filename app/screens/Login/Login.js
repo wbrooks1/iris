@@ -22,6 +22,7 @@ export default class Login extends Component {
             accessToken: null,
             loaded: false,
         };
+        console.log("Login", "opened");
     }
 
     /**
@@ -31,10 +32,11 @@ export default class Login extends Component {
      * @param userID
      * @param token
      */
-    toHome = (location, userName, userID, token) => {
+    toHome = (location, userName, userID, token, locationDate) => {
         this.props.navigator.resetTo({
             id: 'Home',
             passProps: {
+                locationDate: locationDate,
                 location: location,
                 userName: userName,
                 userID: userID,
@@ -53,12 +55,13 @@ export default class Login extends Component {
         try {
             let _loginStatus = await AsyncStorage.getItem('@AsyncStorage:loginStatus');
             if (_loginStatus === 'true') {
+                var locationDate = await AsyncStorage.getItem('@AsyncStorage:locationDate');
                 var location = await AsyncStorage.getItem('@AsyncStorage:location');
                 var userName = await AsyncStorage.getItem('@AsyncStorage:userName');
                 var userID = await AsyncStorage.getItem('@AsyncStorage:userID');
                 var token = await AsyncStorage.getItem('@AsyncStorage:accessToken');
-                console.log('Login.js checkLoginStatus()', location, userName, userID)
-                this.toHome(location, userName, userID, token);
+                console.log('Login.js checkLoginStatus()', location, userName, userID, locationDate)
+                this.toHome(location, userName, userID, token, locationDate);
             } else {
                 let check = await LocationServicesDialogBox.checkLocationServicesIsEnabled({
                     message: 'Location must be enabled?',

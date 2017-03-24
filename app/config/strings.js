@@ -1,26 +1,27 @@
 //URLs to handle login
 export const loginURLs = {
     google : {
-        login: 'http://ethan-rowell.ddns.net:8083/auth/google?location=',
-        success: 'http://ethan-rowell.ddns.net:8083/auth/google/success',
-        failure: 'http://ethan-rowell.ddns.net:8083/auth/google/failure',
+        login: 'http://iris-app.westus.cloudapp.azure.com/auth/google?location=',
+        success: 'http://iris-app.westus.cloudapp.azure.com/auth/google/success',
+        failure: 'http://iris-app.westus.cloudapp.azure.com/auth/google/failure',
     },
     facebook : {
-        login: 'http://ethan-rowell.ddns.net:8083/auth/facebook?location=',
-        success: 'http://ethan-rowell.ddns.net:8083/auth/facebook/success',
-        failure: 'http://ethan-rowell.ddns.net:8083/auth/facebook/failure',
+        login: 'http://iris-app.westus.cloudapp.azure.com/auth/facebook?location=',
+        success: 'http://iris-app.westus.cloudapp.azure.com/auth/facebook/success',
+        failure: 'http://iris-app.westus.cloudapp.azure.com/auth/facebook/failure',
     },
     twitter : {
-        login: 'http://ethan-rowell.ddns.net:8083/auth/twitter?location=',
-        success: 'http://ethan-rowell.ddns.net:8083/auth/twitter/success',
-        failure: 'http://ethan-rowell.ddns.net:8083/auth/twitter/failure',
+        login: 'http://iris-app.westus.cloudapp.azure.com/auth/twitter?location=',
+        success: 'http://iris-app.westus.cloudapp.azure.com/auth/twitter/success',
+        failure: 'http://iris-app.westus.cloudapp.azure.com/auth/twitter/failure',
     }
 };
 
 //URLs to handle incident activities
 export const incidentURLs = {
-    incidents: 'http://ethan-rowell.ddns.net:8083/api/incidents',
-    reports: 'http://ethan-rowell.ddns.net:8083/api/',
-    users: 'http://ethan-rowell.ddns.net:8083/api/users/',
-    search: 'http://ethan-rowell.ddns.net:8083/api/incidents?keywords=',
+    incidents: 'http://iris-app.westus.cloudapp.azure.com/api/incidents',
+    reports: 'http://iris-app.westus.cloudapp.azure.com/api/',
+    users: 'http://iris-app.westus.cloudapp.azure.com/api/users/',
+    search: 'http://iris-app.westus.cloudapp.azure.com/api/incidents?keywords=',
+    update: 'http://iris-app.westus.cloudapp.azure.com/api/incidents/',
 };
