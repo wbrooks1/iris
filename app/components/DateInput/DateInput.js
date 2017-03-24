@@ -1,6 +1,6 @@
 'use strict';
 import React, {Component} from 'react';
-import {View, TextInput, Text, DatePickerAndroid, TouchableHighlight} from 'react-native';
+import {View, TextInput, Text, DatePickerAndroid, DatePickerIOS, TouchableHighlight} from 'react-native';
 import styles from './styles';
 
 /**
@@ -29,7 +29,6 @@ export default class DateInput extends Component {
         }
     }
 
-    //TODO: Implement iOS datePicker
     /**
      * Async method opens R.N. DatePickerAndroid and sets component state
      * and updates form input when date is selected.
@@ -50,6 +49,11 @@ export default class DateInput extends Component {
             console.warn('Cannot open date picker', message);
         }
     }
+
+    // //TODO: Implement iOS datePicker
+    // async openIOSDatePicker() {
+    //
+    // }
 
     render() {
         return (

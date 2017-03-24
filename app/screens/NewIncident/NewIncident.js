@@ -168,7 +168,7 @@ export default class NewIncident extends Component {
                     Toast.show('Something went wrong' + responseJson.error);
                 }
             }).catch((err) => {
-            console.error('NewIncident submitIncident()', err);
+            console.error('NewIncident updateIncident()', err);
         });
     }
 

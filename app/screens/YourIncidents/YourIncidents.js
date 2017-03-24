@@ -64,7 +64,8 @@ export default class YourIncidents extends Component {
         this.props.navigator.push({
             id: 'EditIncident',
             passProps: {
-                id: id
+                id: id,
+                token: this.props.token,
             }
         });
     };

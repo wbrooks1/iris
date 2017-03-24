@@ -22,6 +22,7 @@ export default class Login extends Component {
             accessToken: null,
             loaded: false,
         };
+        console.log("Login", "opened");
     }
 
     /**

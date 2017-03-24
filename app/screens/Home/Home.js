@@ -5,6 +5,7 @@ import {TouchableHighlight, StyleSheet, Text, Image, View, TextInput, ScrollView
 } from 'react-native'
 import styles from './styles';
 import HomeButton from '../../components/HomeButton';
+import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
 
 /**
  * Home screen for app, serves as navigation hub.
@@ -68,6 +69,27 @@ export default class Home extends Component {
             console.error(error);
         }
     }
+
+    async updateLocation() {
+        let check = await LocationServicesDialogBox.checkLocationServicesIsEnabled({
+            message: 'Location must be enabled?',
+            ok: 'Okay',
+            cancel: 'cancel'
+        }).then(function (success) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        var location = position.coords.latitude + ', ' + position.coords.longitude;
+                        console.log('Position:', location);
+                        AsyncStorage.setItem('@AsyncStorage:location', this.props.location);
+                    },
+                    (error) => console.log(JSON.stringify(error)),
+                    {timeout: 20000, maximumAge: 100000});
+            }.bind(this)
+        ).catch((error) => {
+            console.log(error);
+        });
+    }
+
 
     render() {
         return (
