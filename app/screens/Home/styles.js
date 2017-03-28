@@ -23,8 +23,14 @@ export default StyleSheet.create({
         textAlign: 'right',
         margin: style.margin,
         color: colors.redAccent,
-        fontFamily: 'centuryschl',
-    },
+        ...Platform.select({
+        ios: {
+            fontFamily: 'CenturySchL-Roma'
+        },
+        android: {
+            fontFamily: 'centuryschl',
+        },
+    }),    },
     background: {
         width: width,
         height: height,
@@ -46,7 +52,6 @@ export default StyleSheet.create({
         },
         android: {
             fontFamily: 'centuryschl',
-
         },
     }),
     }

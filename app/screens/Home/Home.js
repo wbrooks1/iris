@@ -2,19 +2,19 @@
 
 import React, {Component} from 'react';
 import {
-    TouchableHighlight, StyleSheet, Text, Image, View, TextInput, ScrollView, Navigator, AsyncStorage
-} from 'react-native'
+    TouchableHighlight, StyleSheet, Text, Image, View, TextInput, ScrollView, Navigator, AsyncStorage,
+Platform} from 'react-native'
 import styles from './styles';
 import HomeButton from '../../components/HomeButton';
 import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
 
 /**
- * Home screen for app, serves as navigation hub.
- * @author Winfield Brooks
- * @props userID: user id
- * @props location: user default location
- * @props token: security token
- */
+* Home screen for app, serves as navigation hub.
+* @author Winfield Brooks
+* @props userID: user id
+* @props location: user default location
+* @props token: security token
+*/
 export default class Home extends Component {
     constructor(props) {
         super(props);
@@ -60,9 +60,9 @@ export default class Home extends Component {
     }
 
     /**
-     * Logout user. Set async storage elements to defaults and navigate to login screen.
-     * @returns {Promise.<void>}
-     */
+    * Logout user. Set async storage elements to defaults and navigate to login screen.
+    * @returns {Promise.<void>}
+    */
     async logout() {
         try {
             await AsyncStorage.setItem('@AsyncStorage:loginStatus', 'false');
@@ -76,11 +76,12 @@ export default class Home extends Component {
     }
 
     async updateLocation() {
-        let check = await LocationServicesDialogBox.checkLocationServicesIsEnabled({
-            message: 'Location must be enabled?',
-            ok: 'Okay',
-            cancel: 'cancel'
-        }).then(function (success) {
+        if (Platform.OS === 'android') {
+            let check = await LocationServicesDialogBox.checkLocationServicesIsEnabled({
+                message: 'Location must be enabled?',
+                ok: 'Okay',
+                cancel: 'cancel'
+            }).then(function (success) {
                 navigator.geolocation.getCurrentPosition(
                     (position) => {
                         var location = position.coords.latitude + ', ' + position.coords.longitude;
@@ -94,50 +95,65 @@ export default class Home extends Component {
                     },
                     (error) => console.log(JSON.stringify(error)),
                     {timeout: 20000, maximumAge: 100000});
-            }.bind(this)
-        ).catch((error) => {
-            console.log(error);
-        });
+                }.bind(this)
+            ).catch((error) => {
+                console.log(error);
+            });
+        } else {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    var location = position.coords.latitude + ', ' + position.coords.longitude;
+                    var date = new Date().toISOString().slice(0, 10);
+                    AsyncStorage.setItem('@AsyncStorage:location', location);
+                    AsyncStorage.setItem('@AsyncStorage:locationDate', date);
+                    this.setState({
+                        location: location,
+                        locationDate: date,
+                    });
+                },
+                (error) => console.log(JSON.stringify(error)),
+                {timeout: 20000, maximumAge: 100000});
+        }
     }
 
 
     render() {
         return (
             <View style={styles.container }>
-                <Image style={styles.background } source={require('../../images/map_background.png' ) }>
-                    <Image style={styles.image } source={require('../../images/iris_logo_homepage.png' ) }/>
-                    <View style={styles.text_row}>
-                        <Text style={styles.user}> {this.props.userName} </Text>
-                        <TouchableHighlight onPress={() => this.logout()}>
-                            <Text style={styles.logout_text}> Logout </Text>
-                        </TouchableHighlight>
-                    </View>
-                    <View style={styles.text_row}>
-                        <TouchableHighlight onPress={() => this.updateLocation()}>
-                            <Text style={styles.logout_text}> Update Location (Last update {this.state.locationDate}) </Text>
-                        </TouchableHighlight>
-                    </View>
-                    <View style={styles.row_container}>
-                        <HomeButton
-                            image={require('../../images/new_incident_icon.png')}
-                            onPress={() => this.toNewIncident()}
-                        />
-                        <HomeButton
-                            image={require('../../images/your_incidents_icon.png')}
-                            onPress={() => this.toYourIncidents()}
-                        />
-                    </View>
-                    <View style={styles.row_container}>
-                        <HomeButton
-                            image={require('../../images/search_incidents_icon.png')}
-                            onPress={() => this.toSearchIncidents()}
-                        />
-                        <HomeButton
-                            image={require('../../images/view_reports_icon.png')}
-                            onPress={() => this.toViewReports()}
-                        />
-                    </View>
-                </Image>
+            <Image style={styles.background } source={require('../../images/map_background.png' ) }>
+            <Image style={styles.image } source={require('../../images/iris_logo_homepage.png' ) }/>
+            <View style={styles.text_row}>
+            <Text style={styles.user}> {this.props.userName} </Text>
+            <TouchableHighlight onPress={() => this.logout()}>
+            <Text style={styles.logout_text}> Logout </Text>
+            </TouchableHighlight>
+            </View>
+            <View style={styles.text_row}>
+            <TouchableHighlight onPress={() => this.updateLocation()}>
+            <Text style={styles.logout_text}> Update Location (Last update {this.state.locationDate}) </Text>
+            </TouchableHighlight>
+            </View>
+            <View style={styles.row_container}>
+            <HomeButton
+            image={require('../../images/new_incident_icon.png')}
+            onPress={() => this.toNewIncident()}
+            />
+            <HomeButton
+            image={require('../../images/your_incidents_icon.png')}
+            onPress={() => this.toYourIncidents()}
+            />
+            </View>
+            <View style={styles.row_container}>
+            <HomeButton
+            image={require('../../images/search_incidents_icon.png')}
+            onPress={() => this.toSearchIncidents()}
+            />
+            <HomeButton
+            image={require('../../images/view_reports_icon.png')}
+            onPress={() => this.toViewReports()}
+            />
+            </View>
+            </Image>
             </View>
         );
     }

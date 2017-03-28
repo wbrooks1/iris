@@ -56,10 +56,11 @@ export default class Login extends Component {
              let _loginStatus = await AsyncStorage.getItem('@AsyncStorage:loginStatus');
              if (_loginStatus === 'true') {
                  var location = await AsyncStorage.getItem('@AsyncStorage:location');
+                 var locationDate = await AsyncStorage.getItem('@AsyncStorage:locationDate');
                  var userName = await AsyncStorage.getItem('@AsyncStorage:userName');
                  var userID = await AsyncStorage.getItem('@AsyncStorage:userID');
                  var token = await AsyncStorage.getItem('@AsyncStorage:accessToken');
-                 this.toHome(location, userName, userID, token);
+                 this.toHome(location, userName, userID, token, locationDate);
              } else {
                  if (Platform.OS === 'ios') {
                      navigator.geolocation.getCurrentPosition(
