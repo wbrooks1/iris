@@ -1,5 +1,5 @@
 
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet, Dimensions, Platform } from 'react-native';
 import { colors, style } from '../../config/styles';
 
 const window = Dimensions.get('window');
@@ -18,7 +18,15 @@ export default StyleSheet.create({
     },
     title: {
         fontSize: style.titleFontSize,
-        fontFamily: 'centuryschl',
+        ...Platform.select({
+        ios: {
+            fontFamily: 'CenturySchL-Roma'
+        },
+        android: {
+            fontFamily: 'centuryschl',
+
+        },
+    }),
         textAlign: 'left',
         margin: style.titleMargin,
         color: colors.carbon,

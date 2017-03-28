@@ -1,6 +1,6 @@
 'use strict';
 import React, {Component} from 'react';
-import {View, TextInput, Text, DatePickerAndroid, DatePickerIOS, TouchableHighlight} from 'react-native';
+import {View, TextInput, Text, DatePickerAndroid, TouchableHighlight} from 'react-native';
 import styles from './styles';
 
 /**
@@ -50,11 +50,6 @@ export default class DateInput extends Component {
         }
     }
 
-    // //TODO: Implement iOS datePicker
-    // async openIOSDatePicker() {
-    //
-    // }
-
     render() {
         return (
             <View style={styles.container}>
@@ -74,6 +69,3 @@ export default class DateInput extends Component {
         );
     }
 }
-
-
-

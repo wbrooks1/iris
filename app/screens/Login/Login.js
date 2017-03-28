@@ -2,7 +2,7 @@
 
 import React, {Component} from 'react';
 import {ActivityIndicator, AsyncStorage, AppRegistry, StyleSheet, Text, Image, View, BackAndroid,
-} from 'react-native';
+Platform, } from 'react-native';
 import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
 import styles from './styles';
 import IconButton from '../../components/IconButton';
@@ -50,43 +50,61 @@ export default class Login extends Component {
      * If logged call toHome.
      * @returns {Promise.<void>}
      */
-    async checkLoginStatus() {
-        try {
-            let _loginStatus = await AsyncStorage.getItem('@AsyncStorage:loginStatus');
-            if (_loginStatus === 'true') {
-                var location = await AsyncStorage.getItem('@AsyncStorage:location');
-                var userName = await AsyncStorage.getItem('@AsyncStorage:userName');
-                var userID = await AsyncStorage.getItem('@AsyncStorage:userID');
-                var token = await AsyncStorage.getItem('@AsyncStorage:accessToken');
-                console.log('Login.js checkLoginStatus()', location, userName, userID)
-                this.toHome(location, userName, userID, token);
-            } else {
-                let check = await LocationServicesDialogBox.checkLocationServicesIsEnabled({
-                    message: 'Location must be enabled?',
-                    ok: 'Okay',
-                    cancel: 'Close'
-                }).then(function (success) {
-                        navigator.geolocation.getCurrentPosition(
-                            (position) => {
-                                var location = position.coords.latitude + ', ' + position.coords.longitude;
-                                console.log('Position:', location);
-                                this.setState({
-                                    location: location,
-                                    loaded: true,
-                                });
-                            },
-                            (error) => console.log(JSON.stringify(error)),
-                            {timeout: 20000, maximumAge: 100000});
-                    }.bind(this)
-                ).catch((error) => {
-                    console.log(error);
-                    BackAndroid.exitApp();
-                });
-            }
-        } catch (error) {
-            console.error(error);
-        }
-    }
+     async checkLoginStatus() {
+         try {
+             let _loginStatus = await AsyncStorage.getItem('@AsyncStorage:loginStatus');
+             if (_loginStatus === 'true') {
+                 var location = await AsyncStorage.getItem('@AsyncStorage:location');
+                 var userName = await AsyncStorage.getItem('@AsyncStorage:userName');
+                 var userID = await AsyncStorage.getItem('@AsyncStorage:userID');
+                 var token = await AsyncStorage.getItem('@AsyncStorage:accessToken');
+                 console.log('Login.js checkLoginStatus()', location, userName, userID)
+                 this.toHome(location, userName, userID, token);
+             } else {
+                 if (Platform.OS === 'ios') {
+                    //  this.setState({
+                    //               location: location,
+                    //               loaded: true,
+                    // });
+                     navigator.geolocation.getCurrentPosition(
+                         (position) => {
+                             var location = position.coords.latitude + ', ' + position.coords.longitude;
+                             console.log('Position:', location);
+                             this.setState({
+                                 location: location,
+                                 loaded: true,
+                             });
+                         },
+                         (error) => console.log(JSON.stringify(error)),
+                         {timeout: 20000, maximumAge: 100000});
+                     } else {
+                         let check = await LocationServicesDialogBox.checkLocationServicesIsEnabled({
+                             message: 'Location must be enabled?',
+                             ok: 'Okay',
+                             cancel: 'Close'
+                         }).then(function (success) {
+                             navigator.geolocation.getCurrentPosition(
+                                 (position) => {
+                                     var location = position.coords.latitude + ', ' + position.coords.longitude;
+                                     console.log('Position:', location);
+                                     this.setState({
+                                         location: location,
+                                         loaded: true,
+                                     });
+                                 },
+                                 (error) => console.log(JSON.stringify(error)),
+                                 {timeout: 20000, maximumAge: 100000});
+                             }.bind(this)
+                         ).catch((error) => {
+                             console.log(error);
+                             BackAndroid.exitApp();
+                         });
+                     }
+                 }
+             } catch (error) {
+                 console.error(error);
+             }
+         }
 
     componentWillMount() {
         this.checkLoginStatus();

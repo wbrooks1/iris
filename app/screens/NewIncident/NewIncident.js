@@ -127,6 +127,7 @@ export default class NewIncident extends Component {
                 toBeFilled.push(' ' + this.state.formData[item].title);
             }
         }
+        console.log(this.state.formData['start_date'].data, this.state.formData['end_date'].data)
         if (this.state.formData['start_date'].data > this.state.formData['end_date'].data){
             Alert.alert('Submit Incident', 'End Date must be after Start Date',
                 [{text: 'OK', onPress: () => console.log('form not complete')},])

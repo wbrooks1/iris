@@ -1,4 +1,4 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet, Dimensions, Platform } from 'react-native';
 import { colors, style } from '../../config/styles';
 
 const window = Dimensions.get('window');
@@ -21,8 +21,16 @@ export default StyleSheet.create({
         width: window.width,
     },
     modal: {
-        marginTop: window.height / 4,
-        height: 275,
+        ...Platform.select({
+            ios: {
+                alignSelf: 'center',
+            },
+            android: {
+                marginTop: window.height / 4,
+                height: 275,
+            },
+        }),
+
         width: window.width - style.modalWidthDifference,
         justifyContent: 'center',
         alignItems: 'center',
@@ -34,8 +42,8 @@ export default StyleSheet.create({
         borderWidth: StyleSheet.hairlineWidth,
     },
     text_box: {
-      backgroundColor: colors.white,
-      borderRadius: style.borderRadius,
+        backgroundColor: colors.white,
+        borderRadius: style.borderRadius,
     },
     picker: {
         width: window.width - style.inputWidthDifference,
@@ -52,7 +60,15 @@ export default StyleSheet.create({
     },
     title: {flex: 1,
         fontSize: style.titleFontSize,
-        fontFamily: 'centuryschl',
+        ...Platform.select({
+            ios: {
+                fontFamily: 'CenturySchL-Roma'
+            },
+            android: {
+                fontFamily: 'centuryschl',
+
+            },
+        }),
         color: colors.black,
         textAlignVertical: 'center',
         textAlign: 'center',
@@ -60,13 +76,29 @@ export default StyleSheet.create({
     },
     submitButtonText: {
         fontSize: style.largeFontSize,
-        fontFamily: 'centuryschl',
+        ...Platform.select({
+            ios: {
+                fontFamily: 'CenturySchL-Roma'
+            },
+            android: {
+                fontFamily: 'centuryschl',
+
+            },
+        }),
         margin: style.margin,
         color: colors.black,
     },
     label: {
         fontSize: style.titleFontSize,
-        fontFamily: 'centuryschl',
+        ...Platform.select({
+            ios: {
+                fontFamily: 'CenturySchL-Roma'
+            },
+            android: {
+                fontFamily: 'centuryschl',
+
+            },
+        }),
         textAlign: 'left',
         margin: style.titleMargin,
     },

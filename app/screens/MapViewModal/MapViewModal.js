@@ -2,7 +2,7 @@
 
 import React, {Component} from 'react';
 import { Modal, Text, TouchableHighlight, View, Navigator } from 'react-native';
-import MapView from 'react-native-maps';
+import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import styles from './styles';
 
 /**
@@ -28,7 +28,7 @@ export default class MapViewModal extends Component {
                    visible={this.props.modalVisible}
                    transparent={true}
                    onRequestClose={() => {this.props.closeModal()}}>
-                <MapView style={styles.map} initialRegion={{
+                <MapView style={styles.map} provider={MapView.PROVIDER_DEFAULT} initialRegion={{
                     latitude: this.props.location.latitude,
                     longitude: this.props.location.longitude,
                     latitudeDelta: 0.0922,
@@ -47,4 +47,3 @@ export default class MapViewModal extends Component {
         );
     }
 }
-
