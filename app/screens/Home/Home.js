@@ -91,7 +91,6 @@ export default class Home extends Component {
                             location: location,
                             locationDate: date,
                         });
-
                     },
                     (error) => console.log(JSON.stringify(error)),
                     {timeout: 20000, maximumAge: 100000});
