@@ -1,7 +1,8 @@
 'use strict';
 
 import React, {Component} from 'react';
-import {TouchableHighlight, StyleSheet, Text, Image, View, TextInput, ScrollView, Navigator, AsyncStorage
+import {
+    TouchableHighlight, StyleSheet, Text, Image, View, TextInput, ScrollView, Navigator, AsyncStorage
 } from 'react-native'
 import styles from './styles';
 import HomeButton from '../../components/HomeButton';
@@ -17,13 +18,17 @@ import LocationServicesDialogBox from 'react-native-android-location-services-di
 export default class Home extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            location: this.props.location,
+            locationDate: this.props.locationDate,
+        }
     }
 
     toNewIncident = () => {
         this.props.navigator.push({
             id: 'NewIncident',
             passProps: {
-                location: this.props.location,
+                location: this.state.location,
                 userID: this.props.userID,
                 token: this.props.token,
             }
@@ -44,7 +49,7 @@ export default class Home extends Component {
             passProps: {
                 userID: this.props.userID,
                 token: this.props.token,
-                location: this.props.location,
+                location: this.state.location,
             }
         });
     }
@@ -79,8 +84,13 @@ export default class Home extends Component {
                 navigator.geolocation.getCurrentPosition(
                     (position) => {
                         var location = position.coords.latitude + ', ' + position.coords.longitude;
-                        console.log('Position:', location);
-                        AsyncStorage.setItem('@AsyncStorage:location', this.props.location);
+                        var date = new Date().toISOString().slice(0, 10);
+                        AsyncStorage.setItem('@AsyncStorage:location', location);
+                        AsyncStorage.setItem('@AsyncStorage:locationDate', date);
+                        this.setState({
+                            location: location,
+                            locationDate: date,
+                        });
                     },
                     (error) => console.log(JSON.stringify(error)),
                     {timeout: 20000, maximumAge: 100000});
@@ -100,6 +110,11 @@ export default class Home extends Component {
                         <Text style={styles.user}> {this.props.userName} </Text>
                         <TouchableHighlight onPress={() => this.logout()}>
                             <Text style={styles.logout_text}> Logout </Text>
+                        </TouchableHighlight>
+                    </View>
+                    <View style={styles.text_row}>
+                        <TouchableHighlight onPress={() => this.updateLocation()}>
+                            <Text style={styles.logout_text}> Update Location (Last update {this.state.locationDate}) </Text>
                         </TouchableHighlight>
                     </View>
                     <View style={styles.row_container}>

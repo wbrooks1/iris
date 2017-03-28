@@ -122,7 +122,7 @@ export default class EditIncident extends Component {
                 console.log('Reponse to fetch', responseJson);
                 if (responseJson.message) {
                     Toast.show('Incident was updated.');
-                    this.props.navigator.pop();
+                    this.props.navigator.popN(2);
                 } else {
                     Toast.show('Something went wrong' + responseJson.error);
                 }

@@ -20,7 +20,7 @@ export default class WebLoginModal extends Component {
      * @param userID
      * @param token
      */
-    toHome = (userName, userID, token) => {
+    toHome = (userName, userID, token, locationDate) => {
         this.props.navigator.resetTo({
             id: 'Home',
             passProps: {
@@ -28,6 +28,7 @@ export default class WebLoginModal extends Component {
                 userName: userName,
                 userID: userID,
                 token: token,
+                locationDate: locationDate,
             }
         });
     }
@@ -45,6 +46,7 @@ export default class WebLoginModal extends Component {
             await AsyncStorage.setItem('@AsyncStorage:userName', decode.email);
             await AsyncStorage.setItem('@AsyncStorage:userID', '' + decode.sub);
             await AsyncStorage.setItem('@AsyncStorage:location', this.props.location);
+            await AsyncStorage.setItem('@AsyncStorage:locationDate', new Date().toISOString().slice(0,10));
         } catch (error) {
             console.error(error);
         }
@@ -58,13 +60,14 @@ export default class WebLoginModal extends Component {
     verifyAccount = (webViewState) => {
         var jwtDecode = require('jwt-decode');
         var url = webViewState.url.toString();
-        if (url === this.props.loginURLs.success + '#') {
+        console.log("login url", url);
+        if (url === this.props.loginURLs.success) {
             this.props.closeModal();
             fetch(this.props.loginURLs.success)
                 .then((response) => response.json())
                 .then((responseJson) => {
                     var decoded = jwtDecode(responseJson.access_token)
-                    this.toHome(decoded.email, decoded.sub, responseJson.access_token);
+                    this.toHome(decoded.email, decoded.sub, responseJson.access_token, new Date().toISOString().slice(0, 10));
                     this.storeLoginStatus(responseJson.access_token, decoded);
                 }).catch((err) => {
                 console.error('WebLoginModal verifyAccount()', err);

@@ -1,4 +1,4 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet, Dimensions, Platform } from 'react-native';
 import { colors, style } from '../../config/styles';
 
 var {height, width} = Dimensions.get('window')
@@ -14,7 +14,23 @@ export default StyleSheet.create({
     },
     title: {
         fontSize: style.titleFontSize,
-        fontFamily: 'centuryschl',
+        ...Platform.select({
+            ios: {
+                fontFamily: 'CenturySchL-Roma'
+            },
+            android: {
+                ...Platform.select({
+        ios: {
+            fontFamily: 'CenturySchL-Roma'
+        },
+        android: {
+            fontFamily: 'centuryschl',
+
+        },
+    }),
+
+            },
+        }),
         textAlign: 'center',
         margin: style.margin,
         color: colors.black,
@@ -30,13 +46,36 @@ export default StyleSheet.create({
     },
     list_desc: {
         fontSize: style.inputFontSize,
-        fontFamily: 'centuryschl',
+        ...Platform.select({
+        ios: {
+            fontFamily: 'CenturySchL-Roma'
+        },
+        android: {
+            fontFamily: 'centuryschl',
+
+        },
+    }),
         color: colors.carbon,
     },
     list_title: {
         fontSize: style.titleFontSize,
-        fontFamily: 'centuryschl',
-        color: colors.black,
+        ...Platform.select({
+            ios: {
+                fontFamily: 'CenturySchL-Roma'
+            },
+            android: {
+                ...Platform.select({
+        ios: {
+            fontFamily: 'CenturySchL-Roma'
+        },
+        android: {
+            fontFamily: 'centuryschl',
+
+        },
+    }),
+
+            },
+        }),        color: colors.black,
     },
     image: {
         width: width,
