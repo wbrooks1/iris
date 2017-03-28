@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import {StyleSheet, Platform} from 'react-native';
 import { colors, style } from '../../config/styles';
 
 export default StyleSheet.create({
@@ -9,7 +9,15 @@ export default StyleSheet.create({
     },
     buttonText: {
         color: colors.carbon,
-        fontFamily: 'centuryschl',
+        ...Platform.select({
+        ios: {
+            fontFamily: 'CenturySchL-Roma'
+        },
+        android: {
+            fontFamily: 'centuryschl',
+
+        },
+    }),
         fontSize: style.iconButtonFontSize,
         alignSelf: 'center',
     },

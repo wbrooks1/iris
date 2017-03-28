@@ -60,7 +60,8 @@ export default class WebLoginModal extends Component {
     verifyAccount = (webViewState) => {
         var jwtDecode = require('jwt-decode');
         var url = webViewState.url.toString();
-        if (url === this.props.loginURLs.success + '#') {
+        console.log("login url", url);
+        if (url === this.props.loginURLs.success) {
             this.props.closeModal();
             fetch(this.props.loginURLs.success)
                 .then((response) => response.json())

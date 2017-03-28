@@ -49,12 +49,12 @@ export default class AddFieldModal extends Component {
                         <Image style={styles.back_arrow} source={require('../../images/back_icon.png')}/>
                     </TouchableHighlight>
                     <Text style={styles.title}>
-                        Add New Field
+                        Add New Input
                     </Text>
                 </View>
                     <View style={styles.text_box}>
                     <Text style={styles.label}>
-                        Select Field Type
+                        Select Input Type
                     </Text>
                     <Picker style={styles.picker}
                             selectedValue={this.state.type}
@@ -64,19 +64,19 @@ export default class AddFieldModal extends Component {
                         <Picker.Item label="Location" value="location"/>
                     </Picker>
                     <Text style={styles.label}>
-                        Field Title
+                        Input Title
                     </Text>
                     <TextInput
                         style={styles.input}
                         autoCapitalize="sentences"
                         autoCorrect={false}
-                        placeholder="Enter field title"
+                        placeholder="Enter input title"
                         defaultValue={this.state.title}
                         onChangeText={(text) => this.setState({title: text})}
                         />
                     </View>
                     <TouchableHighlight style={styles.submit_button} onPress={() => this.addField()}>
-                        <Text style={styles.submitButtonText}>Add Field</Text>
+                        <Text style={styles.submitButtonText}>Add Input</Text>
                     </TouchableHighlight>
                 </View>
                 </View>

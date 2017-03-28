@@ -1,11 +1,19 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet, Dimensions, Platform } from 'react-native';
 import { colors, style } from '../../config/styles';
 
 var {height, width} = Dimensions.get('window')
 export default StyleSheet.create({
 
     submit: {
-        fontFamily: 'centuryschl',
+        ...Platform.select({
+        ios: {
+            fontFamily: 'CenturySchL-Roma'
+        },
+        android: {
+            fontFamily: 'centuryschl',
+
+        },
+    }),
         fontSize: style.largeFontSize,
         textAlign: 'center',
         color: colors.black,
