@@ -24,4 +24,5 @@ export const incidentURLs = {
     users: 'http://iris-app.westus.cloudapp.azure.com/api/users/',
     search: 'http://iris-app.westus.cloudapp.azure.com/api/incidents?keywords=',
     update: 'http://iris-app.westus.cloudapp.azure.com/api/incidents/',
+    categories: 'http://iris-app.westus.cloudapp.azure.com/api/categories',
 };

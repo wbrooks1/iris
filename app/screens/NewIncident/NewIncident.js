@@ -27,6 +27,7 @@ export default class NewIncident extends Component {
             }),
             formData: {},
             modalVisible: false,
+            categories: [],
         };
     }
 
@@ -115,6 +116,20 @@ export default class NewIncident extends Component {
         this.setState({formData: newFormData});
     }
 
+    // /**
+    //  * Get stored categories json from server. (Not in use)
+    //  */
+    // getCategories() {
+    //     fetch(incidentURLs.categories)
+    //         .then((response) => response.json())
+    //         .then((responseJson) => {
+    //             console.log('responseJson', responseJson)
+    //         }).catch((err) => {
+    //         console.error(err);
+    //     });
+    //
+    // }
+
     /**
      * Verify that all fields have data and that end date is after start date before incident can be uploaded.
      */
@@ -200,7 +215,6 @@ export default class NewIncident extends Component {
             title: title,
             type: type,
         });
-        console.log('new array', newArray);
         this.setState({
             dataSource: this.state.dataSource.cloneWithRows(newArray),
         });

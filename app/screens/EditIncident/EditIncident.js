@@ -1,8 +1,7 @@
 'use strict';
 
 import React, {Component} from 'react';
-import {
-    AppRegistry, StyleSheet, Text, Image, View, TextInput, ScrollView, Navigator, BackAndroid,
+import {StyleSheet, Text, Image, View, TextInput, ScrollView, Navigator, BackAndroid,
     ListView, TouchableHighlight, Alert,
 } from 'react-native'
 import styles from './styles';
@@ -52,7 +51,6 @@ export default class EditIncident extends Component {
             .then((response) => response.json())
             .then((responseJson) => {
                 this.formatData(responseJson);
-                console.log("fetchData()", JSON.stringify(responseJson));
             }).catch((err) => {
             console.error(err);
         });
@@ -103,7 +101,6 @@ export default class EditIncident extends Component {
      * Submit formData as POST body.
      */
     updateIncident() {
-        console.log('EditIncident formData string', JSON.stringify(this.state.formData));
         let data = {
             method: 'POST',
             headers: {
@@ -115,11 +112,9 @@ export default class EditIncident extends Component {
                 this.state.formData
             )
         }
-        console.log(incidentURLs.update + this.props.id, data)
         fetch(incidentURLs.update + this.props.id, data)
             .then((response) => response.json())
             .then((responseJson) => {
-                console.log('Reponse to fetch', responseJson);
                 if (responseJson.message) {
                     Toast.show('Incident was updated.');
                     this.props.navigator.popN(2);
@@ -159,7 +154,6 @@ export default class EditIncident extends Component {
     }
 
     renderRow(rowData) {
-        console.log("Row data", rowData);
         var location;
         if(rowData.type === 'location') {
             location = rowData.data;
@@ -208,4 +202,3 @@ export default class EditIncident extends Component {
     }
 }
 
-AppRegistry.registerComponent('EditIncident', () => EditIncident);
