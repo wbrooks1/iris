@@ -73,7 +73,6 @@ export default class SearchIncidents extends Component {
      * @param id
      */
     toNewReport = (id) => {
-        console.log("toNewReport: id", id);
         this.props.navigator.push({
             id: 'NewReport',
             passProps: {

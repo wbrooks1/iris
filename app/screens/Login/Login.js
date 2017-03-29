@@ -164,10 +164,6 @@ export default class Login extends Component {
                             text='Facebook'
                             onPress={() => this.openModal('facebook')}
                         />
-                        <IconButton
-                            image={require('../../images/microsoft_icon.png')}
-                            text='Microsoft'
-                            onPress={() => this.toHome()}/>
                     </View>
                 </View>
 
