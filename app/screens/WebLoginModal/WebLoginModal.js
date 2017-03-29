@@ -61,7 +61,7 @@ export default class WebLoginModal extends Component {
         var jwtDecode = require('jwt-decode');
         var url = webViewState.url.toString();
         console.log("login url", url);
-        if (url === this.props.loginURLs.success) {
+        if (url === this.props.loginURLs.success + '#') {
             this.props.closeModal();
             fetch(this.props.loginURLs.success)
                 .then((response) => response.json())
