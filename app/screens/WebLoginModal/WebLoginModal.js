@@ -61,7 +61,7 @@ export default class WebLoginModal extends Component {
         var jwtDecode = require('jwt-decode');
         var url = webViewState.url.toString();
         console.log("login url", url);
-        if (url === this.props.loginURLs.success + '#') {
+        if (url === this.props.loginURLs.success + '#' || url === this.props.loginURLs.success) {
             this.props.closeModal();
             fetch(this.props.loginURLs.success)
                 .then((response) => response.json())
@@ -74,7 +74,7 @@ export default class WebLoginModal extends Component {
                 this.props.closeModal();
                 Alert.alert('Login Error', 'Something went wrong, please try again');
             });
-        } else if (url === this.props.loginURLs.failure + '#') {
+        } else if (url === this.props.loginURLs.failure + '#' || url === this.props.loginURLs.failure) {
             this.props.closeModal();
             Alert.alert('Login Error', 'You were not logged in, please try again');
         }
